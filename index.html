@@ -28,6 +28,7 @@
             padding: 10px;
             opacity: 0; /* Initially hide the navigation */
             border-radius: 15px; /* Round out the corners */
+            text-align: center; /* Center align the navigation */
         }
         @keyframes fadeInNav {
             from {
@@ -43,13 +44,16 @@
             list-style-type: none;
             margin: 0;
             padding: 0;
-            text-align: center;
+            display: inline-block; /* Make the list items display inline */
         }
         li {
-            display: inline-block;
             margin-right: 20px;
         }
+        li.home {
+            margin-right: 0; /* Remove margin for the home icon */
+        }
         li a {
+            display: inline-block; /* Make the links display as blocks */
             color: #5c4b18; /* Set the navbar buttons color */
             text-decoration: none;
             padding: 5px 10px;
@@ -65,6 +69,7 @@
             color: #5c4b18; /* Match the color of navbar buttons */
             font-size: 20px; /* Adjust the size of the icon */
             margin-right: 10px; /* Add some space between the icon and the text */
+            vertical-align: middle; /* Align the icon vertically */
         }
     </style>
 </head>
@@ -73,7 +78,7 @@
 <!-- Your navigation bar -->
 <nav>
     <ul>
-        <li><span class="home-icon">🏠</span><a href="#home">Home</a></li>
+        <li class="home"><a href="#home"><span class="home-icon">🏠</span></a></li>
         <li><a href="#about">About Me</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
