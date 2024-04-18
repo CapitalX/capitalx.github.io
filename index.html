@@ -8,9 +8,25 @@
             overflow: hidden; /* Hide overflow to prevent scrollbars during animation */
         }
         .startup-animation {
-            animation: fadeIn 2s ease-out forwards; /* Apply the animation to the entire page */
+            animation: fadeInPage 2s ease-out forwards; /* Apply the animation to the entire page */
         }
-        @keyframes fadeIn {
+        @keyframes fadeInPage {
+            from {
+                opacity: 0; /* Start with opacity 0 */
+            }
+            to {
+                opacity: 1; /* End with opacity 1 */
+            }
+        }
+
+        /* Animation for the navigation */
+        nav {
+            animation: fadeInNav 2s ease-out forwards; /* Apply the animation to the navigation */
+            background-color: #333;
+            padding: 10px;
+            opacity: 0; /* Initially hide the navigation */
+        }
+        @keyframes fadeInNav {
             from {
                 opacity: 0; /* Start with opacity 0 */
             }
@@ -20,11 +36,6 @@
         }
 
         /* Additional styles for the navigation */
-        nav {
-            background-color: #333;
-            padding: 10px;
-            opacity: 0; /* Initially hide the navigation */
-        }
         ul {
             list-style-type: none;
             margin: 0;
