@@ -1,43 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Startup Animation with Navigation</title>
+    <title>My Portfolio</title>
     <style>
         /* CSS styles for the animation */
         body {
             overflow: hidden; /* Hide overflow to prevent scrollbars during animation */
+            background-color: #EAE7DC; /* Set the base background color */
         }
         .startup-animation {
             animation: fadeInPage 2s ease-out forwards; /* Apply the animation to the entire page */
-            background-color: antiquewhite;
             opacity: 0;
         }
         @keyframes fadeInPage {
             from {
                 opacity: 0; /* Start with opacity 0 */
-                background-color: antiquewhite;
             }
             to {
                 opacity: 1; /* End with opacity 1 */
-                background-color: #999999;
             }
         }
 
         /* Animation for the navigation */
         nav {
-            animation: fadeInNav 3s ease-out forwards; /* Apply the animation to the navigation */
-            background-color: #333;
+            animation: fadeInNav 2s ease-out forwards; /* Apply the animation to the navigation */
+            background-color: #D8C3A5; /* Set the navbar background color */
             padding: 10px;
             opacity: 0; /* Initially hide the navigation */
         }
         @keyframes fadeInNav {
             from {
                 opacity: 0; /* Start with opacity 0 */
-                background-color: antiquewhite;
             }
             to {
                 opacity: 1; /* End with opacity 1 */
-                background-color: #333;
             }
         }
 
@@ -53,13 +49,14 @@
             margin-right: 20px;
         }
         li a {
-            color: white;
+            color: #8E8D8A; /* Set the navbar buttons color */
             text-decoration: none;
             padding: 5px 10px;
             border-radius: 5px;
         }
         li a:hover {
-            background-color: #555;
+            background-color: #8E8D8A; /* Set the hover background color */
+            color: white; /* Change text color on hover */
         }
     </style>
 </head>
