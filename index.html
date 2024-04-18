@@ -27,6 +27,7 @@
             background-color: #cea264; /* Set the navbar background color */
             padding: 10px;
             opacity: 0; /* Initially hide the navigation */
+            border-radius: 15px; /* Round out the corners */
         }
         @keyframes fadeInNav {
             from {
@@ -58,6 +59,13 @@
             background-color: #5c4d20; /* Set the hover background color */
             color: rgb(240, 180, 140); /* Change text color on hover */
         }
+
+        /* Additional styles for the home icon */
+        .home-icon {
+            color: #5c4b18; /* Match the color of navbar buttons */
+            font-size: 20px; /* Adjust the size of the icon */
+            margin-right: 10px; /* Add some space between the icon and the text */
+        }
     </style>
 </head>
 <body class="startup-animation">
@@ -65,6 +73,7 @@
 <!-- Your navigation bar -->
 <nav>
     <ul>
+        <li><span class="home-icon">🏠</span><a href="#home">Home</a></li>
         <li><a href="#about">About Me</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
