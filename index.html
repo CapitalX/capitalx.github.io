@@ -40,26 +40,27 @@
         }
 
         /* Additional styles for the navigation */
-        ul {
+        .nav-items {
             list-style-type: none;
             margin: 0;
             padding: 0;
-            display: inline-block; /* Make the list items display inline */
+            display: flex;
+            justify-content: center; /* Center align the items */
         }
-        li {
-            margin-right: 20px;
+        .nav-items li {
+            margin-right: 20px; /* Add some space between items */
         }
-        li.home {
-            margin-right: 0; /* Remove margin for the home icon */
+        .nav-items .home {
+            margin-right: auto; /* Push the home button all the way to the left */
         }
-        li a {
-            display: inline-block; /* Make the links display as blocks */
+        .nav-items li a {
             color: #5c4b18; /* Set the navbar buttons color */
             text-decoration: none;
             padding: 5px 10px;
             border-radius: 5px;
+            display: inline-block; /* Make the links display as blocks */
         }
-        li a:hover {
+        .nav-items li a:hover {
             background-color: #5c4d20; /* Set the hover background color */
             color: rgb(240, 180, 140); /* Change text color on hover */
         }
@@ -69,7 +70,6 @@
             color: #5c4b18; /* Match the color of navbar buttons */
             font-size: 20px; /* Adjust the size of the icon */
             margin-right: 10px; /* Add some space between the icon and the text */
-            vertical-align: middle; /* Align the icon vertically */
         }
     </style>
 </head>
@@ -77,7 +77,7 @@
 
 <!-- Your navigation bar -->
 <nav>
-    <ul>
+    <ul class="nav-items">
         <li class="home"><a href="#home"><span class="home-icon">🏠</span></a></li>
         <li><a href="#about">About Me</a></li>
         <li><a href="#projects">Projects</a></li>
@@ -88,9 +88,4 @@
 
 <!-- Your content goes here -->
 <h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-
-<!-- Additional content... -->
-
-</body>
-</html>
+<p>I
