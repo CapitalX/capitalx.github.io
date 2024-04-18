@@ -28,7 +28,8 @@
             padding: 10px;
             opacity: 0; /* Initially hide the navigation */
             border-radius: 15px; /* Round out the corners */
-            text-align: center; /* Center align the navigation */
+            display: flex;
+            justify-content: space-between; /* Align items with space between them */
         }
         @keyframes fadeInNav {
             from {
@@ -45,13 +46,12 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center; /* Center align the items */
-        }
-        .nav-items li {
-            margin-right: 20px; /* Add some space between items */
         }
         .nav-items .home {
             margin-right: auto; /* Push the home button all the way to the left */
+        }
+        .nav-items li {
+            margin-left: 20px; /* Add some space between items */
         }
         .nav-items li a {
             color: #5c4b18; /* Set the navbar buttons color */
@@ -69,7 +69,7 @@
         .home-icon {
             color: #5c4b18; /* Match the color of navbar buttons */
             font-size: 20px; /* Adjust the size of the icon */
-            margin-right: 10px; /* Add some space between the icon and the text */
+            vertical-align: middle; /* Align the icon vertically */
         }
     </style>
 </head>
@@ -84,8 +84,18 @@
         <li><a href="#skills">Skills</a></li>
         <li><a href="#contact">Contact</a></li>
     </ul>
+    <!-- Empty space -->
+    <div></div>
+    <!-- Additional links -->
+    <a href="#login">Login</a>
+    <a href="#signup">Sign Up</a>
 </nav>
 
 <!-- Your content goes here -->
 <h1>Hello World</h1>
-<p>I
+<p>I'm hosted with GitHub Pages.</p>
+
+<!-- Additional content... -->
+
+</body>
+</html>
