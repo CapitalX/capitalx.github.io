@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Portfolio</title>
+    <title>Startup Animation with Navigation</title>
     <style>
-        /* CSS styles for the navigation bar */
+        /* CSS styles for the animation */
+        body {
+            overflow: hidden; /* Hide overflow to prevent scrollbars during animation */
+        }
+        .startup-animation {
+            animation: fadeIn 2s ease-out forwards; /* Apply the animation to the entire page */
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0; /* Start with opacity 0 */
+            }
+            to {
+                opacity: 1; /* End with opacity 1 */
+            }
+        }
+
+        /* Additional styles for the navigation */
         nav {
             background-color: #333;
             padding: 10px;
+            opacity: 0; /* Initially hide the navigation */
         }
         ul {
             list-style-type: none;
@@ -29,8 +46,9 @@
         }
     </style>
 </head>
-<body>
+<body class="startup-animation">
 
+<!-- Your navigation bar -->
 <nav>
     <ul>
         <li><a href="#about">About Me</a></li>
@@ -40,11 +58,11 @@
     </ul>
 </nav>
 
-<!-- Your existing content goes here -->
+<!-- Your content goes here -->
 <h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages. Test</p>
+<p>I'm hosted with GitHub Pages.</p>
 
-<!-- More content... -->
+<!-- Additional content... -->
 
 </body>
 </html>
