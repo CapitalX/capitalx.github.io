@@ -1,49 +1,176 @@
+:root {
+    --primary-color: #0a192f;
+    --secondary-color: #172a45;
+    --accent-color: #64ffda;
+    --text-color: #e6f1ff;
+    --text-color-secondary: #8892b0;
+  }
+  
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  header {
+    background-color: var(--secondary-color);
+    padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+  
+  nav {
+    margin: 20px 0;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  nav li {
+    margin: 0 15px;
+  }
+  
+  nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  nav a:hover {
+    color: var(--accent-color);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: transparent;
+    color: var(--accent-color);
+    text-decoration: none;
+    border: 2px solid var(--accent-color);
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .cta-button:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+  }
+  
+  .full-page-header {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+  }
+  
+  .full-page-header h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .full-page-header p {
+    font-size: 1.2rem;
+    color: var(--text-color-secondary);
+    max-width: 600px;
+    margin-bottom: 30px;
+  }
+  
+  #about {
+    padding: 100px 0;
+  }
+  
 
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-      }
-      header {
-        background-color: #333;
-        color: #fff;
-        padding: 10px 0;
-        text-align: center;
-      }
-      header h1 {
-        margin: 0;
-      }
-      nav {
-        margin: 20px 0;
-        text-align: center;
-      }
-      nav a {
-        color: #333;
-        text-decoration: none;
-        margin: 0 15px;
-        font-size: 18px;
-      }
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      .home-button {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #333;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 5px;
-        margin-top: 20px;
-      }
-      .home-button:hover {
-        background-color: #555;
-      }
-        .post {
-            background-color: #fff;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }       
+  #darkModeToggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .custom-cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-color);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.2s ease;
+  }
+  
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  
+  .animate-on-scroll.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  footer {
+    background-color: var(--secondary-color);
+    color: var(--text-color-secondary);
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  /* Dark mode styles */
+  body.dark-mode {
+    --primary-color: #000000;
+    --secondary-color: #0a192f;
+  }
+  
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 1.5rem;
+    }
+  
+    nav {
+      margin: 10px 0;
+    }
+  
+    nav a {
+      font-size: 0.9rem;
+    }
+  
+    .full-page-header h2 {
+      font-size: 2rem;
+    }
+  
+    .full-page-header p {
+      font-size: 1rem;
+    }
+  }
