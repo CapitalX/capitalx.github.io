@@ -49,16 +49,6 @@ document.querySelectorAll(".animate-on-scroll").forEach((element) => {
   observer.observe(element);
 });
 
-// Dynamic Cursor
-const cursor = document.createElement("div");
-cursor.classList.add("custom-cursor");
-document.body.appendChild(cursor);
-
-document.addEventListener("mousemove", (e) => {
-  cursor.style.left = e.clientX + "px";
-  cursor.style.top = e.clientY + "px";
-});
-
 // Main Initialization
 document.addEventListener("DOMContentLoaded", () => {
   load3DModel();
