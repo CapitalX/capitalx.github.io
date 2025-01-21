@@ -27,7 +27,7 @@
         <div class="social-links">
           <a href="https://github.com/CapitalX" target="_blank"><i class="fab fa-github"></i></a>
           <a href="https://www.linkedin.com/in/capitalx/" target="_blank"><i class="fab fa-linkedin"></i></a>
-          <a href="https://bsky.app/profile/itscapitalx.bsky.social" target="_blank"><i class="fab fa-at"></i></a>
+          <a href="https://bsky.app/profile/itscapitalx.bsky.social" target="_blank"><i class="fab fa-globe"></i></a>
         </div>
       </div>
       <div class="cta-button">
@@ -67,7 +67,7 @@
       <h2>Get In Touch</h2>
       <div class="contact-content">
         <p>Interested in working together? Let's connect!</p>
-        <a href="mailto:xbecoding@gmail.com" class="contact-button">Send Message</a>
+        <a href="mailto:xbecoding@gmail.com?subject=Portfolio%20Inquiry" class="contact-button">Send Message</a>
       </div>
     </section>
 
@@ -140,6 +140,28 @@
         }
         
         createStarfield();
+
+        // Fade in animation for sections
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in', 'is-visible');
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections and their children
+        document.querySelectorAll('section, .about-content, .skill-tags, .projects-grid, .contact-content').forEach(section => {
+            section.classList.add('fade-in');
+            observer.observe(section);
+        });
     </script>
   </body>
 </html>
