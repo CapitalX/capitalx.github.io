@@ -8,7 +8,8 @@
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
-    color: #333;
+    color: #fff;
+    background: #0a0a0f;
 }
 
 /* Navigation */
@@ -17,18 +18,19 @@ body {
     top: 0;
     width: 100%;
     padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(10, 10, 15, 0.8);
     backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .nav-brand {
     font-size: 1.5rem;
     font-weight: bold;
+    color: #fff;
 }
 
 .nav-links {
@@ -39,13 +41,13 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: #333;
+    color: #fff;
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: #007AFF;
+    color: #00ffff;
 }
 
 /* Splash Section */
@@ -57,18 +59,21 @@ body {
     align-items: center;
     text-align: center;
     padding: 2rem;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: transparent;
+    position: relative;
+    z-index: 1;
 }
 
 .intro-text h1 {
     font-size: 3.5rem;
     margin-bottom: 1rem;
-    color: #1a1a1a;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
 .intro-text p {
     font-size: 1.2rem;
-    color: #666;
+    color: #b8b8b8;
     margin-bottom: 2rem;
 }
 
@@ -77,22 +82,23 @@ body {
 }
 
 .social-links a {
-    color: #333;
+    color: #fff;
     font-size: 1.5rem;
     margin: 0 0.5rem;
     transition: color 0.3s ease;
 }
 
 .social-links a:hover {
-    color: #007AFF;
+    color: #00ffff;
 }
 
 .cta-button button {
     padding: 1rem 2rem;
     font-size: 1.1rem;
-    background: #007AFF;
-    color: white;
-    border: none;
+    background: transparent;
+    border: 2px solid #00ffff;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
     border-radius: 5px;
     cursor: pointer;
     transition: transform 0.3s ease, background 0.3s ease;
@@ -100,19 +106,22 @@ body {
 
 .cta-button button:hover {
     transform: translateY(-2px);
-    background: #0056b3;
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
 }
 
 /* About Section */
 .about-section {
     padding: 5rem 2rem;
-    background: white;
+    background: rgba(10, 10, 15, 0.8);
 }
 
 .about-section h2 {
     text-align: center;
     margin-bottom: 3rem;
     font-size: 2.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
 }
 
 .about-content {
@@ -132,41 +141,49 @@ body {
 
 .skill-tags span {
     padding: 0.5rem 1rem;
-    background: #f0f0f0;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
     border-radius: 20px;
     font-size: 0.9rem;
+    color: #fff;
 }
 
 /* Projects Section */
 .projects-section {
     padding: 5rem 2rem;
-    background: #f8f9fa;
+    background: rgba(15, 15, 20, 0.8);
 }
 
 .projects-section h2 {
     text-align: center;
     margin-bottom: 3rem;
     font-size: 2.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
 }
 
 /* Contact Section */
 .contact-section {
     padding: 5rem 2rem;
     text-align: center;
-    background: white;
+    background: rgba(10, 10, 15, 0.8);
 }
 
 .contact-section h2 {
     margin-bottom: 2rem;
     font-size: 2.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
 }
 
 .contact-button {
     display: inline-block;
     padding: 1rem 2rem;
     margin-top: 2rem;
-    background: #007AFF;
-    color: white;
+    background: transparent;
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    color: #fff;
     text-decoration: none;
     border-radius: 5px;
     transition: transform 0.3s ease, background 0.3s ease;
@@ -174,14 +191,16 @@ body {
 
 .contact-button:hover {
     transform: translateY(-2px);
-    background: #0056b3;
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
 }
 
 /* Footer */
 footer {
     padding: 2rem;
     text-align: center;
-    background: #333;
+    background: rgba(5, 5, 10, 0.9);
+    border-top: 1px solid rgba(0, 255, 255, 0.1);
     color: white;
 }
 
@@ -198,4 +217,36 @@ footer {
     .intro-text h1 {
         font-size: 2.5rem;
     }
+}
+
+/* Section Headers */
+section h2 {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+/* Add these new styles for section transitions */
+section {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+/* Glow effects */
+.nav-brand, h1, h2, h3 {
+    position: relative;
+}
+
+.nav-brand:after, h1:after, h2:after, h3:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    filter: blur(20px);
+    opacity: 0.15;
+    background: #00ffff;
+    z-index: -1;
 }
