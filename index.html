@@ -76,34 +76,70 @@
     </footer>
 
     <script>
-        function createStars() {
+        function createStarfield() {
             const stars = document.getElementById('stars');
-            const count = 150;
+            const starCount = 200;
+            const shootingStarCount = 5;
             
-            for (let i = 0; i < count; i++) {
+            // Create static stars
+            for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 
                 // Random position
                 star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
                 
-                // Random size
-                const size = Math.random() * 3;
+                // Random size (smaller on average)
+                const size = Math.random() * 2;
                 star.style.width = `${size}px`;
                 star.style.height = `${size}px`;
                 
-                // Random animation duration
-                const duration = 3 + Math.random() * 8;
+                // Random twinkle duration
+                const duration = 2 + Math.random() * 4;
                 star.style.animationDuration = `${duration}s`;
                 
                 // Random delay
-                star.style.animationDelay = `${Math.random() * 8}s`;
+                star.style.animationDelay = `${Math.random() * duration}s`;
+                
+                // Random brightness
+                const brightness = 0.5 + Math.random() * 0.5;
+                star.style.opacity = brightness;
                 
                 stars.appendChild(star);
             }
+            
+            // Create shooting stars
+            function createShootingStar() {
+                const star = document.createElement('div');
+                star.className = 'shooting-star';
+                
+                // Random starting position
+                star.style.top = `${Math.random() * 50}%`;
+                
+                // Random size and duration
+                const width = 50 + Math.random() * 100;
+                star.style.width = `${width}px`;
+                
+                const duration = 1 + Math.random() * 2;
+                star.style.animationDuration = `${duration}s`;
+                
+                stars.appendChild(star);
+                
+                // Remove shooting star after animation
+                setTimeout(() => {
+                    star.remove();
+                    createShootingStar();
+                }, duration * 1000);
+            }
+            
+            // Initialize shooting stars
+            for (let i = 0; i < shootingStarCount; i++) {
+                setTimeout(() => createShootingStar(), Math.random() * 3000);
+            }
         }
         
-        createStars();
+        createStarfield();
     </script>
   </body>
 </html>

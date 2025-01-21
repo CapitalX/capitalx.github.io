@@ -9,7 +9,7 @@ body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: #fff;
-    background: #0a0a0f;
+    background: #000005;
 }
 
 /* Navigation */
@@ -62,13 +62,28 @@ body {
     background: transparent;
     position: relative;
     z-index: 1;
+    overflow: hidden;
+}
+
+.splash-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,5,0.8) 100%);
+    pointer-events: none;
+    z-index: -1;
 }
 
 .intro-text h1 {
     font-size: 3.5rem;
     margin-bottom: 1rem;
     color: #fff;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+                 0 0 20px rgba(0, 255, 255, 0.3),
+                 0 0 30px rgba(0, 255, 255, 0.1);
 }
 
 .intro-text p {
@@ -113,7 +128,8 @@ body {
 /* About Section */
 .about-section {
     padding: 5rem 2rem;
-    background: rgba(10, 10, 15, 0.8);
+    background: rgba(0, 0, 5, 0.7);
+    backdrop-filter: blur(10px);
 }
 
 .about-section h2 {
@@ -141,17 +157,26 @@ body {
 
 .skill-tags span {
     padding: 0.5rem 1rem;
-    background: rgba(0, 255, 255, 0.1);
-    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.2);
     border-radius: 20px;
     font-size: 0.9rem;
     color: #fff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+.skill-tags span:hover {
+    background: rgba(0, 255, 255, 0.1);
+    border-color: rgba(0, 255, 255, 0.3);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
 }
 
 /* Projects Section */
 .projects-section {
     padding: 5rem 2rem;
-    background: rgba(15, 15, 20, 0.8);
+    background: rgba(0, 0, 5, 0.7);
+    backdrop-filter: blur(10px);
 }
 
 .projects-section h2 {
@@ -166,7 +191,8 @@ body {
 .contact-section {
     padding: 5rem 2rem;
     text-align: center;
-    background: rgba(10, 10, 15, 0.8);
+    background: rgba(0, 0, 5, 0.7);
+    backdrop-filter: blur(10px);
 }
 
 .contact-section h2 {
@@ -248,5 +274,22 @@ section {
     filter: blur(20px);
     opacity: 0.15;
     background: #00ffff;
+    z-index: -1;
+}
+
+/* Add subtle nebula effect to sections */
+section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(0, 255, 255, 0.03),
+        transparent 50%
+    );
+    pointer-events: none;
     z-index: -1;
 }
