@@ -3,44 +3,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>XTech Solutions - Modern Portfolio 2025</title>
+    <title>Xavier's Portfolio</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
   <body>
-    <header>
-      <div class="header-content">
-        <h1><a href="#home" class="home-link">XTech Solutions</a></h1>
-        <nav>
-          <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </nav>
-        <button id="darkModeToggle" aria-label="Toggle dark mode">🌓</button>
-      </div>
-    </header>
-    <main>
-      <section id="home" class="full-page-header">
-        <h2>Welcome to the Future of Web Development</h2>
-        <p>Explore our AI-powered, immersive web solutions</p>
-        <a href="#projects" class="cta-button">View Our Work</a>
-      </section>
-      <section id="about">
-        <h2>About Us</h2>
-        <div class="3d-element">
-          <!-- 3D model or animation here -->
+    <nav class="navbar">
+      <div class="nav-brand">Xavier</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <section id="home" class="splash-container">
+      <div class="intro-text">
+        <h1>Xavier</h1>
+        <p>ServiceNow Developer & React Native Engineer</p>
+        <div class="social-links">
+          <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
         </div>
-        <p>
-          We are pioneers in AI/iOS and Full Stack Development, crafting the
-          digital experiences of tomorrow.
-        </p>
-      </section>
-      <!-- More sections... -->
-    </main>
+      </div>
+      <div class="cta-button">
+        <button onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'})">
+          Explore My Work
+        </button>
+      </div>
+    </section>
+
+    <section id="about" class="about-section">
+      <h2>About Me</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>I'm a passionate developer specializing in ServiceNow development and React Native applications. With experience in both platform development and mobile solutions, I create efficient and user-friendly applications.</p>
+        </div>
+        <div class="skills">
+          <h3>Skills</h3>
+          <div class="skill-tags">
+            <span>ServiceNow</span>
+            <span>React Native</span>
+            <span>JavaScript</span>
+            <span>HTML/CSS</span>
+            <span>Node.js</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="projects-section">
+      <h2>Projects</h2>
+      <div class="projects-grid">
+        <!-- Project cards will go here -->
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+      <h2>Get In Touch</h2>
+      <div class="contact-content">
+        <p>Interested in working together? Let's connect!</p>
+        <a href="mailto:your.email@example.com" class="contact-button">Send Message</a>
+      </div>
+    </section>
+
     <footer>
-      <p>&copy; 2025 XTech Solutions. Sustainably powered.</p>
+      <p>&copy; 2024 Xavier. All rights reserved.</p>
     </footer>
-    <script src="app.js"></script>
   </body>
 </html>
