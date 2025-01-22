@@ -192,12 +192,24 @@ body {
     text-shadow: none;
 }
 
+.about-text {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 .about-content {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 3rem;
+    text-align: center;
+}
+
+.skills h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
 .skill-tags {
@@ -258,6 +270,7 @@ body {
     border-radius: 15px;
     padding: 1.5rem;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 .project-card img {
@@ -277,6 +290,7 @@ body {
     color: #b8b8b8;
     font-size: 0.9rem;
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 .carousel-button {
@@ -370,19 +384,32 @@ footer {
     
     .about-content {
         grid-template-columns: 1fr;
+        text-align: center;
+        padding: 0 1rem;
     }
     
     .intro-text h1 {
         font-size: 3rem;
+        text-align: center;
     }
     
     section {
         padding: 4rem 1.5rem;
         margin: 1rem;
+        text-align: center;
     }
     
     .skill-tags {
         justify-content: center;
+    }
+
+    .project-card {
+        margin: 0 auto;
+    }
+
+    .about-text p {
+        text-align: center;
+        padding: 0 1rem;
     }
 }
 
