@@ -154,8 +154,6 @@ body {
 /* About Section */
 .about-section {
     padding: 5rem 2rem;
-    background: rgba(0, 0, 5, 0.7);
-    backdrop-filter: blur(10px);
 }
 
 .about-section h2 {
@@ -199,8 +197,6 @@ body {
 /* Projects Section */
 .projects-section {
     padding: 5rem 2rem;
-    background: rgba(0, 0, 5, 0.7);
-    backdrop-filter: blur(10px);
 }
 
 .projects-section h2 {
@@ -215,8 +211,6 @@ body {
 .contact-section {
     padding: 5rem 2rem;
     text-align: center;
-    background: rgba(0, 0, 5, 0.7);
-    backdrop-filter: blur(10px);
 }
 
 .contact-section h2 {
@@ -288,14 +282,12 @@ section h2 {
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
 }
 
-/* Add these new styles for section transitions */
+/* Update the section styles */
 section {
     position: relative;
     z-index: 1;
     border-top: 1px solid rgba(0, 255, 255, 0.1);
     padding: 6rem 2rem;
-    background: rgba(0, 0, 10, 0.4);
-    backdrop-filter: blur(8px);
     margin: 2rem 0;
     border-radius: 20px;
     max-width: 1200px;
