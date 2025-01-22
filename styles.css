@@ -548,3 +548,103 @@ window.addEventListener('scroll', () => {
     }
     lastScroll = currentScroll;
 });
+
+.coming-soon {
+    position: relative;
+    min-height: 300px;
+    background: rgba(10, 10, 15, 0.9) !important;
+    overflow: hidden;
+}
+
+.space-game {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(to bottom, #0a0a2a, #000005);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.spaceship {
+    position: absolute;
+    font-size: 24px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+}
+
+.stars-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
+    background-repeat: repeat;
+    animation: scrollStars 10s linear infinite;
+}
+
+@keyframes scrollStars {
+    from { background-position: 0 0; }
+    to { background-position: 0 200px; }
+}
+
+// Space game initialization
+function initSpaceGame() {
+    const spaceship = document.querySelector('.spaceship');
+    const gameArea = document.querySelector('.space-game');
+    
+    if (!spaceship || !gameArea) return;
+    
+    let shipX = 50;
+    let shipY = 150;
+    
+    // Initial position
+    spaceship.style.left = `${shipX}px`;
+    spaceship.style.top = `${shipY}px`;
+    
+    // Mouse/Touch controls
+    gameArea.addEventListener('mousemove', (e) => {
+        const rect = gameArea.getBoundingClientRect();
+        shipX = e.clientX - rect.left - 12;
+        shipY = e.clientY - rect.top - 12;
+        
+        // Boundary checks
+        shipX = Math.max(0, Math.min(shipX, gameArea.clientWidth - 24));
+        shipY = Math.max(0, Math.min(shipY, gameArea.clientHeight - 24));
+        
+        spaceship.style.left = `${shipX}px`;
+        spaceship.style.top = `${shipY}px`;
+    });
+    
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+        const speed = 10;
+        switch(e.key) {
+            case 'ArrowLeft':
+                shipX = Math.max(0, shipX - speed);
+                break;
+            case 'ArrowRight':
+                shipX = Math.min(gameArea.clientWidth - 24, shipX + speed);
+                break;
+            case 'ArrowUp':
+                shipY = Math.max(0, shipY - speed);
+                break;
+            case 'ArrowDown':
+                shipY = Math.min(gameArea.clientHeight - 24, shipY + speed);
+                break;
+        }
+        spaceship.style.left = `${shipX}px`;
+        spaceship.style.top = `${shipY}px`;
+    });
+}
+
+// Initialize space game after DOM loads
+document.addEventListener('DOMContentLoaded', initSpaceGame);
