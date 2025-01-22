@@ -112,12 +112,12 @@ body {
     white-space: nowrap;
     overflow: hidden;
     position: relative;
-    width: 0;
+    width: fit-content;
     margin: 0 auto 2rem auto;
     padding-right: 5px;
     border-right: 3px solid #00ffff;
     animation: 
-        typewriter 1.5s cubic-bezier(0.4, 0.1, 0.2, 1) 2s forwards,
+        typewriter-text 1.5s cubic-bezier(0.4, 0.1, 0.2, 1) 2s forwards,
         blink 0.8s ease-in-out infinite;
 }
 
@@ -393,4 +393,16 @@ section::before {
 .projects-section h2,
 .contact-section h2 {
     text-shadow: none;
+}
+
+/* Add new keyframes for text-specific typing */
+@keyframes typewriter-text {
+    from { 
+        width: 0;
+        opacity: 1;
+    }
+    to { 
+        width: 11ch; /* ch unit represents the width of the "0" character - Technologist is 11 characters */
+        opacity: 1;
+    }
 }
