@@ -366,11 +366,28 @@ body {
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
 }
 
+.contact-card {
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 .contact-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.contact-content p {
+    font-size: 1.2rem;
+    color: #b8b8b8;
 }
 
 /* Footer */
