@@ -58,6 +58,11 @@ function initHeaderBehavior() {
     function handleScroll() {
         const currentScroll = window.scrollY;
         
+        // Fade in/out based on scroll position
+        const opacity = Math.min(currentScroll / 200, 1);
+        header.style.background = `rgba(10, 10, 15, ${opacity * 0.95})`;
+        header.style.backdropFilter = `blur(${opacity * 12}px)`;
+        
         // Always show header at the top of the page
         if (currentScroll < 100) {
             header.classList.remove('hidden');
@@ -65,7 +70,7 @@ function initHeaderBehavior() {
             return;
         }
 
-        // Add scrolled class for background
+        // Add scrolled class for border
         if (currentScroll > 50) {
             header.classList.add('scrolled');
         } else {
@@ -74,10 +79,8 @@ function initHeaderBehavior() {
 
         // Handle hide/show based on scroll direction
         if (currentScroll > lastScroll && currentScroll > 200) {
-            // Scrolling down & not at top
             header.classList.add('hidden');
         } else {
-            // Scrolling up
             header.classList.remove('hidden');
         }
 
@@ -90,9 +93,12 @@ function initHeaderBehavior() {
             scrollTimeout = setTimeout(() => {
                 handleScroll();
                 scrollTimeout = null;
-            }, 100);
+            }, 16); // ~60fps
         }
     }, { passive: true });
+
+    // Initial call
+    handleScroll();
 }
 
 // Initialize header behavior when DOM is loaded
