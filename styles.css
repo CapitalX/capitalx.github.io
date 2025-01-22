@@ -86,15 +86,7 @@ body {
 }
 
 .splash-container::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,5,0.8) 100%);
-    pointer-events: none;
-    z-index: -1;
+    display: none;
 }
 
 .intro-text h1 {
@@ -106,19 +98,40 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    width: fit-content;
+    margin: 0 auto 1rem auto;
+    animation: typewriter 1s steps(7) 0.5s forwards;
 }
 
 .intro-text p {
     font-size: 1.2rem;
     color: #b8b8b8;
     margin-bottom: 2rem;
+    opacity: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    width: fit-content;
+    margin: 0 auto 2rem auto;
+    padding-right: 5px;
+    border-right: 3px solid #00ffff;
+    animation: 
+        typewriter 1s steps(11) 1.5s forwards,
+        blink 0.8s steps(11) infinite,
+        fadeInUp 0.5s ease 1.5s forwards;
 }
 
 .social-links {
-    margin-top: 2rem;
-    margin-bottom: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
     display: flex;
-    gap: 1.5rem;
+    justify-content: center;
+    gap: 2rem;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease 2.5s forwards;
 }
 
 .social-links a {
@@ -145,6 +158,8 @@ body {
     transition: all 0.3s ease;
     font-weight: 500;
     letter-spacing: 0.5px;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease 3s forwards;
 }
 
 .cta-button button:hover {
@@ -156,6 +171,8 @@ body {
 /* About Section */
 .about-section {
     padding: 5rem 2rem;
+    background: transparent;
+    backdrop-filter: none;
 }
 
 .about-section h2 {
@@ -199,6 +216,8 @@ body {
 /* Projects Section */
 .projects-section {
     padding: 5rem 2rem;
+    background: transparent;
+    backdrop-filter: none;
 }
 
 .projects-section h2 {
@@ -213,6 +232,8 @@ body {
 .contact-section {
     padding: 5rem 2rem;
     text-align: center;
+    background: transparent;
+    backdrop-filter: none;
 }
 
 .contact-section h2 {
@@ -288,49 +309,23 @@ section h2 {
 section {
     position: relative;
     z-index: 1;
-    border-top: 1px solid rgba(0, 255, 255, 0.1);
     padding: 6rem 2rem;
     margin: 2rem 0;
-    border-radius: 20px;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
+    background: transparent;
+    border: none;
 }
 
-/* Glow effects */
-.nav-brand, h1, h2, h3 {
-    position: relative;
-}
-
+/* Remove glow effects from headers */
 .nav-brand:after, h1:after, h2:after, h3:after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120%;
-    height: 120%;
-    filter: blur(20px);
-    opacity: 0.15;
-    background: #00ffff;
-    z-index: -1;
+    display: none;
 }
 
-/* Add subtle nebula effect to sections */
+/* Remove section::before gradient */
 section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(
-        circle at 50% 50%,
-        rgba(0, 255, 255, 0.03),
-        transparent 50%
-    );
-    pointer-events: none;
-    z-index: -1;
+    display: none;
 }
 
 /* Add at the bottom of styles.css */
@@ -352,4 +347,25 @@ section::before {
 /* Add visibility classes */
 .is-visible {
     opacity: 1;
+}
+
+/* Add these new animations */
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
