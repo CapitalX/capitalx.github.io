@@ -101,37 +101,34 @@ body {
     white-space: nowrap;
     overflow: hidden;
     position: relative;
-    width: fit-content;
+    width: 0;
     margin: 0 auto 1rem auto;
-    animation: typewriter 1s steps(7) 0.5s forwards;
+    animation: typewriter 1s steps(6) forwards;
 }
 
 .intro-text p {
     font-size: 1.2rem;
     color: #b8b8b8;
-    margin-bottom: 2rem;
-    opacity: 0;
     white-space: nowrap;
     overflow: hidden;
     position: relative;
-    width: fit-content;
+    width: 0;
     margin: 0 auto 2rem auto;
     padding-right: 5px;
     border-right: 3px solid #00ffff;
     animation: 
-        typewriter 1s steps(11) 1.5s forwards,
-        blink 0.8s steps(11) infinite,
-        fadeInUp 0.5s ease 1.5s forwards;
+        typewriter 1.2s steps(11) 1s forwards,
+        blink 0.8s infinite;
 }
 
 .social-links {
-    margin-top: 1rem;
-    margin-bottom: 2rem;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 2rem;
+    margin: 2rem auto;
     opacity: 0;
-    animation: fadeInUp 0.5s ease 2.5s forwards;
+    animation: fadeInUp 0.5s ease 2.3s forwards;
 }
 
 .social-links a {
@@ -356,6 +353,7 @@ section::before {
 }
 
 @keyframes blink {
+    from, to { border-color: #00ffff; }
     50% { border-color: transparent; }
 }
 
