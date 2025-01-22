@@ -253,22 +253,29 @@ body {
     position: relative;
     overflow: hidden;
     padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .project-carousel {
     display: flex;
-    gap: 2rem;
-    transition: transform 0.3s ease;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 1rem;
 }
 
 .project-card {
-    min-width: 300px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
     background: rgba(10, 10, 15, 0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(0, 255, 255, 0.1);
     border-radius: 15px;
-    padding: 1.5rem;
+    padding: 2rem;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     text-align: center;
 }

@@ -85,22 +85,22 @@ function initHeaderBehavior() {
     }
 
     // Throttled scroll handler
-    function throttledScroll() {
+    window.addEventListener('scroll', () => {
         if (!scrollTimeout) {
             scrollTimeout = setTimeout(() => {
                 handleScroll();
                 scrollTimeout = null;
-            }, 150);
+            }, 100);
         }
-    }
-
-    window.addEventListener('scroll', throttledScroll, { passive: true });
+    }, { passive: true });
 }
+
+// Initialize header behavior when DOM is loaded
+document.addEventListener('DOMContentLoaded', initHeaderBehavior);
 
 // Main Initialization
 document.addEventListener("DOMContentLoaded", () => {
   load3DModel();
-  initHeaderBehavior();
 
   // Initialize other components or features here
 });
