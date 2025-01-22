@@ -249,22 +249,31 @@ body {
     text-shadow: none;
 }
 
+.projects-card {
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 .projects-grid {
-    position: relative;
-    overflow: hidden;
-    padding: 2rem 0;
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
+    padding: 0;
 }
 
 .project-carousel {
+    width: 100%;
     display: flex;
     justify-content: center;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 1rem;
+    align-items: center;
+    padding: 0;
 }
 
 .project-card {
@@ -326,6 +335,12 @@ body {
 
 .carousel-button.next {
     right: 1rem;
+}
+
+.project-card.coming-soon {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 /* Contact Section */
