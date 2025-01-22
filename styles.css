@@ -546,8 +546,6 @@ section::before {
     padding: 1rem;
 }
 
-
-
 .coming-soon {
     position: relative;
     min-height: 300px;
@@ -563,13 +561,14 @@ section::before {
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 1rem;
+    transform: translateZ(0);  /* Force GPU acceleration */
 }
 
 .spaceship {
     position: absolute;
     font-size: 24px;
-    transition: all 0.2s ease;
-    cursor: pointer;
+    transform: translate(0, 0);
+    will-change: transform;
     z-index: 2;
     filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
 }
@@ -581,16 +580,19 @@ section::before {
     right: 0;
     bottom: 0;
     background-image: 
-        radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 50px 160px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
+        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 50px 160px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 160px 120px, #fff, rgba(0,0,0,0));
     background-repeat: repeat;
-    animation: scrollStars 10s linear infinite;
+    animation: scrollStars 20s linear infinite;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 @keyframes scrollStars {
-    from { background-position: 0 0; }
-    to { background-position: 0 200px; }
+    from { transform: translateY(0); }
+    to { transform: translateY(200px); }
 }

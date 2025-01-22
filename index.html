@@ -197,60 +197,98 @@
             
             let shipX = gameArea.clientWidth / 2;
             let shipY = gameArea.clientHeight / 2;
+            let targetX = shipX;
+            let targetY = shipY;
+            let isMoving = false;
             
             // Initial position
-            spaceship.style.left = `${shipX}px`;
-            spaceship.style.top = `${shipY}px`;
+            spaceship.style.transform = `translate(${shipX}px, ${shipY}px)`;
             
-            // Mouse/Touch controls
-            gameArea.addEventListener('mousemove', (e) => {
-                const rect = gameArea.getBoundingClientRect();
-                shipX = e.clientX - rect.left - 12;
-                shipY = e.clientY - rect.top - 12;
+            function updatePosition() {
+                if (!isMoving) return;
+                
+                // Smooth interpolation
+                shipX += (targetX - shipX) * 0.1;
+                shipY += (targetY - shipY) * 0.1;
                 
                 // Boundary checks
                 shipX = Math.max(0, Math.min(shipX, gameArea.clientWidth - 24));
                 shipY = Math.max(0, Math.min(shipY, gameArea.clientHeight - 24));
                 
-                spaceship.style.left = `${shipX}px`;
-                spaceship.style.top = `${shipY}px`;
+                // Use transform instead of left/top for better performance
+                spaceship.style.transform = `translate(${shipX}px, ${shipY}px)`;
+                
+                requestAnimationFrame(updatePosition);
+            }
+            
+            // Throttled mouse/touch handler
+            let lastMove = 0;
+            const throttleDelay = 16; // ~60fps
+            
+            function handleMove(clientX, clientY) {
+                const now = Date.now();
+                if (now - lastMove < throttleDelay) return;
+                lastMove = now;
+                
+                const rect = gameArea.getBoundingClientRect();
+                targetX = clientX - rect.left - 12;
+                targetY = clientY - rect.top - 12;
+                
+                if (!isMoving) {
+                    isMoving = true;
+                    requestAnimationFrame(updatePosition);
+                }
+            }
+            
+            // Mouse controls
+            gameArea.addEventListener('mousemove', (e) => {
+                handleMove(e.clientX, e.clientY);
             });
             
             // Touch controls
             gameArea.addEventListener('touchmove', (e) => {
                 e.preventDefault();
                 const touch = e.touches[0];
-                const rect = gameArea.getBoundingClientRect();
-                shipX = touch.clientX - rect.left - 12;
-                shipY = touch.clientY - rect.top - 12;
-                
-                // Boundary checks
-                shipX = Math.max(0, Math.min(shipX, gameArea.clientWidth - 24));
-                shipY = Math.max(0, Math.min(shipY, gameArea.clientHeight - 24));
-                
-                spaceship.style.left = `${shipX}px`;
-                spaceship.style.top = `${shipY}px`;
+                handleMove(touch.clientX, touch.clientY);
             });
             
-            // Keyboard controls
+            // Keyboard controls with smooth movement
+            const keys = new Set();
+            const speed = 5;
+            
             document.addEventListener('keydown', (e) => {
-                const speed = 10;
-                switch(e.key) {
-                    case 'ArrowLeft':
-                        shipX = Math.max(0, shipX - speed);
-                        break;
-                    case 'ArrowRight':
-                        shipX = Math.min(gameArea.clientWidth - 24, shipX + speed);
-                        break;
-                    case 'ArrowUp':
-                        shipY = Math.max(0, shipY - speed);
-                        break;
-                    case 'ArrowDown':
-                        shipY = Math.min(gameArea.clientHeight - 24, shipY + speed);
-                        break;
+                keys.add(e.key);
+                if (!isMoving) {
+                    isMoving = true;
+                    requestAnimationFrame(updatePosition);
                 }
-                spaceship.style.left = `${shipX}px`;
-                spaceship.style.top = `${shipY}px`;
+            });
+            
+            document.addEventListener('keyup', (e) => {
+                keys.delete(e.key);
+                if (keys.size === 0) {
+                    isMoving = false;
+                }
+            });
+            
+            function updateKeyboardMovement() {
+                if (keys.size > 0) {
+                    if (keys.has('ArrowLeft')) targetX -= speed;
+                    if (keys.has('ArrowRight')) targetX += speed;
+                    if (keys.has('ArrowUp')) targetY -= speed;
+                    if (keys.has('ArrowDown')) targetY += speed;
+                    
+                    requestAnimationFrame(updateKeyboardMovement);
+                }
+            }
+            
+            document.addEventListener('keydown', (e) => {
+                if (!keys.has(e.key)) {
+                    keys.add(e.key);
+                    if (keys.size === 1) {
+                        updateKeyboardMovement();
+                    }
+                }
             });
         }
 
