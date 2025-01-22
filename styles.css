@@ -27,10 +27,12 @@ body {
     z-index: 1000;
     transition: all 0.3s ease;
     transform: translateY(0);
+    opacity: 0;  /* Start fully transparent */
 }
 
 .navbar.hidden {
     transform: translateY(-100%);
+    opacity: 0;
 }
 
 .navbar.visible {
@@ -39,6 +41,7 @@ body {
     backdrop-filter: blur(12px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    opacity: 1;
 }
 
 .nav-brand {
@@ -529,12 +532,17 @@ window.addEventListener('scroll', () => {
     const aboutSection = document.getElementById('about');
     const aboutOffset = aboutSection.offsetTop;
 
-    if (currentScroll <= 0) {
+    // Initially hide navbar
+    if (currentScroll <= 100) {
         navbar.classList.remove('visible', 'hidden');
-    } else if (currentScroll > lastScroll) {
+    } 
+    // Scrolling down
+    else if (currentScroll > lastScroll) {
         navbar.classList.add('hidden');
         navbar.classList.remove('visible');
-    } else {
+    } 
+    // Scrolling up
+    else {
         navbar.classList.remove('hidden');
         if (currentScroll >= aboutOffset - 100) {
             navbar.classList.add('visible');
