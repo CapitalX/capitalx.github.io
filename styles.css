@@ -553,46 +553,30 @@ section::before {
     overflow: hidden;
 }
 
-.space-game {
-    position: relative;
-    width: 100%;
+.placeholder-image {
     height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(to bottom, #0a0a2a, #000005);
     border-radius: 10px;
-    overflow: hidden;
     margin-bottom: 1rem;
-    transform: translateZ(0);  /* Force GPU acceleration */
 }
 
-.spaceship {
-    position: absolute;
-    font-size: 24px;
-    transform: translate(0, 0);
-    will-change: transform;
-    z-index: 2;
-    filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+.placeholder-image i {
+    font-size: 48px;
+    color: #00ffff;
+    opacity: 0.8;
+    animation: pulse 2s ease-in-out infinite;
 }
 
-.stars-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 50px 160px, #fff, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 160px 120px, #fff, rgba(0,0,0,0));
-    background-repeat: repeat;
-    animation: scrollStars 20s linear infinite;
-    transform: translateZ(0);
-    will-change: transform;
-}
-
-@keyframes scrollStars {
-    from { transform: translateY(0); }
-    to { transform: translateY(200px); }
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
 }

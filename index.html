@@ -73,12 +73,11 @@
         <div class="projects-grid">
           <div class="project-carousel">
             <div class="project-card coming-soon">
-              <div class="space-game">
-                <div class="spaceship">🚀</div>
-                <div class="stars-bg"></div>
+              <div class="placeholder-image">
+                <i class="fas fa-code"></i>
               </div>
               <h3>Projects Coming Soon!</h3>
-              <p>Exciting projects are being developed. In the meantime, help this spaceship navigate through space! Use arrow keys or tap/click to move.</p>
+              <p>Exciting projects are currently in development. Check back soon to see what I've been working on!</p>
             </div>
           </div>
         </div>
@@ -188,113 +187,6 @@
             section.classList.add('fade-in');
             observer.observe(section);
         });
-
-        // Space game initialization
-        function initSpaceGame() {
-            const spaceship = document.querySelector('.spaceship');
-            const gameArea = document.querySelector('.space-game');
-            
-            if (!spaceship || !gameArea) return;
-            
-            let shipX = gameArea.clientWidth / 2;
-            let shipY = gameArea.clientHeight / 2;
-            let targetX = shipX;
-            let targetY = shipY;
-            let isMoving = false;
-            
-            // Initial position
-            spaceship.style.transform = `translate(${shipX}px, ${shipY}px)`;
-            
-            function updatePosition() {
-                if (!isMoving) return;
-                
-                // Smooth interpolation
-                shipX += (targetX - shipX) * 0.1;
-                shipY += (targetY - shipY) * 0.1;
-                
-                // Boundary checks
-                shipX = Math.max(0, Math.min(shipX, gameArea.clientWidth - 24));
-                shipY = Math.max(0, Math.min(shipY, gameArea.clientHeight - 24));
-                
-                // Use transform instead of left/top for better performance
-                spaceship.style.transform = `translate(${shipX}px, ${shipY}px)`;
-                
-                requestAnimationFrame(updatePosition);
-            }
-            
-            // Throttled mouse/touch handler
-            let lastMove = 0;
-            const throttleDelay = 16; // ~60fps
-            
-            function handleMove(clientX, clientY) {
-                const now = Date.now();
-                if (now - lastMove < throttleDelay) return;
-                lastMove = now;
-                
-                const rect = gameArea.getBoundingClientRect();
-                targetX = clientX - rect.left - 12;
-                targetY = clientY - rect.top - 12;
-                
-                if (!isMoving) {
-                    isMoving = true;
-                    requestAnimationFrame(updatePosition);
-                }
-            }
-            
-            // Mouse controls
-            gameArea.addEventListener('mousemove', (e) => {
-                handleMove(e.clientX, e.clientY);
-            });
-            
-            // Touch controls
-            gameArea.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                handleMove(touch.clientX, touch.clientY);
-            });
-            
-            // Keyboard controls with smooth movement
-            const keys = new Set();
-            const speed = 5;
-            
-            document.addEventListener('keydown', (e) => {
-                keys.add(e.key);
-                if (!isMoving) {
-                    isMoving = true;
-                    requestAnimationFrame(updatePosition);
-                }
-            });
-            
-            document.addEventListener('keyup', (e) => {
-                keys.delete(e.key);
-                if (keys.size === 0) {
-                    isMoving = false;
-                }
-            });
-            
-            function updateKeyboardMovement() {
-                if (keys.size > 0) {
-                    if (keys.has('ArrowLeft')) targetX -= speed;
-                    if (keys.has('ArrowRight')) targetX += speed;
-                    if (keys.has('ArrowUp')) targetY -= speed;
-                    if (keys.has('ArrowDown')) targetY += speed;
-                    
-                    requestAnimationFrame(updateKeyboardMovement);
-                }
-            }
-            
-            document.addEventListener('keydown', (e) => {
-                if (!keys.has(e.key)) {
-                    keys.add(e.key);
-                    if (keys.size === 1) {
-                        updateKeyboardMovement();
-                    }
-                }
-            });
-        }
-
-        // Initialize space game after DOM loads
-        document.addEventListener('DOMContentLoaded', initSpaceGame);
     </script>
   </body>
 </html>

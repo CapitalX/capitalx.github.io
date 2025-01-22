@@ -49,9 +49,58 @@ document.querySelectorAll(".animate-on-scroll").forEach((element) => {
   observer.observe(element);
 });
 
+// Header scroll behavior
+function initHeaderBehavior() {
+    const header = document.querySelector('.navbar');
+    let lastScroll = 0;
+    let scrollTimeout;
+
+    function handleScroll() {
+        const currentScroll = window.scrollY;
+        
+        // Always show header at the top of the page
+        if (currentScroll < 100) {
+            header.classList.remove('hidden');
+            header.classList.remove('scrolled');
+            return;
+        }
+
+        // Add scrolled class for background
+        if (currentScroll > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+
+        // Handle hide/show based on scroll direction
+        if (currentScroll > lastScroll && currentScroll > 200) {
+            // Scrolling down & not at top
+            header.classList.add('hidden');
+        } else {
+            // Scrolling up
+            header.classList.remove('hidden');
+        }
+
+        lastScroll = currentScroll;
+    }
+
+    // Throttled scroll handler
+    function throttledScroll() {
+        if (!scrollTimeout) {
+            scrollTimeout = setTimeout(() => {
+                handleScroll();
+                scrollTimeout = null;
+            }, 150);
+        }
+    }
+
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+}
+
 // Main Initialization
 document.addEventListener("DOMContentLoaded", () => {
   load3DModel();
+  initHeaderBehavior();
 
   // Initialize other components or features here
 });
