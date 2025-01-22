@@ -554,7 +554,7 @@ section::before {
         opacity: 1;
     }
     to { 
-        width: 11ch; /* ch unit represents the width of the "0" character - Technologist is 11 characters */
+        width: 10ch; /* ch unit represents the width of the "0" character - Technologist is 11 characters */
         opacity: 1;
     }
 }
