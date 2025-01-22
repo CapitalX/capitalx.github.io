@@ -115,6 +115,7 @@ body {
 
 .social-links {
     margin-top: 2rem;
+    margin-bottom: 3rem;
     display: flex;
     gap: 1.5rem;
 }
