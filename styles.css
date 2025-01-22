@@ -315,13 +315,9 @@ section h2 {
 section {
     position: relative;
     z-index: 1;
-    padding: 6rem 2rem;
-    margin: 2rem 0;
+    padding: 4rem 2rem;
+    margin: 2rem auto;
     max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    background: transparent;
-    border: none;
 }
 
 /* Remove glow effects from headers */
@@ -413,4 +409,31 @@ section::before {
         width: 11ch; /* ch unit represents the width of the "0" character - Technologist is 11 characters */
         opacity: 1;
     }
+}
+
+/* Add card styling for sections */
+.about-card,
+.projects-card,
+.contact-card {
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific section adjustments */
+.about-section,
+.projects-section,
+.contact-section {
+    padding: 2rem;
+}
+
+/* Content spacing */
+.about-content,
+.projects-grid,
+.contact-content {
+    margin: 0;
+    padding: 1rem;
 }
