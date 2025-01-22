@@ -103,7 +103,7 @@ body {
     position: relative;
     width: 0;
     margin: 0 auto 1rem auto;
-    animation: typewriter 1s steps(6) forwards;
+    animation: typewriter 2s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
 }
 
 .intro-text p {
@@ -117,8 +117,8 @@ body {
     padding-right: 5px;
     border-right: 3px solid #00ffff;
     animation: 
-        typewriter 1.2s steps(11) 1s forwards,
-        blink 0.8s infinite;
+        typewriter 1.5s cubic-bezier(0.4, 0.1, 0.2, 1) 2s forwards,
+        blink 0.8s ease-in-out infinite;
 }
 
 .social-links {
@@ -349,13 +349,23 @@ section::before {
 
 /* Add these new animations */
 @keyframes typewriter {
-    from { width: 0; }
-    to { width: 100%; }
+    from { 
+        width: 0;
+        opacity: 1;
+    }
+    to { 
+        width: 100%;
+        opacity: 1;
+    }
 }
 
 @keyframes blink {
-    from, to { border-color: #00ffff; }
-    50% { border-color: transparent; }
+    from, to { 
+        border-color: transparent;
+    }
+    50% { 
+        border-color: #00ffff;
+    }
 }
 
 @keyframes fadeInUp {
