@@ -130,40 +130,6 @@
                 
                 stars.appendChild(star);
             }
-            
-            // Create shooting stars
-            function createShootingStar() {
-                const star = document.createElement('div');
-                star.className = 'shooting-star';
-                
-                // Random starting position (across full width)
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 50}%`;
-                
-                // Random angle
-                const angle = 35 + (Math.random() * 20); // Between 35-55 degrees
-                star.style.transform = `rotate(${angle}deg)`;
-                
-                // Random size and duration
-                const width = 50 + Math.random() * 100;
-                star.style.width = `${width}px`;
-                
-                const duration = 1 + Math.random() * 2;
-                star.style.animationDuration = `${duration}s`;
-                
-                stars.appendChild(star);
-                
-                // Remove shooting star after animation and create new one after random delay
-                setTimeout(() => {
-                    star.remove();
-                    setTimeout(createShootingStar, Math.random() * 5000); // Random delay between 0-5s
-                }, duration * 1000);
-            }
-            
-            // Initialize 3 shooting stars with random delays
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => createShootingStar(), Math.random() * 3000);
-            }
         }
         
         createStarfield();
