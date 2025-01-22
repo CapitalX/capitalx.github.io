@@ -192,6 +192,75 @@
             section.classList.add('fade-in');
             observer.observe(section);
         });
+
+        // Space game initialization
+        function initSpaceGame() {
+            const spaceship = document.querySelector('.spaceship');
+            const gameArea = document.querySelector('.space-game');
+            
+            if (!spaceship || !gameArea) return;
+            
+            let shipX = gameArea.clientWidth / 2;
+            let shipY = gameArea.clientHeight / 2;
+            
+            // Initial position
+            spaceship.style.left = `${shipX}px`;
+            spaceship.style.top = `${shipY}px`;
+            
+            // Mouse/Touch controls
+            gameArea.addEventListener('mousemove', (e) => {
+                const rect = gameArea.getBoundingClientRect();
+                shipX = e.clientX - rect.left - 12;
+                shipY = e.clientY - rect.top - 12;
+                
+                // Boundary checks
+                shipX = Math.max(0, Math.min(shipX, gameArea.clientWidth - 24));
+                shipY = Math.max(0, Math.min(shipY, gameArea.clientHeight - 24));
+                
+                spaceship.style.left = `${shipX}px`;
+                spaceship.style.top = `${shipY}px`;
+            });
+            
+            // Touch controls
+            gameArea.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = gameArea.getBoundingClientRect();
+                shipX = touch.clientX - rect.left - 12;
+                shipY = touch.clientY - rect.top - 12;
+                
+                // Boundary checks
+                shipX = Math.max(0, Math.min(shipX, gameArea.clientWidth - 24));
+                shipY = Math.max(0, Math.min(shipY, gameArea.clientHeight - 24));
+                
+                spaceship.style.left = `${shipX}px`;
+                spaceship.style.top = `${shipY}px`;
+            });
+            
+            // Keyboard controls
+            document.addEventListener('keydown', (e) => {
+                const speed = 10;
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        shipX = Math.max(0, shipX - speed);
+                        break;
+                    case 'ArrowRight':
+                        shipX = Math.min(gameArea.clientWidth - 24, shipX + speed);
+                        break;
+                    case 'ArrowUp':
+                        shipY = Math.max(0, shipY - speed);
+                        break;
+                    case 'ArrowDown':
+                        shipY = Math.min(gameArea.clientHeight - 24, shipY + speed);
+                        break;
+                }
+                spaceship.style.left = `${shipX}px`;
+                spaceship.style.top = `${shipY}px`;
+            });
+        }
+
+        // Initialize space game after DOM loads
+        document.addEventListener('DOMContentLoaded', initSpaceGame);
     </script>
   </body>
 </html>

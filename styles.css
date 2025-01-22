@@ -546,35 +546,7 @@ section::before {
     padding: 1rem;
 }
 
-/* Add to your existing script section */
-let lastScroll = 0;
-const navbar = document.querySelector('.navbar');
 
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    const aboutSection = document.getElementById('about');
-    const aboutOffset = aboutSection.offsetTop;
-
-    // Initially hide navbar
-    if (currentScroll <= 100) {
-        navbar.classList.remove('visible', 'hidden');
-    } 
-    // Scrolling down
-    else if (currentScroll > lastScroll) {
-        navbar.classList.add('hidden');
-        navbar.classList.remove('visible');
-    } 
-    // Scrolling up
-    else {
-        navbar.classList.remove('hidden');
-        if (currentScroll >= aboutOffset - 100) {
-            navbar.classList.add('visible');
-        } else {
-            navbar.classList.remove('visible');
-        }
-    }
-    lastScroll = currentScroll;
-});
 
 .coming-soon {
     position: relative;
@@ -622,56 +594,3 @@ window.addEventListener('scroll', () => {
     from { background-position: 0 0; }
     to { background-position: 0 200px; }
 }
-
-// Space game initialization
-function initSpaceGame() {
-    const spaceship = document.querySelector('.spaceship');
-    const gameArea = document.querySelector('.space-game');
-    
-    if (!spaceship || !gameArea) return;
-    
-    let shipX = 50;
-    let shipY = 150;
-    
-    // Initial position
-    spaceship.style.left = `${shipX}px`;
-    spaceship.style.top = `${shipY}px`;
-    
-    // Mouse/Touch controls
-    gameArea.addEventListener('mousemove', (e) => {
-        const rect = gameArea.getBoundingClientRect();
-        shipX = e.clientX - rect.left - 12;
-        shipY = e.clientY - rect.top - 12;
-        
-        // Boundary checks
-        shipX = Math.max(0, Math.min(shipX, gameArea.clientWidth - 24));
-        shipY = Math.max(0, Math.min(shipY, gameArea.clientHeight - 24));
-        
-        spaceship.style.left = `${shipX}px`;
-        spaceship.style.top = `${shipY}px`;
-    });
-    
-    // Keyboard controls
-    document.addEventListener('keydown', (e) => {
-        const speed = 10;
-        switch(e.key) {
-            case 'ArrowLeft':
-                shipX = Math.max(0, shipX - speed);
-                break;
-            case 'ArrowRight':
-                shipX = Math.min(gameArea.clientWidth - 24, shipX + speed);
-                break;
-            case 'ArrowUp':
-                shipY = Math.max(0, shipY - speed);
-                break;
-            case 'ArrowDown':
-                shipY = Math.min(gameArea.clientHeight - 24, shipY + speed);
-                break;
-        }
-        spaceship.style.left = `${shipX}px`;
-        spaceship.style.top = `${shipY}px`;
-    });
-}
-
-// Initialize space game after DOM loads
-document.addEventListener('DOMContentLoaded', initSpaceGame);
