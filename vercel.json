@@ -1,23 +1,23 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/**/*.js", "use": "@vercel/node" },
-    { "src": "**/*", "use": "@vercel/static" }
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
   ],
   "routes": [
     {
-      "src": "/api/nowgpt-usage",
-      "methods": ["POST", "OPTIONS"],
-      "dest": "/api/nowgpt-usage.js"
-    },
-    {
-      "src": "/api/chat",
-      "methods": ["POST", "OPTIONS"],
-      "dest": "/api/chat.js"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/index.html"
     }
   ]
 } 

@@ -91,6 +91,10 @@ class NowGPTModal {
                     <div class="usage-counter">
                         Questions remaining today: <span></span>
                     </div>
+                    <div class="sources-section" style="display: none;">
+                        <h4>Sources</h4>
+                        <div class="source-list"></div>
+                    </div>
                 </div>
             </div>
         `;

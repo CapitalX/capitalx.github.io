@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
+import { ragHandler } from '../rag-handler';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -7,8 +8,59 @@ const supabase = createClient(
 );
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY
 });
+
+class ConversationMemory {
+    constructor(windowSize = 3) {
+        this.messages = [];
+        this.windowSize = windowSize;
+    }
+
+    addMessage(role, content) {
+        this.messages.push({ role, content });
+        if (this.messages.length > this.windowSize * 2) {
+            this.messages = this.messages.slice(-this.windowSize * 2);
+        }
+    }
+
+    getMessages() {
+        return this.messages;
+    }
+}
+
+export const memory = new ConversationMemory();
+
+export const CHAT_PROMPT = `You are an expert assistant in ServiceNow Xanadu Release Notes and Documentation. Use the following pieces of context to answer the question at the end.
+If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
+Context:
+{context}
+
+Chat History:
+{chatHistory}
+
+Question: {question}
+
+Please provide your response in the following format:
+
+1. Direct Answer: 
+[Provide a clear, concise answer directly addressing the question]
+
+2. From the Documentation:
+[Quote or summarize relevant information from the provided context]
+
+3. Additional Details:
+[Provide any important context, examples, code snippets, or clarifications]
+
+4. Related Documentation:
+[List 2-3 related topics from the Xanadu documentation that might be helpful]
+
+Format your response using markdown for better readability.
+Use bullet points and code blocks where appropriate.
+If showing technical steps, number them clearly.
+
+Answer:`;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -31,21 +83,24 @@ export default async function handler(req, res) {
       return res.status(429).json({ message: 'Daily limit exceeded' });
     }
 
-    // Store conversation in Supabase
-    const { data: chatData } = await supabase
-      .from('chat_history')
-      .insert({
-        token,
-        message,
-        date: today
-      })
-      .select()
-      .single();
+    // Get relevant documents
+    const relevantDocs = await ragHandler.getRelevantDocuments(message);
+    const context = relevantDocs.map(doc => doc.content).join('\n\n');
 
-    // Stream OpenAI response
+    // Get conversation history
+    const chatHistory = memory.getMessages();
+
+    // Create completion with context and history
     const stream = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: message }],
+      messages: [
+        { role: "system", content: CHAT_PROMPT },
+        ...chatHistory,
+        { 
+          role: "user", 
+          content: `Context: ${context}\n\nQuestion: ${message}` 
+        }
+      ],
       stream: true,
     });
 
@@ -70,6 +125,10 @@ export default async function handler(req, res) {
         count: (usageData?.count || 0) + 1,
         last_used: new Date().toISOString()
       });
+
+    // Update memory
+    memory.addMessage("user", message);
+    memory.addMessage("assistant", responseText);
 
     res.end();
   } catch (error) {
