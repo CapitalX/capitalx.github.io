@@ -84,6 +84,7 @@ class NowGPTModal {
       const messageDiv = this.addMessage(message, true);
       const responseDiv = this.addMessage("", false);
       this.typingIndicator.style.display = "flex";
+      this.updateSendButton(true);
 
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -132,6 +133,7 @@ class NowGPTModal {
       }
 
       this.typingIndicator.style.display = "none";
+      this.updateSendButton(false);
       await this.updateUsageCounter();
       this.scrollToBottom();
     } catch (error) {
