@@ -127,7 +127,7 @@ body {
     border-right: 3px solid #00ffff;
     animation: 
         typewriter-text 1.5s cubic-bezier(0.4, 0.1, 0.2, 1) 2s forwards,
-        blink 0.8s ease-in-out infinite;
+        blink 0.8s ease-in-out 2s infinite;
 }
 
 .social-links {
@@ -137,7 +137,7 @@ body {
     gap: 2rem;
     margin: 2rem auto;
     opacity: 0;
-    animation: fadeInUp 0.5s ease 2.3s forwards;
+    animation: fadeInUp 0.5s ease 3.5s forwards;
     width: 100%;
 }
 
@@ -166,7 +166,7 @@ body {
     font-weight: 500;
     letter-spacing: 0.5px;
     opacity: 0;
-    animation: fadeInUp 0.5s ease 3s forwards;
+    animation: fadeInUp 0.5s ease 4s forwards;
 }
 
 .cta-button button:hover {

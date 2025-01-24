@@ -145,13 +145,13 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('fade-in', 'is-visible');
-                    observer.unobserve(entry.target); // Stop observing once animated
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Observe all sections and their children
-        document.querySelectorAll('section, .about-content, .skill-tags, .projects-grid, .contact-content').forEach(section => {
+        // Only observe sections after the splash container
+        document.querySelectorAll('.about-content, .skill-tags, .projects-grid, .contact-content').forEach(section => {
             section.classList.add('fade-in');
             observer.observe(section);
         });
