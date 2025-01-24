@@ -115,7 +115,7 @@ body {
     width: auto;
     margin: 0 auto 1rem auto;
     animation: 
-        fadeIn 1s ease forwards,
+        fadeIn 2s ease forwards,
         typewriter 2s cubic-bezier(0.4, 0.1, 0.2, 1) 1s forwards;
     opacity: 0;
 }
