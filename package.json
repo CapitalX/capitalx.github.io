@@ -1,0 +1,12 @@
+{
+  "name": "xtech-portfolio",
+  "version": "1.0.0",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.x.x"
+  },
+  "scripts": {
+    "start": "next start",
+    "build": "next build",
+    "dev": "next dev"
+  }
+} 
