@@ -14,11 +14,11 @@
       "use": "@vercel/static"
     },
     {
-      "src": "js/**/*.js",
+      "src": "Projects/nowGPT/nowgpt-modal.js",
       "use": "@vercel/static"
     },
     {
-      "src": "Projects/**/*.js",
+      "src": "Projects/nowGPT/api/**/*.js",
       "use": "@vercel/node"
     }
   ],
@@ -32,8 +32,8 @@
       "dest": "/assets/$1"
     },
     {
-      "src": "/js/(.*)",
-      "dest": "/js/$1"
+      "src": "/Projects/nowGPT/nowgpt-modal.js",
+      "dest": "/Projects/nowGPT/nowgpt-modal.js"
     },
     {
       "src": "/styles.css",

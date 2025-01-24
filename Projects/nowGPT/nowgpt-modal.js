@@ -10,9 +10,8 @@ class NowGPTModal {
     }
 
     initUserId() {
-        // Generate or retrieve anonymous user ID
         this.userId = localStorage.getItem('anonymous_id') || 
-            'anon_' + Math.random().toString(36).substring(2, 11);
+            'anon_' + Math.random().toString(36).substring(2, 9);
         localStorage.setItem('anonymous_id', this.userId);
     }
 
@@ -34,7 +33,7 @@ class NowGPTModal {
             return data.remaining;
         } catch (error) {
             console.error('Usage check error:', error);
-            return 0; // Fail closed for safety
+            return 0;
         }
     }
 
@@ -85,7 +84,7 @@ class NowGPTModal {
         const demoButtons = document.querySelectorAll('.try-demo-btn');
         demoButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                console.log('Demo button clicked'); // Add this for debugging
+                console.log('Demo button clicked');
                 this.showModal();
             });
         });
@@ -95,7 +94,6 @@ class NowGPTModal {
             this.hideModal();
         });
 
-        // Add chat functionality
         const sendButton = this.modal.querySelector('.chat-input button');
         const input = this.modal.querySelector('.chat-input input');
         
@@ -103,14 +101,14 @@ class NowGPTModal {
             const message = input.value.trim();
             if (message && await this.checkUsage() > 0) {
                 await this.incrementUsage();
-                // Handle the message (implement chat logic here)
+                // Handle the message
                 input.value = '';
             }
         });
     }
 
     async showModal() {
-        console.log('Showing modal'); // Add this for debugging
+        console.log('Showing modal');
         const remainingQuestions = await this.checkUsage();
         if (remainingQuestions <= 0) {
             alert('You have reached your daily limit. Please try again tomorrow!');
@@ -131,8 +129,8 @@ class NowGPTModal {
     }
 }
 
-// Wait for DOM to be fully loaded
+// Initialize the NowGPT modal
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initializing NowGPT Modal'); // Add this for debugging
-    const modal = new NowGPTModal();
+    console.log('Initializing NowGPT Modal');
+    new NowGPTModal();
 }); 
