@@ -1,217 +1,245 @@
 class NowGPTModal {
-    constructor() {
-        this.modal = null;
-        this.maxDaily = 3;
-        this.token = null;
-        this.messageQueue = [];
-        this.isProcessing = false;
-        this.initModal();
-        this.bindEvents();
-    }
+  constructor() {
+    this.modal = null;
+    this.maxDaily = 3;
+    this.token = null;
+    this.messageQueue = [];
+    this.isProcessing = false;
+    this.initModal();
+    this.bindEvents();
+    this.addWelcomeMessage();
+  }
 
-    async checkUsage() {
-        try {
-            const response = await fetch('/api/nowgpt-usage', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ action: 'check' })
-            });
-            
-            if (!response.ok) throw new Error('Usage check failed');
-            const data = await response.json();
-            this.token = data.token;
-            return data.remaining;
-        } catch (error) {
-            console.error('Usage check error:', error);
-            return 0;
+  async checkUsage() {
+    try {
+      const response = await fetch("/api/nowgpt-usage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "check" }),
+      });
+
+      if (!response.ok) throw new Error("Usage check failed");
+      const data = await response.json();
+      this.token = data.token;
+      return data.remaining;
+    } catch (error) {
+      console.error("Usage check error:", error);
+      return 0;
+    }
+  }
+
+  async sendMessage(message) {
+    try {
+      const messageDiv = this.addMessage(message, true);
+      const responseDiv = this.addMessage("Thinking...", false);
+
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+          token: this.token,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        responseDiv.querySelector(".message-text").innerHTML = `❌ Error: ${
+          errorData.message || "Failed to get response"
+        }`;
+        return;
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let responseText = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n");
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = JSON.parse(line.slice(5));
+            responseText += data.content;
+            responseDiv.querySelector(".message-text").innerHTML =
+              marked.parse(responseText);
+          }
         }
+      }
+
+      await this.updateUsageCounter();
+    } catch (error) {
+      console.error("Chat error:", error);
+      const errorMessage =
+        "Sorry, there was an error processing your request. Please try again later.";
+      if (this.messagesContainer.lastChild) {
+        this.messagesContainer.lastChild.querySelector(
+          ".message-text"
+        ).innerHTML = `❌ ${errorMessage}`;
+      } else {
+        this.addMessage(`❌ ${errorMessage}`, false);
+      }
     }
+  }
 
-    async sendMessage(message) {
-        try {
-            const messageDiv = this.addMessage(message, true);
-            const responseDiv = this.addMessage('Thinking...', false);
-            
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message,
-                    token: this.token
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                responseDiv.querySelector('.message-text').innerHTML = 
-                    `❌ Error: ${errorData.message || 'Failed to get response'}`;
-                return;
-            }
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let responseText = '';
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value);
-                const lines = chunk.split('\n');
-                
-                for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        const data = JSON.parse(line.slice(5));
-                        responseText += data.content;
-                        responseDiv.querySelector('.message-text').innerHTML = 
-                            marked.parse(responseText);
-                    }
-                }
-            }
-
-            await this.updateUsageCounter();
-        } catch (error) {
-            console.error('Chat error:', error);
-            const errorMessage = 'Sorry, there was an error processing your request. Please try again later.';
-            if (this.messagesContainer.lastChild) {
-                this.messagesContainer.lastChild.querySelector('.message-text').innerHTML = 
-                    `❌ ${errorMessage}`;
-            } else {
-                this.addMessage(`❌ ${errorMessage}`, false);
-            }
-        }
-    }
-
-    initModal() {
-        const modalHTML = `
+  initModal() {
+    const modalHTML = `
             <div class="demo-modal" style="display: none;">
                 <div class="demo-modal-content">
                     <span class="close-modal">&times;</span>
-                    <h3>NowGPT Demo</h3>
+                    <div class="modal-header">
+                        <h3>ServiceNow Xanadu Assistant</h3>
+                        <div class="usage-counter">
+                            <span class="usage-icon">🎯</span>
+                            Questions remaining today: <span></span>
+                        </div>
+                    </div>
                     <div class="demo-chat">
                         <div class="chat-messages"></div>
                         <div class="chat-input">
-                            <input type="text" placeholder="Ask a question...">
-                            <button>Send</button>
+                            <input type="text" placeholder="Ask about Xanadu features, updates, or documentation...">
+                            <button class="send-button">
+                                <span class="button-text">Send</span>
+                                <span class="button-icon">↗️</span>
+                            </button>
                         </div>
-                    </div>
-                    <div class="usage-counter">
-                        Questions remaining today: <span></span>
-                    </div>
-                    <div class="sources-section" style="display: none;">
-                        <h4>Sources</h4>
-                        <div class="source-list"></div>
                     </div>
                 </div>
             </div>
         `;
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-        this.modal = document.querySelector('.demo-modal');
-        this.messagesContainer = this.modal.querySelector('.chat-messages');
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
+    this.modal = document.querySelector(".demo-modal");
+    this.messagesContainer = this.modal.querySelector(".chat-messages");
+  }
+
+  bindEvents() {
+    const demoButtons = document.querySelectorAll(".try-demo-btn");
+    demoButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        console.log("Demo button clicked");
+        this.showModal();
+      });
+    });
+
+    const closeButton = this.modal.querySelector(".close-modal");
+    closeButton.addEventListener("click", () => {
+      this.hideModal();
+    });
+
+    const sendButton = this.modal.querySelector(".chat-input button");
+    const input = this.modal.querySelector(".chat-input input");
+
+    const handleMessage = async () => {
+      const message = input.value.trim();
+      if (message && (await this.checkUsage()) > 0) {
+        sendButton.disabled = true;
+        sendButton.textContent = "Sending...";
+        await this.incrementUsage();
+        await this.sendMessage(message);
+        input.value = "";
+        sendButton.disabled = false;
+        sendButton.textContent = "Send";
+      }
+    };
+
+    sendButton.addEventListener("click", handleMessage);
+
+    input.addEventListener("keypress", async (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        await handleMessage();
+      }
+    });
+  }
+
+  async showModal() {
+    console.log("Showing modal");
+    const remainingQuestions = await this.checkUsage();
+    if (remainingQuestions <= 0) {
+      alert("You have reached your daily limit. Please try again tomorrow!");
+      return;
     }
+    this.modal.style.display = "flex";
+    await this.updateUsageCounter();
+  }
 
-    bindEvents() {
-        const demoButtons = document.querySelectorAll('.try-demo-btn');
-        demoButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                console.log('Demo button clicked');
-                this.showModal();
-            });
-        });
+  hideModal() {
+    this.modal.style.display = "none";
+  }
 
-        const closeButton = this.modal.querySelector('.close-modal');
-        closeButton.addEventListener('click', () => {
-            this.hideModal();
-        });
+  async updateUsageCounter() {
+    const counter = this.modal.querySelector(".usage-counter span");
+    const remaining = await this.checkUsage();
+    counter.textContent = remaining;
+  }
 
-        const sendButton = this.modal.querySelector('.chat-input button');
-        const input = this.modal.querySelector('.chat-input input');
-        
-        const handleMessage = async () => {
-            const message = input.value.trim();
-            if (message && await this.checkUsage() > 0) {
-                sendButton.disabled = true;
-                sendButton.textContent = 'Sending...';
-                await this.incrementUsage();
-                await this.sendMessage(message);
-                input.value = '';
-                sendButton.disabled = false;
-                sendButton.textContent = 'Send';
-            }
-        };
+  async incrementUsage() {
+    try {
+      const response = await fetch("/api/nowgpt-usage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "increment",
+          token: this.token,
+        }),
+      });
 
-        sendButton.addEventListener('click', handleMessage);
-        
-        input.addEventListener('keypress', async (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                await handleMessage();
-            }
-        });
+      if (!response.ok) throw new Error("Usage increment failed");
+      await this.updateUsageCounter();
+    } catch (error) {
+      console.error("Usage increment error:", error);
     }
+  }
 
-    async showModal() {
-        console.log('Showing modal');
-        const remainingQuestions = await this.checkUsage();
-        if (remainingQuestions <= 0) {
-            alert('You have reached your daily limit. Please try again tomorrow!');
-            return;
-        }
-        this.modal.style.display = 'flex';
-        await this.updateUsageCounter();
-    }
+  addWelcomeMessage() {
+    const welcomeMessage = `👋 Hello! I'm your ServiceNow Xanadu assistant. I can help you with:
+- Feature explanations
+- Documentation queries
+- Release notes information
+- Technical specifications
 
-    hideModal() {
-        this.modal.style.display = 'none';
-    }
+How can I assist you today?`;
+    this.addMessage(welcomeMessage, false);
+  }
 
-    async updateUsageCounter() {
-        const counter = this.modal.querySelector('.usage-counter span');
-        const remaining = await this.checkUsage();
-        counter.textContent = remaining;
-    }
-
-    async incrementUsage() {
-        try {
-            const response = await fetch('/api/nowgpt-usage', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'increment',
-                    token: this.token
-                })
-            });
-            
-            if (!response.ok) throw new Error('Usage increment failed');
-            await this.updateUsageCounter();
-        } catch (error) {
-            console.error('Usage increment error:', error);
-        }
-    }
-
-    addMessage(content, isUser = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `chat-message ${isUser ? 'user' : 'assistant'}`;
-        messageDiv.innerHTML = `
+  addMessage(content, isUser = false) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `chat-message ${
+      isUser ? "user" : "assistant"
+    } animate-in`;
+    messageDiv.innerHTML = `
             <div class="message-content">
-                <span class="avatar">${isUser ? '👤' : '🤖'}</span>
-                <div class="message-text">${content}</div>
+                <span class="avatar">${isUser ? "👤" : "🤖"}</span>
+                <div class="message-text">
+                    ${isUser ? content : marked.parse(content)}
+                </div>
+                ${
+                  !isUser
+                    ? '<div class="message-time">' +
+                      new Date().toLocaleTimeString() +
+                      "</div>"
+                    : ""
+                }
             </div>
         `;
-        this.messagesContainer.appendChild(messageDiv);
-        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-        return messageDiv;
-    }
+    this.messagesContainer.appendChild(messageDiv);
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+    return messageDiv;
+  }
 }
 
 // Initialize the NowGPT modal
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initializing NowGPT Modal');
-    new NowGPTModal();
-}); 
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Initializing NowGPT Modal");
+  new NowGPTModal();
+});
