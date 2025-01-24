@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Xavier's Portfolio</title>
     <link rel="stylesheet" href="/assets/css/styles.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/assets/css/starfield.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/assets/css/starfield.css" />
   </head>
   <body>
     <div class="stars" id="stars"></div>
@@ -25,14 +28,28 @@
         <h1>Xavier Enahoro</h1>
         <p>Technologist</p>
         <div class="social-links">
-          <a href="https://github.com/CapitalX" target="_blank"><i class="fab fa-github"></i></a>
-          <a href="https://www.linkedin.com/in/capitalx/" target="_blank"><i class="fab fa-linkedin"></i></a>
-          <a href="https://bsky.app/profile/itscapitalx.bsky.social" target="_blank"><i class="fas fa-cloud"></i></a>
-          <a href="https://open.spotify.com/artist/7eSCe1Z5dPkgh5kLl5WK1E?si=ODw3wGbBTAWRthArXVRmWQ" target="_blank"><i class="fab fa-spotify"></i></a>
+          <a href="https://github.com/CapitalX" target="_blank"
+            ><i class="fab fa-github"></i
+          ></a>
+          <a href="https://www.linkedin.com/in/capitalx/" target="_blank"
+            ><i class="fab fa-linkedin"></i
+          ></a>
+          <a
+            href="https://bsky.app/profile/itscapitalx.bsky.social"
+            target="_blank"
+            ><i class="fas fa-cloud"></i
+          ></a>
+          <a
+            href="https://open.spotify.com/artist/7eSCe1Z5dPkgh5kLl5WK1E?si=ODw3wGbBTAWRthArXVRmWQ"
+            target="_blank"
+            ><i class="fab fa-spotify"></i
+          ></a>
         </div>
       </div>
       <div class="cta-button">
-        <button onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'})">
+        <button
+          onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'})"
+        >
           Explore My Work
         </button>
       </div>
@@ -42,8 +59,19 @@
       <div class="about-card">
         <h2>About Me</h2>
         <div class="about-content">
-          <div class="about-text" style="text-align: center;">
-            <p>I'm a passionate developer specializing in ServiceNow development and React Native applications. With experience in both platform development and mobile solutions, I create efficient and user-friendly applications that solve real business problems. My expertise includes building custom applications on the ServiceNow platform, developing automated workflows, and creating cross-platform mobile apps that deliver exceptional user experiences. I'm particularly focused on writing clean, maintainable code and implementing best practices for scalable enterprise solutions.</p>
+          <div class="about-text" style="text-align: center">
+            <p>
+              I'm a passionate developer specializing in ServiceNow development
+              and React Native applications. With experience in both platform
+              development and mobile solutions, I create efficient and
+              user-friendly applications that solve real business problems. My
+              expertise includes building custom applications on the ServiceNow
+              platform, developing automated workflows, and creating
+              cross-platform mobile apps that deliver exceptional user
+              experiences. I'm particularly focused on writing clean,
+              maintainable code and implementing best practices for scalable
+              enterprise solutions.
+            </p>
           </div>
           <div class="skills">
             <h3>Skills</h3>
@@ -74,21 +102,30 @@
           <!-- NowGPT Project -->
           <div class="project-card">
             <div class="project-image">
-              <img src="/assets/images/nowgpt-preview.jpeg" alt="NowGPT Preview">
+              <img
+                src="/assets/images/nowgpt-preview.jpeg"
+                alt="NowGPT Preview"
+              />
             </div>
             <h3>NowGPT 🧠</h3>
             <p>Xanadu release documentation assistant</p>
             <div class="project-actions">
-              <button class="try-demo-btn" data-project="nowgpt">Try Demo</button>
-              <a href="https://github.com/CapitalX/nowGPT" target="_blank" class="source-btn">
+              <button class="try-demo-btn" data-project="nowgpt">
+                Try Demo
+              </button>
+              <a
+                href="https://github.com/CapitalX/nowGPT"
+                target="_blank"
+                class="source-btn"
+              >
                 <i class="fab fa-github"></i> Source
               </a>
             </div>
             <div class="usage-limit">
-              <small>Demo limited to 3 questions per day</small>
+              <small>Demo limited to 3 questions per day!</small>
             </div>
           </div>
-          
+
           <!-- Project Template for Future Projects -->
           <div class="project-card coming-soon">
             <div class="placeholder-image">
@@ -106,7 +143,11 @@
         <h2>Get In Touch</h2>
         <div class="contact-content">
           <p>Interested in working together? Let's connect!</p>
-          <a href="mailto:xbecoding@gmail.com?subject=Portfolio%20Inquiry" class="contact-button">Send Message</a>
+          <a
+            href="mailto:xbecoding@gmail.com?subject=Portfolio%20Inquiry"
+            class="contact-button"
+            >Send Message</a
+          >
         </div>
       </div>
     </section>
@@ -116,61 +157,65 @@
     </footer>
 
     <script>
-        function createStarfield() {
-            const stars = document.getElementById('stars');
-            const starCount = 200;
-            
-            // Create static stars
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                
-                // Random position
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                
-                // Random size (smaller on average)
-                const size = Math.random() * 2;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                
-                // Random twinkle duration
-                const duration = 2 + Math.random() * 4;
-                star.style.animationDuration = `${duration}s`;
-                
-                // Random delay
-                star.style.animationDelay = `${Math.random() * duration}s`;
-                
-                // Random brightness
-                const brightness = 0.5 + Math.random() * 0.5;
-                star.style.opacity = brightness;
-                
-                stars.appendChild(star);
-            }
+      function createStarfield() {
+        const stars = document.getElementById("stars");
+        const starCount = 200;
+
+        // Create static stars
+        for (let i = 0; i < starCount; i++) {
+          const star = document.createElement("div");
+          star.className = "star";
+
+          // Random position
+          star.style.left = `${Math.random() * 100}%`;
+          star.style.top = `${Math.random() * 100}%`;
+
+          // Random size (smaller on average)
+          const size = Math.random() * 2;
+          star.style.width = `${size}px`;
+          star.style.height = `${size}px`;
+
+          // Random twinkle duration
+          const duration = 2 + Math.random() * 4;
+          star.style.animationDuration = `${duration}s`;
+
+          // Random delay
+          star.style.animationDelay = `${Math.random() * duration}s`;
+
+          // Random brightness
+          const brightness = 0.5 + Math.random() * 0.5;
+          star.style.opacity = brightness;
+
+          stars.appendChild(star);
         }
-        
-        createStarfield();
+      }
 
-        // Fade in animation for sections
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
+      createStarfield();
 
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in', 'is-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
+      // Fade in animation for sections
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      };
 
-        // Only observe sections after the splash container
-        document.querySelectorAll('.about-content, .skill-tags, .projects-grid, .contact-content').forEach(section => {
-            section.classList.add('fade-in');
-            observer.observe(section);
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("fade-in", "is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      // Only observe sections after the splash container
+      document
+        .querySelectorAll(
+          ".about-content, .skill-tags, .projects-grid, .contact-content"
+        )
+        .forEach((section) => {
+          section.classList.add("fade-in");
+          observer.observe(section);
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

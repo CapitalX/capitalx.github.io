@@ -5,12 +5,14 @@ class NowGPTModal {
     this.token = null;
     this.messageQueue = [];
     this.isProcessing = false;
+    this.isDemoEnabled = false;
 
     // Load saved chat history
     this.loadChatHistory();
     this.initModal();
     this.bindEvents();
     this.addWelcomeMessage();
+    this.updateDemoButton();
   }
 
   // Add methods for chat history persistence
@@ -399,6 +401,25 @@ How can I assist you today? Feel free to ask any questions!`;
       this.messagesContainer.scrollTop -
       this.messagesContainer.clientHeight;
     return scrollBottom < threshold;
+  }
+
+  updateDemoButton() {
+    const demoButtons = document.querySelectorAll(".try-demo-btn");
+    demoButtons.forEach((button) => {
+      if (!this.isDemoEnabled) {
+        button.disabled = true;
+        button.title = "Demo coming soon!";
+        button.style.opacity = "0.5";
+        button.style.cursor = "not-allowed";
+        button.textContent = "Coming Soon";
+      } else {
+        button.disabled = false;
+        button.title = "Try the demo";
+        button.style.opacity = "1";
+        button.style.cursor = "pointer";
+        button.textContent = "Try Demo";
+      }
+    });
   }
 }
 
