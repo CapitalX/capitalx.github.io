@@ -267,11 +267,11 @@ body {
 }
 
 .projects-grid {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
     width: 100%;
-    padding: 0;
+    padding: 1rem;
 }
 
 .project-carousel {
@@ -283,24 +283,36 @@ body {
 }
 
 .project-card {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
     background: rgba(10, 10, 15, 0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(0, 255, 255, 0.1);
     border-radius: 15px;
-    padding: 2rem;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.project-card img {
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 255, 255, 0.15);
+}
+
+.project-image {
     width: 100%;
-    height: 180px;
-    object-fit: cover;
+    height: 200px;
     border-radius: 10px;
+    overflow: hidden;
     margin-bottom: 1rem;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image img {
+    transform: scale(1.05);
 }
 
 .project-card h3 {
@@ -313,6 +325,45 @@ body {
     font-size: 0.9rem;
     margin-bottom: 1rem;
     text-align: center;
+}
+
+.project-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.try-demo-btn, .source-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    flex: 1;
+    text-align: center;
+}
+
+.try-demo-btn {
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #fff;
+}
+
+.source-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.usage-limit {
+    margin-top: 1rem;
+    text-align: center;
+    color: #b8b8b8;
+    font-size: 0.85rem;
 }
 
 .carousel-button {
@@ -639,4 +690,76 @@ section::before {
     to {
         visibility: visible;
     }
+}
+
+.demo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.demo-modal-content {
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #fff;
+}
+
+.demo-chat {
+    margin-top: 1rem;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.chat-input {
+    display: flex;
+    gap: 1rem;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 25px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(0, 255, 255, 0.1);
+    color: #fff;
+}
+
+.chat-input button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    background: rgba(0, 255, 255, 0.2);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #fff;
+    cursor: pointer;
 }

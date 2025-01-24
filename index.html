@@ -71,14 +71,31 @@
       <div class="projects-card">
         <h2>Projects</h2>
         <div class="projects-grid">
-          <div class="project-carousel">
-            <div class="project-card coming-soon">
-              <div class="placeholder-image">
-                <i class="fas fa-code"></i>
-              </div>
-              <h3>Projects Coming Soon!</h3>
-              <p>Exciting projects are currently in development. Check back soon to see what I've been working on!</p>
+          <!-- NowGPT Project -->
+          <div class="project-card">
+            <div class="project-image">
+              <img src="assets/nowgpt-preview.jpg" alt="NowGPT Preview">
             </div>
+            <h3>NowGPT</h3>
+            <p>A ServiceNow-integrated ChatGPT tool for enhanced workflow automation and support.</p>
+            <div class="project-actions">
+              <button class="try-demo-btn" data-project="nowgpt">Try Demo</button>
+              <a href="https://github.com/yourusername/nowgpt" target="_blank" class="source-btn">
+                <i class="fab fa-github"></i> Source
+              </a>
+            </div>
+            <div class="usage-limit">
+              <small>Demo limited to 3 questions per day</small>
+            </div>
+          </div>
+          
+          <!-- Project Template for Future Projects -->
+          <div class="project-card coming-soon">
+            <div class="placeholder-image">
+              <i class="fas fa-code"></i>
+            </div>
+            <h3>More Coming Soon!</h3>
+            <p>New projects are in development.</p>
           </div>
         </div>
       </div>
@@ -156,5 +173,6 @@
             observer.observe(section);
         });
     </script>
+    <script src="js/demo-modal.js"></script>
   </body>
 </html>
