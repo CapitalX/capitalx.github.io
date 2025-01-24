@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { createHash } from 'crypto';
 
 // Add initial startup log
 console.log('API handler initializing...');
@@ -14,7 +15,21 @@ console.log('Environment check:', {
   hasSupabaseKey: !!process.env.SUPABASE_ANON_KEY
 });
 
+function generateDailyToken(ip, secret) {
+  const date = new Date().toISOString().split('T')[0];
+  return createHash('sha256')
+    .update(`${ip}-${date}-${secret}`)
+    .digest('hex')
+    .substring(0, 16);
+}
+
 export default async function handler(req, res) {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || 
+             req.headers['x-real-ip'] || 
+             req.socket.remoteAddress;
+             
+  const dailyToken = generateDailyToken(ip, process.env.TOKEN_SECRET);
+
   // Log every incoming request
   console.log('=== New Request ===');
   console.log('Request URL:', req.url);
@@ -45,32 +60,41 @@ export default async function handler(req, res) {
       case 'check':
         console.log('Checking usage for user:', userId);
         const { data: usageData, error: usageError } = await supabase
-          .from('usage_tracking')
+          .from('daily_usage')
           .select('count')
-          .eq('user_id', userId)
-          .eq('date', today);
+          .eq('token', dailyToken)
+          .single();
 
         console.log('Supabase query result:', { usageData, usageError });
 
-        if (usageError || !usageData || usageData.length === 0) {
+        if (usageError || !usageData) {
           console.log('No usage records found, returning max limit');
-          return res.status(200).json({ remaining: 3 });
+          return res.status(200).json({ 
+            remaining: 3,
+            token: dailyToken 
+          });
         }
 
-        const currentCount = usageData[0]?.count || 0;
+        const currentCount = usageData.count || 0;
         console.log('Current usage count:', currentCount);
         
-        const response = { remaining: 3 - currentCount };
+        const response = { 
+          remaining: 3 - currentCount,
+          token: dailyToken 
+        };
         console.log('Sending response:', response);
         return res.status(200).json(response);
 
       case 'increment':
         const { error: incrementError } = await supabase
-          .from('usage_tracking')
+          .from('daily_usage')
           .upsert({
-            user_id: userId,
-            date: today,
-            count: 1
+            token: dailyToken,
+            count: 1,
+            last_used: new Date().toISOString()
+          }, {
+            onConflict: 'token',
+            count: 'count + 1'
           });
 
         if (incrementError) throw incrementError;

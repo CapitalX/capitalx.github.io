@@ -2,73 +2,50 @@ class NowGPTModal {
     constructor() {
         this.modal = null;
         this.maxDaily = 3;
-        this.userId = null;
-        this.apiBaseUrl = '/api';
+        this.token = null;
         this.initModal();
         this.bindEvents();
-        this.initUserId();
-    }
-
-    initUserId() {
-        this.userId = localStorage.getItem('anonymous_id') || 
-            'anon_' + Math.random().toString(36).substring(2, 9);
-        localStorage.setItem('anonymous_id', this.userId);
     }
 
     async checkUsage() {
-        try {
-            console.log('Checking usage for user:', this.userId);
-            console.log('Making request to:', `${this.apiBaseUrl}/nowgpt-usage`);
-            
-            const response = await fetch(`${this.apiBaseUrl}/nowgpt-usage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'check',
-                    userId: this.userId
-                })
-            });
-            
-            console.log('Response status:', response.status);
-            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Error response body:', errorText);
-                throw new Error('Usage check failed');
-            }
-            
-            const data = await response.json();
-            console.log('Usage check response:', data);
-            return data.remaining;
-        } catch (error) {
-            console.error('Usage check error details:', {
-                error: error.message,
-                stack: error.stack
-            });
-            return 0;
-        }
-    }
-
-    async incrementUsage() {
         try {
             const response = await fetch('/api/nowgpt-usage', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ action: 'check' })
+            });
+            
+            if (!response.ok) throw new Error('Usage check failed');
+            const data = await response.json();
+            this.token = data.token;
+            return data.remaining;
+        } catch (error) {
+            console.error('Usage check error:', error);
+            return 0;
+        }
+    }
+
+    async sendMessage(message) {
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
-                    action: 'increment',
-                    userId: this.userId
+                    message,
+                    token: this.token
                 })
             });
             
-            if (!response.ok) throw new Error('Usage increment failed');
-            await this.updateUsageCounter();
+            if (!response.ok) throw new Error('Chat failed');
+            const data = await response.json();
+            return data.response;
         } catch (error) {
-            console.error('Usage increment error:', error);
+            console.error('Chat error:', error);
+            return 'Sorry, there was an error processing your request.';
         }
     }
 
@@ -143,25 +120,23 @@ class NowGPTModal {
         counter.textContent = remaining;
     }
 
-    async sendMessage(message) {
+    async incrementUsage() {
         try {
-            const response = await fetch(`${this.apiBaseUrl}/chat`, {
+            const response = await fetch('/api/nowgpt-usage', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    message,
-                    userId: this.userId
+                    action: 'increment',
+                    token: this.token
                 })
             });
             
-            if (!response.ok) throw new Error('Chat failed');
-            const data = await response.json();
-            return data.response;
+            if (!response.ok) throw new Error('Usage increment failed');
+            await this.updateUsageCounter();
         } catch (error) {
-            console.error('Chat error:', error);
-            return 'Sorry, there was an error processing your request.';
+            console.error('Usage increment error:', error);
         }
     }
 
