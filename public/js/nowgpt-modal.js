@@ -45,7 +45,12 @@ class NowGPTModal {
                 })
             });
 
-            if (!response.ok) throw new Error('Chat failed');
+            if (!response.ok) {
+                const errorData = await response.json();
+                responseDiv.querySelector('.message-text').innerHTML = 
+                    `❌ Error: ${errorData.message || 'Failed to get response'}`;
+                return;
+            }
 
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
@@ -71,7 +76,13 @@ class NowGPTModal {
             await this.updateUsageCounter();
         } catch (error) {
             console.error('Chat error:', error);
-            return 'Sorry, there was an error processing your request.';
+            const errorMessage = 'Sorry, there was an error processing your request. Please try again later.';
+            if (this.messagesContainer.lastChild) {
+                this.messagesContainer.lastChild.querySelector('.message-text').innerHTML = 
+                    `❌ ${errorMessage}`;
+            } else {
+                this.addMessage(`❌ ${errorMessage}`, false);
+            }
         }
     }
 

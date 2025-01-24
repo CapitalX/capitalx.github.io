@@ -57,4 +57,4 @@ class RAGHandler {
     }
 }
 
-export default RAGHandler; 
+export const ragHandler = new RAGHandler(); 
