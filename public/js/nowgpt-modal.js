@@ -339,14 +339,17 @@ class NowGPTModal {
   }
 
   addWelcomeMessage() {
-    const welcomeMessage = `👋 Hello! I'm your ServiceNow Xanadu assistant. I can help you with:
+    const welcomeMessage = `👋 Hello! I'm your ServiceNow Xanadu assistant.
 
-- 📚 Feature explanations
-- 📖 Documentation queries
-- 🚀 Release notes information
-- ⚙️ Technical specifications
+I can help you with:
 
-How can I assist you today?`;
+• 📚 Feature explanations and capabilities
+• 📖 Documentation and implementation guides  
+• 🚀 Release notes and updates
+• ⚙️ Technical details and specifications
+• 💡 Best practices and recommendations
+
+How can I assist you today? Feel free to ask any questions!`;
     this.addMessage(welcomeMessage, false);
   }
 
