@@ -114,7 +114,7 @@ body {
     width: auto;
     opacity: 0;
     margin: 0 auto 1rem auto;
-    animation: fadeIn 2s ease forwards;
+    animation: fadeIn 1s ease forwards;
 }
 
 .intro-text p {
@@ -128,9 +128,9 @@ body {
     padding-right: 5px;
     border-right: 3px solid #00ffff;
     animation: 
-        showText 0s 3s forwards,
-        typewriter-text 2s cubic-bezier(0.4, 0.1, 0.2, 1) 3s forwards,
-        blink 0.8s ease-in-out 3s infinite;
+        showText 0s 1s forwards,
+        typewriter-text 1s cubic-bezier(0.4, 0.1, 0.2, 1) 1s forwards,
+        blink 0.8s ease-in-out 1s infinite;
     opacity: 0;
     visibility: hidden;
 }
@@ -142,7 +142,7 @@ body {
     gap: 2rem;
     margin: 2rem auto;
     opacity: 0;
-    animation: fadeInUp 0.5s ease 5s forwards;
+    animation: fadeInUp 0.5s ease 2s forwards;
     width: 100%;
 }
 
@@ -171,7 +171,7 @@ body {
     font-weight: 500;
     letter-spacing: 0.5px;
     opacity: 0;
-    animation: fadeInUp 0.5s ease 5s forwards;
+    animation: fadeInUp 0.5s ease 2s forwards;
 }
 
 .cta-button button:hover {
