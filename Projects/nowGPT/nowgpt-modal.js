@@ -84,10 +84,14 @@ class NowGPTModal {
     bindEvents() {
         const demoButtons = document.querySelectorAll('.try-demo-btn');
         demoButtons.forEach(btn => {
-            btn.addEventListener('click', () => this.showModal());
+            btn.addEventListener('click', () => {
+                console.log('Demo button clicked'); // Add this for debugging
+                this.showModal();
+            });
         });
 
-        document.querySelector('.close-modal').addEventListener('click', () => {
+        const closeButton = this.modal.querySelector('.close-modal');
+        closeButton.addEventListener('click', () => {
             this.hideModal();
         });
 
@@ -106,6 +110,7 @@ class NowGPTModal {
     }
 
     async showModal() {
+        console.log('Showing modal'); // Add this for debugging
         const remainingQuestions = await this.checkUsage();
         if (remainingQuestions <= 0) {
             alert('You have reached your daily limit. Please try again tomorrow!');
@@ -126,7 +131,8 @@ class NowGPTModal {
     }
 }
 
-// Initialize the NowGPT modal
+// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new NowGPTModal();
+    console.log('Initializing NowGPT Modal'); // Add this for debugging
+    const modal = new NowGPTModal();
 }); 
