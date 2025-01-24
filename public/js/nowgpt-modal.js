@@ -234,12 +234,6 @@ class NowGPTModal {
           sendButton.disabled = true;
           this.updateSendButton(true);
 
-          // First increment usage
-          const incrementResponse = await this.incrementUsage();
-          if (!incrementResponse.ok) {
-            throw new Error("Failed to increment usage");
-          }
-
           // Then send message
           await this.sendMessage(message);
           input.value = "";
@@ -250,6 +244,11 @@ class NowGPTModal {
           this.isProcessing = false;
           sendButton.disabled = false;
           this.updateSendButton(false);
+          // First increment usage
+          const incrementResponse = await this.incrementUsage();
+          if (!incrementResponse.ok) {
+            throw new Error("Failed to increment usage");
+          }
         }
       }
     };
