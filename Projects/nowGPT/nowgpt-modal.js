@@ -3,6 +3,8 @@ class NowGPTModal {
         this.modal = null;
         this.maxDaily = 3;
         this.token = null;
+        this.messageQueue = [];
+        this.isProcessing = false;
         this.initModal();
         this.bindEvents();
     }
@@ -29,6 +31,9 @@ class NowGPTModal {
 
     async sendMessage(message) {
         try {
+            const messageDiv = this.addMessage(message, true);
+            const responseDiv = this.addMessage('Thinking...', false);
+            
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
@@ -39,10 +44,31 @@ class NowGPTModal {
                     token: this.token
                 })
             });
-            
+
             if (!response.ok) throw new Error('Chat failed');
-            const data = await response.json();
-            return data.response;
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let responseText = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n');
+                
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = JSON.parse(line.slice(5));
+                        responseText += data.content;
+                        responseDiv.querySelector('.message-text').innerHTML = 
+                            marked.parse(responseText);
+                    }
+                }
+            }
+
+            await this.updateUsageCounter();
         } catch (error) {
             console.error('Chat error:', error);
             return 'Sorry, there was an error processing your request.';
@@ -70,6 +96,7 @@ class NowGPTModal {
         `;
         document.body.insertAdjacentHTML('beforeend', modalHTML);
         this.modal = document.querySelector('.demo-modal');
+        this.messagesContainer = this.modal.querySelector('.chat-messages');
     }
 
     bindEvents() {
@@ -140,28 +167,18 @@ class NowGPTModal {
         }
     }
 
-    async handleChat(message) {
-        const chatMessages = this.modal.querySelector('.chat-messages');
-        
-        // Add user message
-        chatMessages.innerHTML += `
-            <div class="message user-message">
-                <strong>You:</strong> ${message}
+    addMessage(content, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${isUser ? 'user' : 'assistant'}`;
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <span class="avatar">${isUser ? '👤' : '🤖'}</span>
+                <div class="message-text">${content}</div>
             </div>
         `;
-
-        // Get AI response
-        const response = await this.sendMessage(message);
-        
-        // Add AI response
-        chatMessages.innerHTML += `
-            <div class="message ai-message">
-                <strong>NowGPT:</strong> ${response}
-            </div>
-        `;
-
-        // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        this.messagesContainer.appendChild(messageDiv);
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        return messageDiv;
     }
 }
 

@@ -51,18 +51,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const { action, userId } = req.body;
+  const { action, token } = req.body;
   const today = new Date().toISOString().split('T')[0];
-  console.log('Processing request:', { action, userId, today });
+  console.log('Processing request:', { action, token, today });
 
   try {
     switch (action) {
       case 'check':
-        console.log('Checking usage for user:', userId);
+        console.log('Checking usage for token:', token);
         const { data: usageData, error: usageError } = await supabase
           .from('daily_usage')
           .select('count')
-          .eq('token', dailyToken)
+          .eq('token', token || dailyToken)
           .single();
 
         console.log('Supabase query result:', { usageData, usageError });
