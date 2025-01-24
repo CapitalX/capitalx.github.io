@@ -408,28 +408,22 @@ How can I assist you today? Feel free to ask any questions!`;
     // Update demo buttons
     const demoButtons = document.querySelectorAll(".try-demo-btn");
     demoButtons.forEach((button) => {
+      button.disabled = !this.isDemoEnabled; // Disable if isDemoEnabled is false
       if (!this.isDemoEnabled) {
-        button.disabled = true;
         button.title = "Coming Soon";
-        button.innerHTML = "Coming Soon";
       } else {
-        button.disabled = false;
-        button.title = "Try the demo";
-        button.innerHTML = "Try Demo";
+        button.title = "Try Demo";
       }
     });
 
     // Update source buttons
     const sourceButtons = document.querySelectorAll(".source-btn");
     sourceButtons.forEach((button) => {
+      button.disabled = !this.isSourceEnabled; // Disable if isSourceEnabled is false
       if (!this.isSourceEnabled) {
-        button.disabled = true;
         button.title = "Coming Soon";
-        button.innerHTML = '<i class="fab fa-github"></i> Coming Soon';
       } else {
-        button.disabled = false;
-        button.title = "View source";
-        button.innerHTML = '<i class="fab fa-github"></i> View Source';
+        button.title = "View Repo";
       }
     });
   }
