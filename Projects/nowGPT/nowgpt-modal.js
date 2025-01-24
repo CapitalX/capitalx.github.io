@@ -3,7 +3,7 @@ class NowGPTModal {
         this.modal = null;
         this.maxDaily = 3;
         this.userId = null;
-        this.apiBaseUrl = 'https://your-vercel-deployment.vercel.app/api';
+        this.apiBaseUrl = 'https://xtech-portfolio.vercel.app/api';
         this.initModal();
         this.bindEvents();
         this.initUserId();
@@ -126,6 +126,52 @@ class NowGPTModal {
         const counter = this.modal.querySelector('.usage-counter span');
         const remaining = await this.checkUsage();
         counter.textContent = remaining;
+    }
+
+    async sendMessage(message) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/chat`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message,
+                    userId: this.userId
+                })
+            });
+            
+            if (!response.ok) throw new Error('Chat failed');
+            const data = await response.json();
+            return data.response;
+        } catch (error) {
+            console.error('Chat error:', error);
+            return 'Sorry, there was an error processing your request.';
+        }
+    }
+
+    async handleChat(message) {
+        const chatMessages = this.modal.querySelector('.chat-messages');
+        
+        // Add user message
+        chatMessages.innerHTML += `
+            <div class="message user-message">
+                <strong>You:</strong> ${message}
+            </div>
+        `;
+
+        // Get AI response
+        const response = await this.sendMessage(message);
+        
+        // Add AI response
+        chatMessages.innerHTML += `
+            <div class="message ai-message">
+                <strong>NowGPT:</strong> ${response}
+            </div>
+        `;
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 }
 

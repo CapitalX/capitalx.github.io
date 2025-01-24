@@ -763,3 +763,17 @@ section::before {
     color: #fff;
     cursor: pointer;
 }
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+}
+
+.user-message {
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.ai-message {
+    background: rgba(255, 255, 255, 0.1);
+}
