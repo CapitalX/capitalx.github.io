@@ -68,8 +68,7 @@ export default async function handler(req, res) {
         const { data: usageData, error: usageError } = await supabase
           .from("daily_usage")
           .select("count, created_at")
-          .eq("token", token || dailyToken)
-          .single();
+          .eq("token", token || dailyToken);
 
         // Strict today check
         const isToday = usageData?.created_at
