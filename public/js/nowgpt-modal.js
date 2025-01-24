@@ -33,7 +33,8 @@ class NowGPTModal {
   async sendMessage(message) {
     try {
       const messageDiv = this.addMessage(message, true);
-      const responseDiv = this.addMessage("Thinking...", false);
+      const responseDiv = this.addMessage("", false);
+      this.typingIndicator.style.display = "flex";
 
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -48,9 +49,11 @@ class NowGPTModal {
 
       if (!response.ok) {
         const errorData = await response.json();
-        responseDiv.querySelector(".message-text").innerHTML = `❌ Error: ${
+        responseDiv.querySelector(
+          ".message-text"
+        ).innerHTML = `<div class="error-message">❌ ${
           errorData.message || "Failed to get response"
-        }`;
+        }</div>`;
         return;
       }
 
@@ -71,11 +74,14 @@ class NowGPTModal {
             responseText += data.content;
             responseDiv.querySelector(".message-text").innerHTML =
               marked.parse(responseText);
+            this.scrollToBottom();
           }
         }
       }
 
+      this.typingIndicator.style.display = "none";
       await this.updateUsageCounter();
+      this.scrollToBottom();
     } catch (error) {
       console.error("Chat error:", error);
       const errorMessage =
@@ -83,10 +89,9 @@ class NowGPTModal {
       if (this.messagesContainer.lastChild) {
         this.messagesContainer.lastChild.querySelector(
           ".message-text"
-        ).innerHTML = `❌ ${errorMessage}`;
-      } else {
-        this.addMessage(`❌ ${errorMessage}`, false);
+        ).innerHTML = `<div class="error-message">❌ ${errorMessage}</div>`;
       }
+      this.typingIndicator.style.display = "none";
     }
   }
 
@@ -94,22 +99,34 @@ class NowGPTModal {
     const modalHTML = `
             <div class="demo-modal" style="display: none;">
                 <div class="demo-modal-content">
-                    <span class="close-modal">&times;</span>
                     <div class="modal-header">
-                        <h3>ServiceNow Xanadu Assistant</h3>
-                        <div class="usage-counter">
-                            <span class="usage-icon">🎯</span>
-                            Questions remaining today: <span></span>
+                        <div class="modal-title">
+                            <h3>
+                                <span class="modal-icon">🤖</span>
+                                ServiceNow Xanadu Assistant
+                            </h3>
+                            <div class="usage-counter">
+                                <span class="usage-icon">🎯</span>
+                                <span class="usage-text">Questions remaining today: <span class="usage-count"></span></span>
+                            </div>
                         </div>
+                        <button class="close-modal" aria-label="Close chat">×</button>
                     </div>
                     <div class="demo-chat">
                         <div class="chat-messages"></div>
-                        <div class="chat-input">
-                            <input type="text" placeholder="Ask about Xanadu features, updates, or documentation...">
-                            <button class="send-button">
-                                <span class="button-text">Send</span>
-                                <span class="button-icon">↗️</span>
-                            </button>
+                        <div class="chat-input-container">
+                            <div class="chat-input">
+                                <input type="text" 
+                                    placeholder="Ask about Xanadu features, updates, or documentation..." 
+                                    aria-label="Chat input">
+                                <button class="send-button" aria-label="Send message">
+                                    <span class="button-text">Send</span>
+                                    <span class="button-icon">↗️</span>
+                                </button>
+                            </div>
+                            <div class="typing-indicator" style="display: none;">
+                                <span></span><span></span><span></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -118,46 +135,83 @@ class NowGPTModal {
     document.body.insertAdjacentHTML("beforeend", modalHTML);
     this.modal = document.querySelector(".demo-modal");
     this.messagesContainer = this.modal.querySelector(".chat-messages");
+    this.typingIndicator = this.modal.querySelector(".typing-indicator");
   }
 
   bindEvents() {
     const demoButtons = document.querySelectorAll(".try-demo-btn");
-    demoButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        console.log("Demo button clicked");
-        this.showModal();
-      });
-    });
-
     const closeButton = this.modal.querySelector(".close-modal");
-    closeButton.addEventListener("click", () => {
-      this.hideModal();
+    const sendButton = this.modal.querySelector(".send-button");
+    const input = this.modal.querySelector(".chat-input input");
+
+    demoButtons.forEach((btn) => {
+      btn.addEventListener("click", () => this.showModal());
     });
 
-    const sendButton = this.modal.querySelector(".chat-input button");
-    const input = this.modal.querySelector(".chat-input input");
+    closeButton.addEventListener("click", () => this.hideModal());
+
+    // Close on escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.modal.style.display === "flex") {
+        this.hideModal();
+      }
+    });
+
+    // Close on click outside modal
+    this.modal.addEventListener("click", (e) => {
+      if (e.target === this.modal) {
+        this.hideModal();
+      }
+    });
 
     const handleMessage = async () => {
       const message = input.value.trim();
-      if (message && (await this.checkUsage()) > 0) {
-        sendButton.disabled = true;
-        sendButton.textContent = "Sending...";
-        await this.incrementUsage();
-        await this.sendMessage(message);
-        input.value = "";
-        sendButton.disabled = false;
-        sendButton.textContent = "Send";
+      if (message && !this.isProcessing) {
+        const remaining = await this.checkUsage();
+        if (remaining > 0) {
+          this.isProcessing = true;
+          sendButton.disabled = true;
+          this.updateSendButton(true);
+          await this.incrementUsage();
+          await this.sendMessage(message);
+          input.value = "";
+          this.isProcessing = false;
+          sendButton.disabled = false;
+          this.updateSendButton(false);
+        }
       }
     };
 
     sendButton.addEventListener("click", handleMessage);
 
     input.addEventListener("keypress", async (e) => {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         await handleMessage();
       }
     });
+
+    // Dynamic input height
+    input.addEventListener("input", () => {
+      input.style.height = "auto";
+      input.style.height = input.scrollHeight + "px";
+    });
+  }
+
+  updateSendButton(isProcessing) {
+    const button = this.modal.querySelector(".send-button");
+    const buttonText = button.querySelector(".button-text");
+    const buttonIcon = button.querySelector(".button-icon");
+
+    if (isProcessing) {
+      buttonText.textContent = "Sending";
+      buttonIcon.textContent = "⏳";
+      button.classList.add("processing");
+    } else {
+      buttonText.textContent = "Send";
+      buttonIcon.textContent = "↗️";
+      button.classList.remove("processing");
+    }
   }
 
   async showModal() {
@@ -176,7 +230,7 @@ class NowGPTModal {
   }
 
   async updateUsageCounter() {
-    const counter = this.modal.querySelector(".usage-counter span");
+    const counter = this.modal.querySelector(".usage-count");
     const remaining = await this.checkUsage();
     counter.textContent = remaining;
   }
@@ -203,10 +257,11 @@ class NowGPTModal {
 
   addWelcomeMessage() {
     const welcomeMessage = `👋 Hello! I'm your ServiceNow Xanadu assistant. I can help you with:
-- Feature explanations
-- Documentation queries
-- Release notes information
-- Technical specifications
+
+- 📚 Feature explanations
+- 📖 Documentation queries
+- 🚀 Release notes information
+- ⚙️ Technical specifications
 
 How can I assist you today?`;
     this.addMessage(welcomeMessage, false);
@@ -217,24 +272,35 @@ How can I assist you today?`;
     messageDiv.className = `chat-message ${
       isUser ? "user" : "assistant"
     } animate-in`;
+
+    const timestamp = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
     messageDiv.innerHTML = `
             <div class="message-content">
                 <span class="avatar">${isUser ? "👤" : "🤖"}</span>
-                <div class="message-text">
-                    ${isUser ? content : marked.parse(content)}
+                <div class="message-body">
+                    <div class="message-text">
+                        ${isUser ? content : content || ""}
+                    </div>
+                    ${
+                      !isUser
+                        ? `<div class="message-time">${timestamp}</div>`
+                        : ""
+                    }
                 </div>
-                ${
-                  !isUser
-                    ? '<div class="message-time">' +
-                      new Date().toLocaleTimeString() +
-                      "</div>"
-                    : ""
-                }
             </div>
         `;
+
     this.messagesContainer.appendChild(messageDiv);
-    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+    this.scrollToBottom();
     return messageDiv;
+  }
+
+  scrollToBottom() {
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
   }
 }
 

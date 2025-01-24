@@ -691,17 +691,25 @@ section::before {
     }
 }
 
+/* NowGPT Modal Enhanced Styles */
 .demo-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 5, 0.85);
+    backdrop-filter: blur(8px);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.demo-modal.visible {
+    opacity: 1;
 }
 
 .demo-modal-content {
@@ -710,88 +718,108 @@ section::before {
     border: 1px solid rgba(0, 255, 255, 0.1);
     max-width: 800px;
     width: 90%;
-    border-radius: 12px;
+    max-height: 90vh;
+    border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     position: relative;
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.demo-modal.visible .demo-modal-content {
+    transform: translateY(0);
 }
 
 .modal-header {
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
     border-bottom: 1px solid rgba(0, 255, 255, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background: rgba(10, 10, 15, 0.98);
 }
 
-.modal-header h3 {
+.modal-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.modal-title h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
 }
 
-.chat-message {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeIn 0.3s ease forwards;
+.modal-icon {
+    font-size: 1.5rem;
 }
 
-.message-content {
-    padding: 1rem;
-    margin: 0.5rem;
-    border-radius: 12px;
-    max-width: 85%;
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
     display: flex;
-    gap: 0.75rem;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
 }
 
-.user .message-content {
-    background: rgba(0, 255, 255, 0.1);
-    margin-left: auto;
-    border: 1px solid rgba(0, 255, 255, 0.2);
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: rotate(90deg);
 }
 
-.assistant .message-content {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.demo-chat {
+    display: flex;
+    flex-direction: column;
+    height: calc(90vh - 80px);
 }
 
-.message-text {
+.chat-messages {
     flex: 1;
-    line-height: 1.6;
+    overflow-y: auto;
+    padding: 1.5rem;
+    scroll-behavior: smooth;
 }
 
-.message-text p {
-    margin-bottom: 0.75rem;
-}
-
-.message-text p:last-child {
-    margin-bottom: 0;
-}
-
-.message-time {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
-    margin-top: 0.5rem;
+.chat-input-container {
+    padding: 1rem;
+    background: rgba(10, 10, 15, 0.98);
+    border-top: 1px solid rgba(0, 255, 255, 0.1);
 }
 
 .chat-input {
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-top: 1px solid rgba(0, 255, 255, 0.1);
-    border-radius: 0 0 12px 12px;
     display: flex;
     gap: 0.75rem;
+    align-items: flex-end;
 }
 
 .chat-input input {
     flex: 1;
+    min-height: 44px;
+    max-height: 120px;
     padding: 0.75rem 1rem;
-    border-radius: 8px;
+    border-radius: 12px;
     border: 1px solid rgba(0, 255, 255, 0.2);
     background: rgba(0, 0, 0, 0.3);
     color: #fff;
     font-size: 0.95rem;
+    resize: none;
+    overflow-y: auto;
+    transition: all 0.2s ease;
 }
 
 .chat-input input:focus {
@@ -801,8 +829,8 @@ section::before {
 }
 
 .send-button {
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
     background: rgba(0, 255, 255, 0.1);
     border: 1px solid rgba(0, 255, 255, 0.3);
     color: #fff;
@@ -811,65 +839,96 @@ section::before {
     align-items: center;
     gap: 0.5rem;
     transition: all 0.2s ease;
+    min-height: 44px;
 }
 
 .send-button:hover:not(:disabled) {
     background: rgba(0, 255, 255, 0.2);
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.2);
 }
 
-.send-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.send-button.processing {
+    background: rgba(0, 255, 255, 0.05);
 }
 
-.usage-counter {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
-    display: flex;
+.typing-indicator {
+    padding: 0.5rem;
+    display: none;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
-.usage-icon {
-    color: #00ffff;
+.typing-indicator span {
+    width: 4px;
+    height: 4px;
+    background: rgba(0, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: typing 1s infinite ease-in-out;
 }
 
-.avatar {
-    font-size: 1.25rem;
-    opacity: 0.8;
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
 }
 
-/* Code block styling within messages */
-.message-text pre {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-    padding: 1rem;
-    margin: 0.75rem 0;
-    overflow-x: auto;
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
 }
 
-.message-text code {
-    font-family: 'Fira Code', monospace;
-    font-size: 0.9rem;
+@keyframes typing {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
 }
 
-/* Scrollbar styling */
-.chat-messages::-webkit-scrollbar {
-    width: 8px;
+.error-message {
+    color: #ff4444;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.2);
 }
 
-.chat-messages::-webkit-scrollbar-track {
-    background: #222;
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .demo-modal-content {
+        width: 95%;
+        height: 90vh;
+        margin: 0;
+        border-radius: 12px;
+    }
+
+    .chat-messages {
+        padding: 1rem;
+    }
+
+    .message-content {
+        max-width: 90%;
+    }
+
+    .modal-title h3 {
+        font-size: 1.1rem;
+    }
+
+    .chat-input {
+        padding: 0.75rem;
+    }
 }
 
-.chat-messages::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 4px;
-}
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .demo-modal-content {
+        background: rgba(5, 5, 10, 0.95);
+    }
 
-.chat-messages::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    .chat-input input {
+        background: rgba(0, 0, 0, 0.4);
+    }
 }
 
 /* Add initial section spacing */
