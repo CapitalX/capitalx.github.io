@@ -109,42 +109,10 @@ export default async function handler(req, res) {
         });
 
       case "increment":
-        const { data: currentData, error: currentError } = await supabase
-          .from("daily_usage")
-          .select("count, created_at")
-          .eq("token", token || dailyToken)
-          .single();
-
-        if (currentError) {
-          console.error("Error checking current count:", currentError);
-          return res.status(500).json({ message: "Error checking usage" });
-        }
-
-        const currentCount = currentData?.count || 0;
-
-        // Strict check before incrementing
-        if (currentCount >= 3) {
-          return res.status(429).json({ message: "Daily limit exceeded" });
-        }
-
-        // Use update with current count to ensure atomic increment
-        const { error: incrementError } = await supabase
-          .from("daily_usage")
-          .update({
-            count: currentCount + 1,
-            last_used: new Date().toISOString(),
-          })
-          .eq("token", token || dailyToken);
-
-        if (incrementError) {
-          console.error("Error incrementing usage:", incrementError);
-          return res.status(500).json({ message: "Error incrementing usage" });
-        }
-
-        // Return updated remaining count
-        return res.status(200).json({
-          message: "Usage incremented",
-          remaining: 2 - currentCount, // Show remaining after increment
+        // For increment, we'll now only handle this in the chat.js after streaming
+        // This endpoint will be deprecated for increment action
+        return res.status(400).json({
+          message: "Increment should be handled after chat completion",
         });
 
       default:
