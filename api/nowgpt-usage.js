@@ -28,14 +28,14 @@ export default async function handler(req, res) {
           .from('usage_tracking')
           .select('count')
           .eq('user_id', userId)
-          .eq('date', today)
-          .single();
+          .eq('date', today);
 
-        if (usageError && usageError.code !== 'PGNF') {
-          throw usageError;
+        // If no records found or error, return max available questions
+        if (usageError || !usageData || usageData.length === 0) {
+          return res.status(200).json({ remaining: 3 });
         }
 
-        const currentCount = usageData?.count || 0;
+        const currentCount = usageData[0]?.count || 0;
         return res.status(200).json({ remaining: 3 - currentCount });
 
       case 'increment':
