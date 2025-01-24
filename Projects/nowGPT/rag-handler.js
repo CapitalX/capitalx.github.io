@@ -15,16 +15,21 @@ class RAGHandler {
 
     async selectRelevantSources(query) {
         const sourceDescriptions = {
-            "xanadu_platform_security.pdf": "Security features, authentication...",
-            "xanadu_general_release_notes.pdf": "Product updates, new features...",
-            // Add other source descriptions
+"xanadu_platform_security.pdf": "Security features, authentication methods, authorization controls, compliance standards, data protection",
+                "xanadu_general_release_notes.pdf": "Product updates, new feature releases, improvements, bug fixes, deprecation notices",
+                "xanadu_api_references.pdf": "Complete API documentation, endpoint specifications, request/response formats, authentication methods",
+                "xanadu_application_development.pdf": "Development guidelines, scripting tutorials, customization options, best practices",
+                "xanadu_it_service_management.pdf": "ITSM workflows, incident/problem management, service desk operations, SLA management",
+                "xanadu_glossary.pdf": "Comprehensive technical terms, industry definitions, platform-specific concepts",
+                "xanadu_customer_service_management.pdf": "Customer service features, case management workflows, SLA tracking, customer engagement tools"
         };
 
         const response = await this.openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [{
                 role: "system",
-                content: `Select relevant documentation sources for: ${query}\n${JSON.stringify(sourceDescriptions)}\nReturn only filenames, comma-separated.`
+                content: `Analyze the query to determine which documentation sources are most relevant.
+            Returns a list of relevant PDF filenames.: ${query}\n${JSON.stringify(sourceDescriptions)}\nReturn only filenames, comma-separated.`
             }],
             temperature: 0
         });
