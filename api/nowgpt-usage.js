@@ -54,49 +54,61 @@ export default async function handler(req, res) {
   }
 
   try {
+    // First, ensure a record exists for today
+    const { data: existingRecord, error: checkError } = await supabase
+      .from("daily_usage")
+      .select("count, created_at")
+      .eq("token", token || dailyToken)
+      .single();
+
+    const isToday = existingRecord?.created_at
+      ? new Date(existingRecord.created_at).toDateString() ===
+        new Date().toDateString()
+      : false;
+
+    // If no record exists or it's not from today, create initial record
+    if (!existingRecord || !isToday) {
+      const { error: initError } = await supabase.from("daily_usage").upsert({
+        token: token || dailyToken,
+        count: 0,
+        created_at: new Date().toISOString(),
+        last_used: new Date().toISOString(),
+      });
+
+      if (initError) {
+        console.error("Error creating initial record:", initError);
+        return res.status(500).json({ message: "Error initializing usage" });
+      }
+    }
+
+    // Clean up expired records
+    await supabase
+      .from("daily_usage")
+      .delete()
+      .lt(
+        "created_at",
+        new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      );
+
     switch (action) {
       case "check":
-        // First, clean up expired records
-        await supabase
-          .from("daily_usage")
-          .delete()
-          .lt(
-            "created_at",
-            new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-          );
-
         const { data: usageData, error: usageError } = await supabase
           .from("daily_usage")
           .select("count, created_at")
-          .eq("token", token || dailyToken);
+          .eq("token", token || dailyToken)
+          .single();
 
-        // Strict today check
-        const isToday = usageData?.created_at
-          ? new Date(usageData.created_at).toDateString() ===
-            new Date().toDateString()
-          : false;
-
-        if (usageError || !usageData || !isToday) {
-          return res.status(200).json({
-            remaining: 3,
-            token: dailyToken,
-          });
-        }
-
-        if (usageData.count >= 3) {
-          return res.status(200).json({
-            remaining: 0,
-            token: dailyToken,
-          });
+        if (usageError) {
+          console.error("Usage check error:", usageError);
+          return res.status(500).json({ message: "Error checking usage" });
         }
 
         return res.status(200).json({
-          remaining: 3 - usageData.count,
-          token: dailyToken,
+          remaining: 3 - (usageData?.count || 0),
+          token: token || dailyToken,
         });
 
       case "increment":
-        // First verify current count
         const { data: currentData, error: currentError } = await supabase
           .from("daily_usage")
           .select("count, created_at")
@@ -108,33 +120,25 @@ export default async function handler(req, res) {
           return res.status(500).json({ message: "Error checking usage" });
         }
 
-        const currentIsToday = currentData?.created_at
-          ? new Date(currentData.created_at).toDateString() ===
-            new Date().toDateString()
-          : false;
-
-        const currentCount = currentIsToday ? currentData?.count || 0 : 0;
+        const currentCount = currentData?.count || 0;
 
         // Strict check before incrementing
         if (currentCount >= 3) {
           return res.status(429).json({ message: "Daily limit exceeded" });
         }
 
-        // Use update instead of upsert to ensure atomic increment
+        // Use update with current count to ensure atomic increment
         const { error: incrementError } = await supabase
           .from("daily_usage")
-          .upsert({
-            token: token || dailyToken,
-            count: currentIsToday ? currentCount + 1 : 1,
-            created_at: currentIsToday
-              ? currentData.created_at
-              : new Date().toISOString(),
+          .update({
+            count: currentCount + 1,
             last_used: new Date().toISOString(),
-          });
+          })
+          .eq("token", token || dailyToken);
 
         if (incrementError) {
           console.error("Error incrementing usage:", incrementError);
-          throw incrementError;
+          return res.status(500).json({ message: "Error incrementing usage" });
         }
 
         // Return updated remaining count
