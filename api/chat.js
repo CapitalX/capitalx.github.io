@@ -85,22 +85,15 @@ export default async function handler(req, res) {
         new Date().toDateString()
       : false;
 
-    if (usageError) {
-      console.error("Usage check error:", usageError);
-      return res.status(500).json({ message: "Error checking usage" });
-    }
-
     const currentCount = isToday ? usageData?.count || 0 : 0;
 
     if (currentCount >= 3) {
       return res.status(429).json({ message: "Daily limit exceeded" });
     }
 
-    // Get relevant documents
+    // Get relevant documents and process chat
     const relevantDocs = await ragHandler.getRelevantDocuments(message);
     const context = relevantDocs.map((doc) => doc.content).join("\n\n");
-
-    // Get conversation history
     const chatHistory = memory.getMessages();
 
     // Create completion with context and history
@@ -124,18 +117,28 @@ export default async function handler(req, res) {
       Connection: "keep-alive",
     });
 
+    let responseText = "";
+
     // Stream the response
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content || "";
+      responseText += content;
       res.write(`data: ${JSON.stringify({ content })}\n\n`);
     }
 
-    // Update usage count after successful response
-    await supabase.from("daily_usage").upsert({
-      token,
-      count: (usageData?.count || 0) + 1,
-      last_used: new Date().toISOString(),
-    });
+    // Only increment usage after successful response
+    const { error: incrementError } = await supabase
+      .from("daily_usage")
+      .upsert({
+        token,
+        count: currentCount + 1,
+        created_at: isToday ? usageData?.created_at : new Date().toISOString(),
+        last_used: new Date().toISOString(),
+      });
+
+    if (incrementError) {
+      console.error("Error incrementing usage:", incrementError);
+    }
 
     // Update memory
     memory.addMessage("user", message);
@@ -144,6 +147,6 @@ export default async function handler(req, res) {
     res.end();
   } catch (error) {
     console.error("Chat error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }

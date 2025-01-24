@@ -98,11 +98,16 @@ export default async function handler(req, res) {
 
       case "increment":
         // First verify current count
-        const { data: currentData } = await supabase
+        const { data: currentData, error: currentError } = await supabase
           .from("daily_usage")
           .select("count, created_at")
           .eq("token", token || dailyToken)
           .single();
+
+        if (currentError) {
+          console.error("Error checking current count:", currentError);
+          return res.status(500).json({ message: "Error checking usage" });
+        }
 
         const currentIsToday = currentData?.created_at
           ? new Date(currentData.created_at).toDateString() ===
@@ -111,28 +116,33 @@ export default async function handler(req, res) {
 
         const currentCount = currentIsToday ? currentData?.count || 0 : 0;
 
+        // Strict check before incrementing
         if (currentCount >= 3) {
           return res.status(429).json({ message: "Daily limit exceeded" });
         }
 
-        // Increment with new record if not today, or update existing
+        // Use update instead of upsert to ensure atomic increment
         const { error: incrementError } = await supabase
           .from("daily_usage")
-          .upsert(
-            {
-              token: token || dailyToken,
-              count: currentIsToday ? currentCount + 1 : 1,
-              created_at: new Date().toISOString(),
-              last_used: new Date().toISOString(),
-            },
-            {
-              onConflict: "token",
-              count: "count + 1",
-            }
-          );
+          .upsert({
+            token: token || dailyToken,
+            count: currentIsToday ? currentCount + 1 : 1,
+            created_at: currentIsToday
+              ? currentData.created_at
+              : new Date().toISOString(),
+            last_used: new Date().toISOString(),
+          });
 
-        if (incrementError) throw incrementError;
-        return res.status(200).json({ message: "Usage incremented" });
+        if (incrementError) {
+          console.error("Error incrementing usage:", incrementError);
+          throw incrementError;
+        }
+
+        // Return updated remaining count
+        return res.status(200).json({
+          message: "Usage incremented",
+          remaining: 2 - currentCount, // Show remaining after increment
+        });
 
       default:
         return res.status(400).json({ message: "Invalid action" });
