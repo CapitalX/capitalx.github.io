@@ -1,6 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
-import { ragHandler } from './rag-handler';
+import { createClient } from "@supabase/supabase-js";
+import OpenAI from "openai";
+import { ragHandler } from "./rag-handler";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -8,31 +8,36 @@ const supabase = createClient(
 );
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 class ConversationMemory {
-    constructor(windowSize = 3) {
-        this.messages = [];
-        this.windowSize = windowSize;
-    }
+  constructor(windowSize = 3) {
+    this.messages = [];
+    this.windowSize = windowSize;
+  }
 
-    addMessage(role, content) {
-        this.messages.push({ role, content });
-        if (this.messages.length > this.windowSize * 2) {
-            this.messages = this.messages.slice(-this.windowSize * 2);
-        }
+  addMessage(role, content) {
+    this.messages.push({ role, content });
+    if (this.messages.length > this.windowSize * 2) {
+      this.messages = this.messages.slice(-this.windowSize * 2);
     }
+  }
 
-    getMessages() {
-        return this.messages;
-    }
+  getMessages() {
+    return this.messages;
+  }
 }
 
 export const memory = new ConversationMemory();
 
-export const CHAT_PROMPT = `You are an expert assistant in ServiceNow Xanadu Release Notes and Documentation. Use the following pieces of context to answer the question at the end.
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
+export const CHAT_PROMPT = `You are a friendly and helpful ServiceNow expert assistant, focused on the Xanadu Release. Your goal is to provide clear, accurate information based on the documentation provided.
+
+When responding:
+- Be concise and direct
+- Use bullet points for clarity
+- Include relevant code examples when applicable
+- Highlight important information using markdown
 
 Context:
 {context}
@@ -42,50 +47,43 @@ Chat History:
 
 Question: {question}
 
-Please provide your response in the following format:
+Structure your response as follows:
 
-1. Direct Answer: 
-[Provide a clear, concise answer directly addressing the question]
+💡 **Quick Answer:**
+[Provide a brief, direct answer to the question]
 
-2. From the Documentation:
-[Quote or summarize relevant information from the provided context]
+📚 **Details:**
+[Expand on the answer with relevant details, examples, or steps]
 
-3. Additional Details:
-[Provide any important context, examples, code snippets, or clarifications]
-
-4. Related Documentation:
-[List 2-3 related topics from the Xanadu documentation that might be helpful]
-
-Format your response using markdown for better readability.
-Use bullet points and code blocks where appropriate.
-If showing technical steps, number them clearly.
+🔍 **Source:**
+[Reference specific documentation or release notes]
 
 Answer:`;
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   const { message, token } = req.body;
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
   try {
     // Check usage first
     const { data: usageData, error: usageError } = await supabase
-      .from('daily_usage')
-      .select('count')
-      .eq('token', token)
+      .from("daily_usage")
+      .select("count")
+      .eq("token", token)
       .single();
 
     if (usageError) throw usageError;
     if (usageData?.count >= 3) {
-      return res.status(429).json({ message: 'Daily limit exceeded' });
+      return res.status(429).json({ message: "Daily limit exceeded" });
     }
 
     // Get relevant documents
     const relevantDocs = await ragHandler.getRelevantDocuments(message);
-    const context = relevantDocs.map(doc => doc.content).join('\n\n');
+    const context = relevantDocs.map((doc) => doc.content).join("\n\n");
 
     // Get conversation history
     const chatHistory = memory.getMessages();
@@ -96,35 +94,33 @@ export default async function handler(req, res) {
       messages: [
         { role: "system", content: CHAT_PROMPT },
         ...chatHistory,
-        { 
-          role: "user", 
-          content: `Context: ${context}\n\nQuestion: ${message}` 
-        }
+        {
+          role: "user",
+          content: `Context: ${context}\n\nQuestion: ${message}`,
+        },
       ],
       stream: true,
     });
 
     // Set headers for streaming
     res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
     });
 
     // Stream the response
     for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || '';
+      const content = chunk.choices[0]?.delta?.content || "";
       res.write(`data: ${JSON.stringify({ content })}\n\n`);
     }
 
     // Update usage count after successful response
-    await supabase
-      .from('daily_usage')
-      .upsert({
-        token,
-        count: (usageData?.count || 0) + 1,
-        last_used: new Date().toISOString()
-      });
+    await supabase.from("daily_usage").upsert({
+      token,
+      count: (usageData?.count || 0) + 1,
+      last_used: new Date().toISOString(),
+    });
 
     // Update memory
     memory.addMessage("user", message);
@@ -132,7 +128,7 @@ export default async function handler(req, res) {
 
     res.end();
   } catch (error) {
-    console.error('Chat error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Chat error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
-} 
+}
