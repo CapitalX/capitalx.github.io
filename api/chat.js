@@ -79,7 +79,11 @@ export default async function handler(req, res) {
       .eq("token", token)
       .single();
 
-    // Verify the record is from today
+    if (usageError) {
+      console.error("Usage check error:", usageError);
+      return res.status(500).json({ message: "Error checking usage" });
+    }
+
     const isToday = usageData?.created_at
       ? new Date(usageData.created_at).toDateString() ===
         new Date().toDateString()
@@ -129,12 +133,11 @@ export default async function handler(req, res) {
     // Only increment usage after successful response
     const { error: incrementError } = await supabase
       .from("daily_usage")
-      .upsert({
-        token,
+      .update({
         count: currentCount + 1,
-        created_at: isToday ? usageData?.created_at : new Date().toISOString(),
         last_used: new Date().toISOString(),
-      });
+      })
+      .eq("token", token);
 
     if (incrementError) {
       console.error("Error incrementing usage:", incrementError);

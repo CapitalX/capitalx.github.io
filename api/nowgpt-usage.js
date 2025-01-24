@@ -66,17 +66,23 @@ export default async function handler(req, res) {
         new Date().toDateString()
       : false;
 
-    // If no record exists or it's not from today, create initial record
+    // If no record exists or it's not from today, create/reset record with count 0
     if (!existingRecord || !isToday) {
-      const { error: initError } = await supabase.from("daily_usage").upsert({
-        token: token || dailyToken,
-        count: 0,
-        created_at: new Date().toISOString(),
-        last_used: new Date().toISOString(),
-      });
+      const { error: initError } = await supabase.from("daily_usage").upsert(
+        {
+          token: token || dailyToken,
+          count: 0, // Always start at 0
+          created_at: new Date().toISOString(),
+          last_used: new Date().toISOString(),
+        },
+        {
+          onConflict: "token",
+          ignoreDuplicates: false, // Force update on conflict
+        }
+      );
 
       if (initError) {
-        console.error("Error creating initial record:", initError);
+        console.error("Error creating/resetting record:", initError);
         return res.status(500).json({ message: "Error initializing usage" });
       }
     }
@@ -92,9 +98,10 @@ export default async function handler(req, res) {
 
     switch (action) {
       case "check":
+        // After ensuring record exists, get current count
         const { data: usageData, error: usageError } = await supabase
           .from("daily_usage")
-          .select("count, created_at")
+          .select("count")
           .eq("token", token || dailyToken)
           .single();
 
@@ -109,8 +116,6 @@ export default async function handler(req, res) {
         });
 
       case "increment":
-        // For increment, we'll now only handle this in the chat.js after streaming
-        // This endpoint will be deprecated for increment action
         return res.status(400).json({
           message: "Increment should be handled after chat completion",
         });
