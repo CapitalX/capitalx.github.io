@@ -358,6 +358,28 @@ body {
     gap: 0.5rem;
 }
 
+/* Add disabled state styles while preserving original look */
+.try-demo-btn:disabled,
+.source-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Preserve hover effects for enabled buttons */
+.try-demo-btn:not(:disabled):hover,
+.source-btn:not(:disabled):hover {
+    background: rgba(0, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
+}
+
+/* Keep icon visible even when disabled */
+.source-btn i {
+    opacity: 1;
+    font-size: 1.1rem;
+}
+
 .usage-limit {
     margin-top: 1rem;
     text-align: center;

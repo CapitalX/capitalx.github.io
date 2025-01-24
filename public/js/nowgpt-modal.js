@@ -411,33 +411,22 @@ How can I assist you today? Feel free to ask any questions!`;
       if (!this.isDemoEnabled) {
         button.disabled = true;
         button.title = "Demo coming soon!";
-        button.style.opacity = "0.5";
-        button.style.cursor = "not-allowed";
-        button.textContent = "Coming Soon";
       } else {
         button.disabled = false;
         button.title = "Try the demo";
-        button.style.opacity = "1";
-        button.style.cursor = "pointer";
-        button.textContent = "Try Demo";
       }
     });
 
     // Update source buttons
     const sourceButtons = document.querySelectorAll(".source-btn");
     sourceButtons.forEach((button) => {
+      const originalContent = button.innerHTML; // Store original content with icon
       if (!this.isSourceEnabled) {
         button.disabled = true;
         button.title = "Source coming soon!";
-        button.style.opacity = "0.5";
-        button.style.cursor = "not-allowed";
-        button.textContent = "Source Coming Soon";
       } else {
         button.disabled = false;
         button.title = "View source";
-        button.style.opacity = "1";
-        button.style.cursor = "pointer";
-        button.textContent = "View Source";
       }
     });
   }
