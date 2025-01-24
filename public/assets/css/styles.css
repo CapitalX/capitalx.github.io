@@ -332,6 +332,7 @@ body {
     margin-top: 1.5rem;
 }
 
+/* Update button base styles */
 .try-demo-btn, .source-btn {
     padding: 0.75rem 1.5rem;
     border-radius: 25px;
@@ -339,6 +340,7 @@ body {
     transition: all 0.3s ease;
     flex: 1;
     text-align: center;
+    position: relative; /* Added for absolute positioning of disabled text */
 }
 
 .try-demo-btn {
@@ -364,12 +366,17 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
-    position: relative;
+}
+
+/* Hide original content when disabled */
+.try-demo-btn:disabled > *,
+.source-btn:disabled > * {
+    visibility: hidden;
 }
 
 /* Add "Coming Soon" text for disabled buttons */
-.try-demo-btn:disabled::after,
-.source-btn:disabled::after {
+.try-demo-btn:disabled::before,
+.source-btn:disabled::before {
     content: "Coming Soon";
     position: absolute;
     top: 50%;
@@ -377,12 +384,8 @@ body {
     transform: translate(-50%, -50%);
     font-size: 0.9rem;
     white-space: nowrap;
-}
-
-/* Keep original content visible when enabled */
-.try-demo-btn:not(:disabled)::after,
-.source-btn:not(:disabled)::after {
-    display: none;
+    visibility: visible;
+    color: #fff;
 }
 
 /* Preserve hover effects for enabled buttons */
@@ -393,16 +396,9 @@ body {
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
 }
 
-/* Keep icon visible even when disabled */
+/* Keep icon styles */
 .source-btn i {
-    opacity: 1;
     font-size: 1.1rem;
-}
-
-/* Hide original text when disabled */
-.try-demo-btn:disabled span,
-.source-btn:disabled span {
-    opacity: 0;
 }
 
 .usage-limit {
