@@ -5,6 +5,18 @@ class NowGPTModal {
     this.token = null;
     this.messageQueue = [];
     this.isProcessing = false;
+
+    // Wait for DOM to be ready
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => {
+        this.init();
+      });
+    } else {
+      this.init();
+    }
+  }
+
+  init() {
     this.initModal();
     this.bindEvents();
     this.addWelcomeMessage();
@@ -100,41 +112,41 @@ class NowGPTModal {
 
   initModal() {
     const modalHTML = `
-            <div class="demo-modal" style="display: none;">
-                <div class="demo-modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">
-                            <h3>
-                                <span class="modal-icon">🤖</span>
-                                ServiceNow Xanadu Assistant
-                            </h3>
-                            <div class="usage-counter">
-                                <span class="usage-icon">🎯</span>
-                                <span class="usage-text">Questions remaining today: <span class="usage-count"></span></span>
-                            </div>
+        <div class="demo-modal" style="display: none;">
+            <div class="demo-modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h3>
+                            <span class="modal-icon">🤖</span>
+                            ServiceNow Xanadu Assistant
+                        </h3>
+                        <div class="usage-counter">
+                            <span class="usage-icon">🎯</span>
+                            <span class="usage-text">Questions remaining today: <span class="usage-count"></span></span>
                         </div>
-                        <button class="close-modal" aria-label="Close chat">×</button>
                     </div>
-                    <div class="demo-chat">
-                        <div class="chat-messages"></div>
-                        <div class="chat-input-container">
-                            <div class="chat-input">
-                                <input type="text" 
-                                    placeholder="Ask about Xanadu features, updates, or documentation..." 
-                                    aria-label="Chat input">
-                                <button class="send-button" aria-label="Send message">
-                                    <span class="button-text">Send</span>
-                                    <span class="button-icon">↗️</span>
-                                </button>
-                            </div>
-                            <div class="typing-indicator" style="display: none;">
-                                <span></span><span></span><span></span>
-                            </div>
+                    <button class="close-modal" aria-label="Close chat">×</button>
+                </div>
+                <div class="demo-chat">
+                    <div class="chat-messages"></div>
+                    <div class="chat-input-container">
+                        <div class="chat-input">
+                            <input type="text" 
+                                placeholder="Ask about Xanadu features, updates, or documentation..." 
+                                aria-label="Chat input">
+                            <button class="send-button" aria-label="Send message">
+                                <span class="button-text">Send</span>
+                                <span class="button-icon">↗️</span>
+                            </button>
+                        </div>
+                        <div class="typing-indicator" style="display: none;">
+                            <span></span><span></span><span></span>
                         </div>
                     </div>
                 </div>
             </div>
-        `;
+        </div>
+    `;
     document.body.insertAdjacentHTML("beforeend", modalHTML);
     this.modal = document.querySelector(".demo-modal");
     this.messagesContainer = this.modal.querySelector(".chat-messages");
@@ -319,7 +331,6 @@ How can I assist you today?`;
 }
 
 // Initialize the NowGPT modal
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Initializing NowGPT Modal");
+if (typeof window !== "undefined") {
   new NowGPTModal();
-});
+}
