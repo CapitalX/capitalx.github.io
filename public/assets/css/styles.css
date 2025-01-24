@@ -80,10 +80,10 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     text-align: center;
-    padding: 2rem;
+    padding-top: 25vh;
     background: transparent;
     position: relative;
     z-index: 1;
