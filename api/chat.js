@@ -66,18 +66,33 @@ export default async function handler(req, res) {
   }
 
   const { message, token } = req.body;
-  const today = new Date().toISOString().split("T")[0];
+
+  if (!token) {
+    return res.status(400).json({ message: "Token required" });
+  }
 
   try {
-    // Check usage first
+    // Check usage first with strict validation
     const { data: usageData, error: usageError } = await supabase
       .from("daily_usage")
-      .select("count")
+      .select("count, created_at")
       .eq("token", token)
       .single();
 
-    if (usageError) throw usageError;
-    if (usageData?.count >= 3) {
+    // Verify the record is from today
+    const isToday = usageData?.created_at
+      ? new Date(usageData.created_at).toDateString() ===
+        new Date().toDateString()
+      : false;
+
+    if (usageError) {
+      console.error("Usage check error:", usageError);
+      return res.status(500).json({ message: "Error checking usage" });
+    }
+
+    const currentCount = isToday ? usageData?.count || 0 : 0;
+
+    if (currentCount >= 3) {
       return res.status(429).json({ message: "Daily limit exceeded" });
     }
 

@@ -30,6 +30,7 @@ export default async function handler(req, res) {
     req.socket.remoteAddress;
 
   const dailyToken = generateDailyToken(ip, process.env.TOKEN_SECRET);
+  const { action, token } = req.body;
 
   // Log every incoming request
   console.log("=== New Request ===");
@@ -52,10 +53,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { action, token } = req.body;
-  const today = new Date().toISOString().split("T")[0];
-  console.log("Processing request:", { action, token, today });
-
   try {
     switch (action) {
       case "check":
@@ -74,37 +71,57 @@ export default async function handler(req, res) {
           .eq("token", token || dailyToken)
           .single();
 
-        console.log("Supabase query result:", { usageData, usageError });
-
-        // Check if the record is from today
+        // Strict today check
         const isToday = usageData?.created_at
           ? new Date(usageData.created_at).toDateString() ===
             new Date().toDateString()
           : false;
 
         if (usageError || !usageData || !isToday) {
-          console.log("No valid usage records found, returning max limit");
           return res.status(200).json({
             remaining: 3,
             token: dailyToken,
           });
         }
 
-        const currentCount = usageData.count || 0;
-        console.log("Current usage count:", currentCount);
+        if (usageData.count >= 3) {
+          return res.status(200).json({
+            remaining: 0,
+            token: dailyToken,
+          });
+        }
 
         return res.status(200).json({
-          remaining: 3 - currentCount,
+          remaining: 3 - usageData.count,
           token: dailyToken,
         });
 
       case "increment":
+        // First verify current count
+        const { data: currentData } = await supabase
+          .from("daily_usage")
+          .select("count, created_at")
+          .eq("token", token || dailyToken)
+          .single();
+
+        const currentIsToday = currentData?.created_at
+          ? new Date(currentData.created_at).toDateString() ===
+            new Date().toDateString()
+          : false;
+
+        const currentCount = currentIsToday ? currentData?.count || 0 : 0;
+
+        if (currentCount >= 3) {
+          return res.status(429).json({ message: "Daily limit exceeded" });
+        }
+
+        // Increment with new record if not today, or update existing
         const { error: incrementError } = await supabase
           .from("daily_usage")
           .upsert(
             {
               token: token || dailyToken,
-              count: 1,
+              count: currentIsToday ? currentCount + 1 : 1,
               created_at: new Date().toISOString(),
               last_used: new Date().toISOString(),
             },

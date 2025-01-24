@@ -220,13 +220,31 @@ class NowGPTModal {
       const message = input.value.trim();
       if (message && !this.isProcessing) {
         const remaining = await this.checkUsage();
-        if (remaining > 0) {
+        if (remaining <= 0) {
+          alert(
+            "You have reached your daily limit. Please try again tomorrow!"
+          );
+          return;
+        }
+
+        try {
           this.isProcessing = true;
           sendButton.disabled = true;
           this.updateSendButton(true);
-          await this.incrementUsage();
+
+          // First increment usage
+          const incrementResponse = await this.incrementUsage();
+          if (!incrementResponse.ok) {
+            throw new Error("Failed to increment usage");
+          }
+
+          // Then send message
           await this.sendMessage(message);
           input.value = "";
+        } catch (error) {
+          console.error("Message handling error:", error);
+          alert("An error occurred. Please try again.");
+        } finally {
           this.isProcessing = false;
           sendButton.disabled = false;
           this.updateSendButton(false);
@@ -312,8 +330,10 @@ class NowGPTModal {
 
       if (!response.ok) throw new Error("Usage increment failed");
       await this.updateUsageCounter();
+      return response;
     } catch (error) {
       console.error("Usage increment error:", error);
+      return null;
     }
   }
 
