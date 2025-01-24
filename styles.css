@@ -110,7 +110,6 @@ body {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     white-space: nowrap;
-    overflow: hidden;
     position: relative;
     width: auto;
     opacity: 0;
