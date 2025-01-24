@@ -408,30 +408,28 @@ How can I assist you today? Feel free to ask any questions!`;
     // Update demo buttons
     const demoButtons = document.querySelectorAll(".try-demo-btn");
     demoButtons.forEach((button) => {
-      const originalText = button.textContent;
       if (!this.isDemoEnabled) {
         button.disabled = true;
-        button.title = "Demo coming soon!";
-        // Original text is hidden by CSS when disabled
+        button.title = "Coming Soon";
+        button.innerHTML = "Coming Soon";
       } else {
         button.disabled = false;
         button.title = "Try the demo";
-        button.textContent = originalText;
+        button.innerHTML = "Try Demo";
       }
     });
 
     // Update source buttons
     const sourceButtons = document.querySelectorAll(".source-btn");
     sourceButtons.forEach((button) => {
-      const originalHTML = button.innerHTML; // Preserve icon
       if (!this.isSourceEnabled) {
         button.disabled = true;
-        button.title = "Source coming soon!";
-        // Original content is hidden by CSS when disabled
+        button.title = "Coming Soon";
+        button.innerHTML = '<i class="fab fa-github"></i> Coming Soon';
       } else {
         button.disabled = false;
         button.title = "View source";
-        button.innerHTML = originalHTML;
+        button.innerHTML = '<i class="fab fa-github"></i> View Source';
       }
     });
   }
