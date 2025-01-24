@@ -12,13 +12,13 @@ class NowGPTModal {
     initUserId() {
         // Generate or retrieve anonymous user ID
         this.userId = localStorage.getItem('anonymous_id') || 
-            'anon_' + Math.random().toString(36).substr(2, 9);
+            'anon_' + Math.random().toString(36).substring(2, 11);
         localStorage.setItem('anonymous_id', this.userId);
     }
 
     async checkUsage() {
         try {
-            const response = await fetch('/api/nowgpt-usage', {
+            const response = await fetch(`${this.apiBaseUrl}/nowgpt-usage`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
