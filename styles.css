@@ -112,13 +112,10 @@ body {
     white-space: nowrap;
     overflow: hidden;
     position: relative;
-    width: 0;
+    width: auto;
     opacity: 0;
-    visibility: hidden;
     margin: 0 auto 1rem auto;
-    animation: 
-        showText 0s forwards,
-        typewriter 2s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
+    animation: fadeIn 2s ease forwards;
 }
 
 .intro-text p {
