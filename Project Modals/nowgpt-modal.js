@@ -1,4 +1,4 @@
-class DemoModal {
+class NowGPTModal {
     constructor() {
         this.modal = null;
         this.usageKey = 'nowgpt_usage';
@@ -70,7 +70,7 @@ class DemoModal {
     }
 }
 
-// Initialize the demo modal
+// Initialize the NowGPT modal
 document.addEventListener('DOMContentLoaded', () => {
-    new DemoModal();
+    new NowGPTModal();
 }); 
