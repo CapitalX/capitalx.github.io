@@ -27,8 +27,7 @@ body {
     z-index: 1000;
     transition: all 0.3s ease;
     border-bottom: 1px solid transparent;
-    opacity: 0;
-    animation: fadeIn 1s ease forwards;
+    opacity: 1;
 }
 
 .navbar.scrolled {
@@ -831,4 +830,13 @@ section::before {
 
 .chat-messages::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+/* Add initial section spacing */
+#home {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0; /* Remove extra padding */
 }
