@@ -3,7 +3,7 @@ class NowGPTModal {
         this.modal = null;
         this.maxDaily = 3;
         this.userId = null;
-        this.apiBaseUrl = `${window.location.origin}/api`;
+        this.apiBaseUrl = '/api';
         this.initModal();
         this.bindEvents();
         this.initUserId();
