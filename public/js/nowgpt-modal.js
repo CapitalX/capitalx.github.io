@@ -120,12 +120,25 @@ class NowGPTModal {
         const sendButton = this.modal.querySelector('.chat-input button');
         const input = this.modal.querySelector('.chat-input input');
         
-        sendButton.addEventListener('click', async () => {
+        const handleMessage = async () => {
             const message = input.value.trim();
             if (message && await this.checkUsage() > 0) {
+                sendButton.disabled = true;
+                sendButton.textContent = 'Sending...';
                 await this.incrementUsage();
-                // Handle the message
+                await this.sendMessage(message);
                 input.value = '';
+                sendButton.disabled = false;
+                sendButton.textContent = 'Send';
+            }
+        };
+
+        sendButton.addEventListener('click', handleMessage);
+        
+        input.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                await handleMessage();
             }
         });
     }
