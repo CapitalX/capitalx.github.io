@@ -74,7 +74,10 @@ class NowGPTModal {
             responseText += data.content;
             responseDiv.querySelector(".message-text").innerHTML =
               marked.parse(responseText);
-            this.scrollToBottom();
+
+            if (this.isNearBottom()) {
+              this.scrollToBottom();
+            }
           }
         }
       }
@@ -286,21 +289,32 @@ How can I assist you today?`;
                         ${isUser ? content : content || ""}
                     </div>
                     ${
-                      !isUser
-                        ? `<div class="message-time">${timestamp}</div>`
-                        : ""
+                      isUser
+                        ? ""
+                        : `<div class="message-time">${timestamp}</div>`
                     }
                 </div>
             </div>
         `;
 
     this.messagesContainer.appendChild(messageDiv);
-    this.scrollToBottom();
+    if (this.isNearBottom()) {
+      this.scrollToBottom();
+    }
     return messageDiv;
   }
 
   scrollToBottom() {
     this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+  }
+
+  isNearBottom() {
+    const threshold = 100; // pixels from bottom
+    const scrollBottom =
+      this.messagesContainer.scrollHeight -
+      this.messagesContainer.scrollTop -
+      this.messagesContainer.clientHeight;
+    return scrollBottom < threshold;
   }
 }
 
