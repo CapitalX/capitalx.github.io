@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
 );
 
 export default async function handler(req, res) {
@@ -45,9 +45,6 @@ export default async function handler(req, res) {
             user_id: userId,
             date: today,
             count: 1
-          }, {
-            onConflict: 'user_id,date',
-            count: 'count + 1'
           });
 
         if (incrementError) throw incrementError;
