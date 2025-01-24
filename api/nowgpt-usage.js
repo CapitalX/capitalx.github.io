@@ -1,16 +1,26 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Add initial startup log
+console.log('API handler initializing...');
+
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY
 );
 
+// Log environment check
+console.log('Environment check:', {
+  hasSupabaseUrl: !!process.env.SUPABASE_URL,
+  hasSupabaseKey: !!process.env.SUPABASE_ANON_KEY
+});
+
 export default async function handler(req, res) {
-  console.log('API Request received:', {
-    method: req.method,
-    headers: req.headers,
-    body: req.body
-  });
+  // Log every incoming request
+  console.log('=== New Request ===');
+  console.log('Request URL:', req.url);
+  console.log('Request Method:', req.method);
+  console.log('Request Headers:', req.headers);
+  console.log('Request Body:', req.body);
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -28,7 +38,7 @@ export default async function handler(req, res) {
 
   const { action, userId } = req.body;
   const today = new Date().toISOString().split('T')[0];
-  console.log('Processing request:', { action, userId });
+  console.log('Processing request:', { action, userId, today });
 
   try {
     switch (action) {
@@ -40,7 +50,7 @@ export default async function handler(req, res) {
           .eq('user_id', userId)
           .eq('date', today);
 
-        console.log('Supabase response:', { usageData, usageError });
+        console.log('Supabase query result:', { usageData, usageError });
 
         if (usageError || !usageData || usageData.length === 0) {
           console.log('No usage records found, returning max limit');
@@ -49,7 +59,10 @@ export default async function handler(req, res) {
 
         const currentCount = usageData[0]?.count || 0;
         console.log('Current usage count:', currentCount);
-        return res.status(200).json({ remaining: 3 - currentCount });
+        
+        const response = { remaining: 3 - currentCount };
+        console.log('Sending response:', response);
+        return res.status(200).json(response);
 
       case 'increment':
         const { error: incrementError } = await supabase
@@ -68,8 +81,10 @@ export default async function handler(req, res) {
     }
   } catch (error) {
     console.error('API error details:', {
-      error: error.message,
-      stack: error.stack
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      cause: error.cause
     });
     return res.status(500).json({ message: 'Internal server error' });
   }
