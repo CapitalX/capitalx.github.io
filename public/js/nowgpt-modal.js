@@ -6,20 +6,52 @@ class NowGPTModal {
     this.messageQueue = [];
     this.isProcessing = false;
 
-    // Wait for DOM to be ready
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => {
-        this.init();
-      });
-    } else {
-      this.init();
-    }
-  }
-
-  init() {
+    // Load saved chat history
+    this.loadChatHistory();
     this.initModal();
     this.bindEvents();
     this.addWelcomeMessage();
+  }
+
+  // Add methods for chat history persistence
+  loadChatHistory() {
+    const today = new Date().toISOString().split("T")[0];
+    const savedData = localStorage.getItem("nowgpt_chat");
+
+    if (savedData) {
+      const { date, history, token } = JSON.parse(savedData);
+
+      // Only restore if it's from today
+      if (date === today) {
+        this.token = token;
+        return history;
+      }
+    }
+
+    // Clear old data and generate new token
+    localStorage.removeItem("nowgpt_chat");
+    this.token = null;
+    return [];
+  }
+
+  saveChatHistory() {
+    const today = new Date().toISOString().split("T")[0];
+    const chatHistory = Array.from(this.messagesContainer.children).map(
+      (msg) => ({
+        content: msg.querySelector(".message-text").innerHTML,
+        isUser: msg.classList.contains("user"),
+        timestamp: msg.querySelector(".message-time")?.textContent,
+      })
+    );
+
+    localStorage.setItem(
+      "nowgpt_chat",
+      JSON.stringify({
+        date: today,
+        history: chatHistory,
+        token: this.token,
+      })
+    );
   }
 
   async checkUsage() {
@@ -29,12 +61,17 @@ class NowGPTModal {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ action: "check" }),
+        body: JSON.stringify({
+          action: "check",
+          token: this.token,
+        }),
       });
 
       if (!response.ok) throw new Error("Usage check failed");
+
       const data = await response.json();
-      this.token = data.token;
+      this.token = data.token; // Save the token
+      this.saveChatHistory(); // Save after token update
       return data.remaining;
     } catch (error) {
       console.error("Usage check error:", error);
@@ -236,6 +273,16 @@ class NowGPTModal {
       alert("You have reached your daily limit. Please try again tomorrow!");
       return;
     }
+
+    // Restore chat history if available
+    const history = this.loadChatHistory();
+    if (history.length > 0) {
+      this.messagesContainer.innerHTML = ""; // Clear default welcome message
+      history.forEach((msg) => {
+        this.addMessage(msg.content, msg.isUser);
+      });
+    }
+
     this.modal.style.display = "flex";
     await this.updateUsageCounter();
   }
@@ -313,6 +360,7 @@ How can I assist you today?`;
     if (this.isNearBottom()) {
       this.scrollToBottom();
     }
+    this.saveChatHistory(); // Save after adding new message
     return messageDiv;
   }
 
