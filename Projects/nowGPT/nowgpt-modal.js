@@ -17,6 +17,9 @@ class NowGPTModal {
 
     async checkUsage() {
         try {
+            console.log('Checking usage for user:', this.userId);
+            console.log('Making request to:', `${this.apiBaseUrl}/nowgpt-usage`);
+            
             const response = await fetch(`${this.apiBaseUrl}/nowgpt-usage`, {
                 method: 'POST',
                 headers: {
@@ -28,11 +31,23 @@ class NowGPTModal {
                 })
             });
             
-            if (!response.ok) throw new Error('Usage check failed');
+            console.log('Response status:', response.status);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response body:', errorText);
+                throw new Error('Usage check failed');
+            }
+            
             const data = await response.json();
+            console.log('Usage check response:', data);
             return data.remaining;
         } catch (error) {
-            console.error('Usage check error:', error);
+            console.error('Usage check error details:', {
+                error: error.message,
+                stack: error.stack
+            });
             return 0;
         }
     }
