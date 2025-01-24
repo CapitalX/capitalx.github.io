@@ -17,17 +17,23 @@ export default async function handler(req, res) {
   }
 
   const { message, userId } = req.body;
+  const today = new Date().toISOString().split('T')[0];
 
   try {
     // Check usage first
-    const { data: usageData } = await supabase
+    const { data: usageData, error: usageError } = await supabase
       .from('usage_tracking')
       .select('count')
       .eq('user_id', userId)
-      .eq('date', new Date().toISOString().split('T')[0])
-      .single();
+      .eq('date', today);
 
-    if (usageData?.count >= 3) {
+    // If no records or error, treat as first usage
+    if (usageError || !usageData || usageData.length === 0) {
+      const count = 0;
+      if (count >= 3) {
+        return res.status(429).json({ message: 'Daily limit exceeded' });
+      }
+    } else if (usageData[0].count >= 3) {
       return res.status(429).json({ message: 'Daily limit exceeded' });
     }
 
@@ -42,8 +48,8 @@ export default async function handler(req, res) {
       .from('usage_tracking')
       .upsert({
         user_id: userId,
-        date: new Date().toISOString().split('T')[0],
-        count: (usageData?.count || 0) + 1
+        date: today,
+        count: ((usageData && usageData[0]?.count) || 0) + 1
       });
 
     return res.status(200).json({ 
