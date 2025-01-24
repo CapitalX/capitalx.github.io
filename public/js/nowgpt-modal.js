@@ -5,8 +5,8 @@ class NowGPTModal {
     this.token = null;
     this.messageQueue = [];
     this.isProcessing = false;
-    this.isDemoEnabled = false;
-    this.isSourceEnabled = false;
+    this.isDemoEnabled = true;
+    this.isSourceEnabled = true;
 
     // Load saved chat history
     this.loadChatHistory();
