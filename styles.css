@@ -27,6 +27,8 @@ body {
     z-index: 1000;
     transition: all 0.3s ease;
     border-bottom: 1px solid transparent;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
 }
 
 .navbar.scrolled {
