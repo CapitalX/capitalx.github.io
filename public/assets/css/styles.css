@@ -358,12 +358,31 @@ body {
     gap: 0.5rem;
 }
 
-/* Add disabled state styles while preserving original look */
+/* Disabled state styles */
 .try-demo-btn:disabled,
 .source-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
+    position: relative;
+}
+
+/* Add "Coming Soon" text for disabled buttons */
+.try-demo-btn:disabled::after,
+.source-btn:disabled::after {
+    content: "Coming Soon";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+/* Keep original content visible when enabled */
+.try-demo-btn:not(:disabled)::after,
+.source-btn:not(:disabled)::after {
+    display: none;
 }
 
 /* Preserve hover effects for enabled buttons */
@@ -378,6 +397,12 @@ body {
 .source-btn i {
     opacity: 1;
     font-size: 1.1rem;
+}
+
+/* Hide original text when disabled */
+.try-demo-btn:disabled span,
+.source-btn:disabled span {
+    opacity: 0;
 }
 
 .usage-limit {
