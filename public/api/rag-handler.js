@@ -1,10 +1,14 @@
-import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
-import { ConversationalRetrievalChain } from "langchain/chains";
-import { PromptTemplate } from "@langchain/core/prompts";
-import { ConversationBufferWindowMemory } from "langchain/memory";
-import { createClient } from "@supabase/supabase-js";
-import { BaseRetriever } from "@langchain/core/retrievers";
+// Import from CDN
+import { SupabaseVectorStore } from "https://esm.sh/@langchain/community@0.0.31/vectorstores/supabase";
+import {
+  OpenAIEmbeddings,
+  ChatOpenAI,
+} from "https://esm.sh/@langchain/openai@0.0.21";
+import { ConversationalRetrievalChain } from "https://esm.sh/langchain@0.1.25/chains";
+import { PromptTemplate } from "https://esm.sh/@langchain/core@0.1.25/prompts";
+import { ConversationBufferWindowMemory } from "https://esm.sh/langchain@0.1.25/memory";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.7";
+import { BaseRetriever } from "https://esm.sh/@langchain/core@0.1.25/retrievers";
 
 export class SmartRetriever extends BaseRetriever {
   constructor(vectorstore) {
@@ -74,10 +78,17 @@ export class SmartRetriever extends BaseRetriever {
 
 export class RAGHandler {
   constructor() {
-    this.supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    // Get environment variables from window._env_
+    const SUPABASE_URL = window._env_?.NEXT_PUBLIC_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = window._env_?.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const OPENAI_API_KEY = window._env_?.OPENAI_API_KEY;
+
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !OPENAI_API_KEY) {
+      throw new Error("Missing required environment variables");
+    }
+
+    this.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    this.openAIKey = OPENAI_API_KEY;
     this.initialized = false;
   }
 
