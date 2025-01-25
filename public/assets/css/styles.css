@@ -363,7 +363,10 @@ body {
     transition: all 0.3s ease;
     flex: 1;
     text-align: center;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .try-demo-btn {
@@ -377,10 +380,6 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #fff;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
 }
 
 /* Disabled state styles */
@@ -391,21 +390,8 @@ body {
     pointer-events: none;
 }
 
-/* Remove the ::before pseudo-element styles that were causing text overlap */
-.try-demo-btn:disabled::before,
-.source-btn:disabled::before {
-    display: none;
-}
-
-/* Preserve hover effects for enabled buttons */
-.try-demo-btn:not(:disabled):hover,
-.source-btn:not(:disabled):hover {
-    background: rgba(0, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
-}
-
-/* Keep icon styles */
+/* Keep icon styles consistent */
+.try-demo-btn i,
 .source-btn i {
     font-size: 1.1rem;
 }
