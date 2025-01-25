@@ -11,14 +11,44 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, token } = req.body;
+    const { message, action } = req.body;
 
-    // Validate token (use your existing token validation)
-    // ... token validation logic ...
+    // Handle initialization check
+    if (action === "initialize") {
+      try {
+        // Test Supabase connection
+        const supabase = createClient(
+          process.env.SUPABASE_URL,
+          process.env.SUPABASE_SERVICE_KEY
+        );
+
+        // Test OpenAI connection
+        const embeddings = new OpenAIEmbeddings({
+          openAIApiKey: process.env.OPENAI_API_KEY,
+        });
+
+        return res.status(200).json({
+          status: "initialized",
+          message: "RAG system initialized successfully",
+        });
+      } catch (error) {
+        console.error("Initialization error:", error);
+        return res.status(500).json({
+          message: "Failed to initialize RAG system",
+          error:
+            process.env.NODE_ENV === "development" ? error.message : undefined,
+        });
+      }
+    }
+
+    // Handle actual queries
+    if (!message) {
+      return res.status(400).json({ message: "Message is required" });
+    }
 
     const supabase = createClient(
       process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_KEY // Use service key for backend
+      process.env.SUPABASE_SERVICE_KEY
     );
 
     const embeddings = new OpenAIEmbeddings({
@@ -31,7 +61,6 @@ export default async function handler(req, res) {
       queryName: "match_documents",
     });
 
-    // Your existing RAG logic here
     const chain = ConversationalRetrievalChain.fromLLM(
       new ChatOpenAI({
         temperature: 0.7,

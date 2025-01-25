@@ -5,14 +5,12 @@ export class RAGHandler {
 
   async initialize() {
     try {
-      // Simple initialization check
       const response = await fetch("/api/langchain", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: "test",
           action: "initialize",
         }),
       });
@@ -21,7 +19,9 @@ export class RAGHandler {
         throw new Error("Failed to initialize RAG system");
       }
 
+      const data = await response.json();
       this.initialized = true;
+      return data;
     } catch (error) {
       console.error("RAG initialization error:", error);
       throw error;
@@ -43,7 +43,6 @@ export class RAGHandler {
         },
         body: JSON.stringify({
           message: query,
-          token: localStorage.getItem("nowgpt_token"),
         }),
       });
 
@@ -53,14 +52,10 @@ export class RAGHandler {
       }
 
       onProgress("Generating response...", 75);
-
       const result = await response.json();
       onProgress("Complete!", 100);
 
-      return {
-        answer: result.answer,
-        sources: result.sources,
-      };
+      return result;
     } catch (error) {
       console.error("RAG processing error:", error);
       throw error;
