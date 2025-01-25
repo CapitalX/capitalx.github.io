@@ -10,6 +10,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <link rel="stylesheet" href="/assets/css/starfield.css" />
+    <link rel="stylesheet" href="/assets/css/modal.css" />
   </head>
   <body>
     <div class="stars" id="stars"></div>
@@ -224,26 +225,6 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <script type="module" src="/js/nowgpt-modal.js"></script>
-    <script type="module">
-      import { showModal, hideModal } from "/js/nowgpt-modal.js";
-
-      // Make functions available globally
-      window.showNowGPTModal = () => {
-        try {
-          showModal();
-        } catch (error) {
-          console.error("Failed to show modal:", error);
-        }
-      };
-      window.hideNowGPTModal = hideModal;
-
-      // Add click handler to your button after DOM is loaded
-      document.addEventListener("DOMContentLoaded", () => {
-        const chatButton = document.querySelector("#chatButton");
-        if (chatButton) {
-          chatButton.onclick = window.showNowGPTModal;
-        }
-      });
-    </script>
+    <script type="module" src="/app.js"></script>
   </body>
 </html>
