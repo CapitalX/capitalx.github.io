@@ -17,6 +17,8 @@ class NowGPTModal {
 
     // Add a slight delay to ensure all buttons are in the DOM
     setTimeout(() => this.updateButtons(), 100);
+
+    this.rag = new RAGHandler();
   }
 
   // Add methods for chat history persistence
@@ -88,70 +90,27 @@ class NowGPTModal {
   async sendMessage(message) {
     try {
       const messageDiv = this.addMessage(message, true);
-      const responseDiv = this.addMessage("", false);
-      this.typingIndicator.style.display = "flex";
-      this.updateSendButton(true);
+      const progressCard = this.addProgressCard();
 
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message,
-          token: this.token,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        responseDiv.querySelector(
-          ".message-text"
-        ).innerHTML = `<div class="error-message">❌ ${
-          errorData.message || "Failed to get response"
-        }</div>`;
-        return;
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let responseText = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value);
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const data = JSON.parse(line.slice(5));
-            responseText += data.content;
-            responseDiv.querySelector(".message-text").innerHTML =
-              marked.parse(responseText);
-
-            if (this.isNearBottom()) {
-              this.scrollToBottom();
-            }
-          }
+      const result = await this.rag.processQuery(
+        message,
+        (status, percentage) => {
+          this.updateProgress(progressCard, status, percentage);
         }
+      );
+
+      // Add the response
+      const responseDiv = this.addMessage(result.answer, false);
+
+      // Add sources if available
+      if (result.sources && result.sources.length > 0) {
+        this.addSourcesCard(result.sources);
       }
 
-      this.typingIndicator.style.display = "none";
-      this.updateSendButton(false);
-      await this.updateUsageCounter();
-      this.scrollToBottom();
+      setTimeout(() => progressCard.remove(), 1000);
     } catch (error) {
       console.error("Chat error:", error);
-      const errorMessage =
-        "Sorry, there was an error processing your request. Please try again later.";
-      if (this.messagesContainer.lastChild) {
-        this.messagesContainer.lastChild.querySelector(
-          ".message-text"
-        ).innerHTML = `<div class="error-message">❌ ${errorMessage}</div>`;
-      }
-      this.typingIndicator.style.display = "none";
+      this.showError(error.message);
     }
   }
 
@@ -163,7 +122,7 @@ class NowGPTModal {
                     <div class="modal-title">
                         <h3>
                             <span class="modal-icon">🤖</span>
-                            ServiceNow Xanadu Assistant
+                            nowGPT V1
                         </h3>
                         <div class="usage-counter">
                             <span class="usage-icon">🎯</span>
@@ -421,6 +380,65 @@ How can I assist you today? Feel free to ask any questions!`;
       // Add opacity for visual feedback
       button.style.opacity = this.isSourceEnabled ? "1" : "0.5";
     });
+  }
+
+  addProgressCard() {
+    const card = document.createElement("div");
+    card.className = "progress-card";
+    card.innerHTML = `
+        <div class="progress-status">
+            <span class="status-text">Initializing...</span>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    `;
+    this.messagesContainer.appendChild(card);
+    return card;
+  }
+
+  async updateProgress(card, status, percentage) {
+    card.querySelector(".status-text").textContent = status;
+    card.querySelector(".progress-fill").style.width = `${percentage}%`;
+    // Add small delay for visual feedback
+    await new Promise((resolve) => setTimeout(resolve, 300));
+  }
+
+  showError(message) {
+    const errorMessage = `<div class="error-message">❌ ${message}</div>`;
+    if (this.messagesContainer.lastChild) {
+      this.messagesContainer.lastChild.querySelector(
+        ".message-text"
+      ).innerHTML = errorMessage;
+    }
+    this.typingIndicator.style.display = "none";
+  }
+
+  addSourcesCard(sources) {
+    const card = document.createElement("div");
+    card.className = "sources-card";
+
+    const sourcesList = sources
+      .map(
+        (doc) => `
+      <div class="source-item">
+        <div class="source-title">${doc.metadata.sources}</div>
+        <div class="source-page">Page ${doc.metadata.page || "N/A"}</div>
+        <div class="source-preview">${doc.pageContent.slice(0, 100)}...</div>
+      </div>
+    `
+      )
+      .join("");
+
+    card.innerHTML = `
+      <div class="sources-header">Sources Referenced</div>
+      <div class="sources-list">
+        ${sourcesList}
+      </div>
+    `;
+
+    this.messagesContainer.appendChild(card);
+    return card;
   }
 }
 

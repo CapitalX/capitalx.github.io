@@ -1021,3 +1021,71 @@ section::before {
 .cta-button[style*="opacity: 1"] {
     pointer-events: auto;
 }
+
+.progress-card {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.progress-status {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.progress-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: rgba(0, 255, 255, 0.5);
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+.status-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.sources-card {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.sources-header {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+}
+
+.source-item {
+    padding: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.source-title {
+    font-weight: bold;
+    color: rgba(0, 255, 255, 0.8);
+}
+
+.source-page {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.source-preview {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 4px;
+}
