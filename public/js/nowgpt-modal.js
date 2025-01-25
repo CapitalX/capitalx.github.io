@@ -1,4 +1,4 @@
-class NowGPTModal {
+export class NowGPTModal {
   constructor() {
     this.modal = null;
     this.messagesContainer = null;
@@ -259,9 +259,3 @@ class NowGPTModal {
     }, 300);
   }
 }
-
-// Create and export modal instance
-const modal = new NowGPTModal();
-
-export const showModal = () => modal.showModal();
-export const hideModal = () => modal.hideModal();
