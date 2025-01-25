@@ -19,21 +19,20 @@ class NowGPTModal {
     // Create modal structure first
     this.createModalStructure();
 
-    // Then bind methods after they're defined
+    // Then bind methods
     this.bindMethods();
 
     // Setup listeners
     this.setupEventListeners();
 
-    // Initialize async components
-    this.initializeAsync();
+    // Add welcome message
+    this.addWelcomeMessage();
   }
 
   bindMethods() {
     this.handleMessage = this.handleMessage.bind(this);
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.init = this.init.bind(this);
   }
 
   async initializeAsync() {
