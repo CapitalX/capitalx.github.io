@@ -16,16 +16,44 @@ export default async function handler(req, res) {
     // Handle initialization check
     if (action === "initialize") {
       try {
-        // Test Supabase connection
-        const supabase = createClient(
-          process.env.SUPABASE_URL,
-          process.env.SUPABASE_SERVICE_KEY
-        );
+        // Test connections one at a time with proper error handling
+        let supabase;
+        try {
+          supabase = createClient(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_SERVICE_KEY
+          );
+          // Test the connection
+          await supabase.from("documents").select("count").limit(1);
+        } catch (error) {
+          console.error("Supabase connection error:", error);
+          return res.status(500).json({
+            message: "Failed to connect to Supabase",
+            error:
+              process.env.NODE_ENV === "development"
+                ? error.message
+                : undefined,
+          });
+        }
 
-        // Test OpenAI connection
-        const embeddings = new OpenAIEmbeddings({
-          openAIApiKey: process.env.OPENAI_API_KEY,
-        });
+        let embeddings;
+        try {
+          embeddings = new OpenAIEmbeddings({
+            openAIApiKey: process.env.OPENAI_API_KEY,
+            maxRetries: 3,
+          });
+          // Test the embeddings
+          await embeddings.embedQuery("test");
+        } catch (error) {
+          console.error("OpenAI embeddings error:", error);
+          return res.status(500).json({
+            message: "Failed to initialize OpenAI embeddings",
+            error:
+              process.env.NODE_ENV === "development"
+                ? error.message
+                : undefined,
+          });
+        }
 
         return res.status(200).json({
           status: "initialized",
