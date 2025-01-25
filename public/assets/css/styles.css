@@ -776,27 +776,38 @@ section::before {
     height: 100%;
     background: rgba(0, 0, 5, 0.85);
     backdrop-filter: blur(8px);
-    display: none; /* This will be changed to flex when shown */
-    justify-content: center;
-    align-items: center;
     z-index: 1000;
-}
-
-/* Ensure the modal is visible when display is set to flex */
-.demo-modal[style*="display: flex"] {
-    opacity: 1;
-}
-
-/* Add transition for smooth appearance */
-.demo-modal-content {
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease;
 }
 
-.demo-modal[style*="display: flex"] .demo-modal-content {
+.demo-modal.show {
     opacity: 1;
+}
+
+.demo-modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.demo-modal.show .demo-modal-content {
     transform: translateY(0);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .demo-modal-content {
+        background: #1a1a1a;
+        color: #fff;
+    }
 }
 
 .modal-header {
