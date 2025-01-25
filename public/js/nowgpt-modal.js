@@ -2,6 +2,7 @@ import RAGHandler from "/api/rag-handler.js";
 
 class NowGPTModal {
   constructor() {
+    // Initialize properties first
     this.modal = null;
     this.maxDaily = 3;
     this.token = null;
@@ -15,18 +16,24 @@ class NowGPTModal {
     this.errorContainer = null;
     this.rag = null;
 
-    // Bind methods
-    this.handleMessage = this.handleMessage.bind(this);
-    this.showModal = this.showModal.bind(this);
-    this.hideModal = this.hideModal.bind(this);
-    this.init = this.init.bind(this);
-
-    // Create modal immediately
+    // Create modal structure first
     this.createModalStructure();
+
+    // Then bind methods after they're defined
+    this.bindMethods();
+
+    // Setup listeners
     this.setupEventListeners();
 
     // Initialize async components
     this.initializeAsync();
+  }
+
+  bindMethods() {
+    this.handleMessage = this.handleMessage.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.init = this.init.bind(this);
   }
 
   async initializeAsync() {
