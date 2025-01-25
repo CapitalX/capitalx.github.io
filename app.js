@@ -108,9 +108,6 @@ function initHeaderBehavior() {
   handleScroll();
 }
 
-// Initialize header behavior when DOM is loaded
-document.addEventListener("DOMContentLoaded", initHeaderBehavior);
-
 // Initialize modal handlers
 function initModalHandlers() {
   console.log("Initializing modal handlers"); // Debug log
@@ -118,12 +115,14 @@ function initModalHandlers() {
   // Create modal instance
   const modal = new NowGPTModal();
 
-  // Find all demo buttons
-  const demoButtons = document.querySelectorAll(".try-demo-btn");
+  // Find all demo buttons with data-project attribute
+  const demoButtons = document.querySelectorAll(
+    "button[data-project='nowgpt']"
+  );
   console.log("Found demo buttons:", demoButtons.length); // Debug log
 
   if (demoButtons.length === 0) {
-    console.error("No demo buttons found with class 'try-demo-btn'");
+    console.error("No demo buttons found with data-project='nowgpt'");
     return;
   }
 
@@ -135,24 +134,16 @@ function initModalHandlers() {
       modal.showModal();
     });
   });
-
-  // Also expose to window for direct access
-  window.showNowGPTModal = () => {
-    console.log("showNowGPTModal called"); // Debug log
-    modal.showModal();
-  };
-  window.hideNowGPTModal = () => modal.hideModal();
 }
 
-// Wait for DOM to be fully loaded before initializing
+// Single DOMContentLoaded listener for all initializations
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded"); // Debug log
 
-  // Initialize modal first
+  // Initialize features in order
   initModalHandlers();
-  console.log("Modal handlers initialized"); // Debug log
-
-  // Then initialize other features
   initHeaderBehavior();
   load3DModel();
+
+  // Remove the other DOMContentLoaded listeners
 });
