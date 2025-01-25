@@ -1,12 +1,9 @@
-import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import { OpenAIEmbeddings } from "@langchain/openai/embeddings";
-import { ChatOpenAI } from "@langchain/openai/chat_models";
-import {
-  createStuffDocumentsChain,
-  createRetrievalChain,
-} from "@langchain/core/chains";
-import { PromptTemplate } from "@langchain/core/prompts";
-import { BufferMemory } from "@langchain/core/memory";
+import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { ChatOpenAI } from "langchain/chat_models/openai";
+import { ConversationChain } from "langchain/chains";
+import { PromptTemplate } from "langchain/prompts";
+import { BufferMemory } from "langchain/memory";
 import { createClient } from "@supabase/supabase-js";
 
 export default async function handler(req, res) {
@@ -75,7 +72,6 @@ export default async function handler(req, res) {
 
     const memory = new BufferMemory({
       memoryKey: "chat_history",
-      outputKey: "answer",
       returnMessages: true,
     });
 
@@ -86,29 +82,26 @@ export default async function handler(req, res) {
       Answer:
     `);
 
-    const documentChain = await createStuffDocumentsChain({
+    const chain = new ConversationChain({
       llm: model,
-      prompt,
+      memory: memory,
+      prompt: prompt,
+      verbose: true,
     });
 
-    const retrievalChain = await createRetrievalChain({
-      combineDocsChain: documentChain,
-      retriever: vectorStore.asRetriever(),
-      memory,
-    });
-
-    const response = await retrievalChain.invoke({
+    const response = await chain.invoke({
+      context: vectorStore.asRetriever(),
       question: message,
     });
 
     return res.status(200).json({
-      answer: response.answer,
+      answer: response.response,
       sources: response.sourceDocuments,
     });
   } catch (error) {
-    console.error("API error:", error);
+    console.error("Chain error:", error);
     return res.status(500).json({
-      message: "Internal server error",
+      message: "Error processing request",
       error:
         process.env.NODE_ENV === "development" ? error.message : "Server error",
     });
