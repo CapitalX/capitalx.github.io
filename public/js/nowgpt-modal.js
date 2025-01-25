@@ -8,8 +8,8 @@ class NowGPTModal {
     this.token = null;
     this.messageQueue = [];
     this.isProcessing = false;
-    this.isDemoEnabled = true;
-    this.isSourceEnabled = true;
+    this.isDemoEnabled = false;
+    this.isSourceEnabled = false;
     this.messagesContainer = null;
     this.messageInput = null;
     this.sendButton = null;
