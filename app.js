@@ -138,9 +138,12 @@ function initModalHandlers() {
   window.hideNowGPTModal = () => modal.hideModal();
 }
 
-// Main Initialization
+// Wait for DOM to be fully loaded before initializing
 document.addEventListener("DOMContentLoaded", () => {
-  load3DModel();
-  initHeaderBehavior();
+  // Initialize modal first
   initModalHandlers();
+
+  // Then initialize other features
+  initHeaderBehavior();
+  load3DModel();
 });

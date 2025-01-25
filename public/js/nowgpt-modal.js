@@ -1,5 +1,6 @@
 export class NowGPTModal {
   constructor() {
+    console.log("Initializing NowGPTModal"); // Debug log
     this.modal = null;
     this.messagesContainer = null;
     this.messageInput = null;
@@ -13,12 +14,23 @@ export class NowGPTModal {
   }
 
   createModalStructure() {
+    console.log("Creating modal structure"); // Debug log
     this.modal = document.createElement("div");
     this.modal.className = "demo-modal";
     this.modal.id = "chatModal";
-    this.modal.style.display = "none";
-    this.modal.style.opacity = "0";
-    this.modal.style.visibility = "hidden";
+
+    // Set initial styles
+    this.modal.style.cssText = `
+      display: none;
+      opacity: 0;
+      visibility: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+    `;
 
     this.modal.innerHTML = `
       <div class="demo-modal-content">
@@ -49,6 +61,7 @@ export class NowGPTModal {
     `;
 
     document.body.appendChild(this.modal);
+    console.log("Modal added to DOM"); // Debug log
 
     // Cache DOM elements
     this.messagesContainer = this.modal.querySelector(".chat-messages");
@@ -247,22 +260,29 @@ export class NowGPTModal {
 
   showModal() {
     console.log("Showing modal"); // Debug log
-    this.modal.style.visibility = "visible";
+
+    // First make it visible but transparent
     this.modal.style.display = "flex";
+    this.modal.style.visibility = "visible";
 
     // Force a reflow
     void this.modal.offsetHeight;
 
-    // Add show class for animation
-    this.modal.classList.add("show");
-    document.body.style.overflow = "hidden";
+    // Then animate in
+    requestAnimationFrame(() => {
+      this.modal.classList.add("show");
+      document.body.style.overflow = "hidden";
+    });
   }
 
   hideModal() {
+    console.log("Hiding modal"); // Debug log
     this.modal.classList.remove("show");
+
     setTimeout(() => {
       this.modal.style.display = "none";
+      this.modal.style.visibility = "hidden";
       document.body.style.overflow = "";
-    }, 300);
+    }, 300); // Match your CSS transition duration
   }
 }
