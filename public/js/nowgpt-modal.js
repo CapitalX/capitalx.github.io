@@ -5,8 +5,8 @@ class NowGPTModal {
     this.token = null;
     this.messageQueue = [];
     this.isProcessing = false;
-    this.isDemoEnabled = false;
-    this.isSourceEnabled = false;
+    this.isDemoEnabled = true;
+    this.isSourceEnabled = true;
 
     // Load saved chat history
     this.loadChatHistory();
@@ -250,7 +250,6 @@ class NowGPTModal {
           this.isProcessing = false;
           sendButton.disabled = false;
           this.updateSendButton(false);
-          // First increment usage
           const incrementResponse = await this.incrementUsage();
           if (!incrementResponse.ok) {
             throw new Error("Failed to increment usage");
