@@ -1,9 +1,8 @@
-import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { ChatOpenAI } from "langchain/chat_models/openai";
+import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
+import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 import { ConversationChain } from "langchain/chains";
-import { PromptTemplate } from "langchain/prompts";
-import { BufferMemory } from "langchain/memory";
+import { PromptTemplate } from "@langchain/core/prompts";
+import { BufferMemory } from "@langchain/core/memory";
 import { createClient } from "@supabase/supabase-js";
 
 export default async function handler(req, res) {
