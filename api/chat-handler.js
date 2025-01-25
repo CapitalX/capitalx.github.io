@@ -14,71 +14,100 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { action } = req.body;
-  console.log("Received action:", action); // Debug log
-
   try {
-    // Validate request
+    // First, validate the request
+    const { action } = req.body;
     if (!action) {
-      throw new Error("No action specified");
+      return res.status(400).json({
+        message: "No action specified",
+        timestamp: new Date().toISOString(),
+      });
     }
 
-    // Log environment variables (without exposing sensitive data)
-    console.log("Environment check:", {
-      hasSupabaseUrl: !!process.env.SUPABASE_URL,
-      hasServiceKey: !!process.env.SUPABASE_SERVICE_KEY,
-      nodeEnv: process.env.NODE_ENV,
-    });
+    // Environment variable check with detailed logging
+    const envCheck = {
+      hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
+      hasServiceKey: Boolean(process.env.SUPABASE_SERVICE_KEY),
+      nodeEnv: process.env.NODE_ENV || "unknown",
+    };
 
-    // Initialize Supabase client with error handling
+    console.log("Environment check:", envCheck);
+
+    // Early return if environment variables are missing
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
-      throw new Error("Missing Supabase configuration");
+      return res.status(503).json({
+        message: "Service configuration incomplete",
+        debug: envCheck,
+        timestamp: new Date().toISOString(),
+      });
     }
 
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_KEY,
-      {
-        auth: { persistSession: false },
-      }
-    );
+    // Initialize Supabase with more error handling
+    let supabase;
+    try {
+      supabase = createClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_KEY,
+        {
+          auth: { persistSession: false },
+        }
+      );
+    } catch (initError) {
+      console.error("Supabase client initialization error:", initError);
+      return res.status(500).json({
+        message: "Failed to initialize database client",
+        error:
+          process.env.NODE_ENV === "development"
+            ? initError.message
+            : "Configuration error",
+        timestamp: new Date().toISOString(),
+      });
+    }
 
-    // Test connection and handle different actions
+    // Handle different actions
     switch (action) {
       case "initialize":
-        console.log("Attempting Supabase connection..."); // Debug log
-
         try {
-          // Test connection with more detailed error handling
+          // Simple connection test
           const { data, error } = await supabase
             .from("documents")
             .select("count")
             .limit(1);
 
           if (error) {
-            console.error("Supabase connection error:", error);
-            throw error;
+            console.error("Database query error:", error);
+            return res.status(500).json({
+              message: "Database connection failed",
+              error:
+                process.env.NODE_ENV === "development"
+                  ? error.message
+                  : "Database error",
+              timestamp: new Date().toISOString(),
+            });
           }
-
-          console.log("Supabase connection successful:", {
-            hasData: !!data,
-            timestamp: new Date().toISOString(),
-          });
 
           return res.status(200).json({
             status: "connected",
             message: "Chat system initialized successfully",
             debug: {
-              hasData: !!data,
+              hasData: Boolean(data),
               timestamp: new Date().toISOString(),
             },
           });
         } catch (dbError) {
-          console.error("Database connection failed:", dbError);
-          throw new Error(`Database connection failed: ${dbError.message}`);
+          console.error("Database operation failed:", dbError);
+          return res.status(500).json({
+            message: "Database operation failed",
+            error:
+              process.env.NODE_ENV === "development"
+                ? dbError.message
+                : "Database error",
+            timestamp: new Date().toISOString(),
+          });
         }
 
       case "chat":
+        // Simple response for now
         return res.status(200).json({
           message: "Chat endpoint ready",
           response: "Hello! I'm a test response. The chat system is working!",
@@ -86,31 +115,26 @@ export default async function handler(req, res) {
         });
 
       default:
-        console.warn("Invalid action received:", action);
         return res.status(400).json({
           message: "Invalid action",
           received: action,
+          timestamp: new Date().toISOString(),
         });
     }
   } catch (error) {
-    console.error("Handler error details:", {
+    console.error("Handler error:", {
       message: error.message,
       stack: error.stack,
-      action: action,
       timestamp: new Date().toISOString(),
     });
 
     return res.status(500).json({
-      message: "Error processing request",
+      message: "Server error occurred",
       error:
         process.env.NODE_ENV === "development"
-          ? {
-              message: error.message,
-              type: error.name,
-              action: action,
-              timestamp: new Date().toISOString(),
-            }
-          : "Server error",
+          ? { message: error.message, type: error.name }
+          : "Internal server error",
+      timestamp: new Date().toISOString(),
     });
   }
 }
