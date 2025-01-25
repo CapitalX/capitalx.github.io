@@ -371,33 +371,15 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-}
-
-.try-demo-btn {
     background: rgba(0, 255, 255, 0.1);
     border: 1px solid rgba(0, 255, 255, 0.3);
     color: #fff;
 }
 
-.source-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    text-decoration: none;
-}
-
-/* Disabled state styles */
-.try-demo-btn:disabled,
-.source-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-/* Keep icon styles consistent */
-.try-demo-btn i,
-.source-btn i {
-    font-size: 1.1rem;
+.try-demo-btn:hover, .source-btn:hover {
+    background: rgba(0, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
 }
 
 .usage-limit {
