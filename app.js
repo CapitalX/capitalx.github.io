@@ -1,5 +1,5 @@
 // Import the modal class first
-import { NowGPTModal } from "./public/js/nowgpt-modal.js";
+import { NowGPTModal } from "/js/nowgpt-modal.js";
 
 // Dark Mode Toggle
 const darkModeToggle = document.getElementById("darkModeToggle");
@@ -113,6 +113,8 @@ document.addEventListener("DOMContentLoaded", initHeaderBehavior);
 
 // Initialize modal handlers
 function initModalHandlers() {
+  console.log("Initializing modal handlers"); // Debug log
+
   // Create modal instance
   const modal = new NowGPTModal();
 
@@ -125,23 +127,30 @@ function initModalHandlers() {
     return;
   }
 
-  demoButtons.forEach((button) => {
+  demoButtons.forEach((button, index) => {
+    console.log(`Adding click listener to button ${index}`); // Debug log
     button.addEventListener("click", (e) => {
       e.preventDefault();
-      console.log("Demo button clicked"); // Debug log
+      console.log(`Button ${index} clicked`); // Debug log
       modal.showModal();
     });
   });
 
   // Also expose to window for direct access
-  window.showNowGPTModal = () => modal.showModal();
+  window.showNowGPTModal = () => {
+    console.log("showNowGPTModal called"); // Debug log
+    modal.showModal();
+  };
   window.hideNowGPTModal = () => modal.hideModal();
 }
 
 // Wait for DOM to be fully loaded before initializing
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded"); // Debug log
+
   // Initialize modal first
   initModalHandlers();
+  console.log("Modal handlers initialized"); // Debug log
 
   // Then initialize other features
   initHeaderBehavior();

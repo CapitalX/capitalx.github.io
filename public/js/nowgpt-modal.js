@@ -259,17 +259,19 @@ export class NowGPTModal {
   }
 
   showModal() {
-    console.log("Showing modal"); // Debug log
+    console.log("showModal called"); // Debug log
 
     // First make it visible but transparent
     this.modal.style.display = "flex";
     this.modal.style.visibility = "visible";
+    console.log("Modal display and visibility set"); // Debug log
 
     // Force a reflow
     void this.modal.offsetHeight;
 
     // Then animate in
     requestAnimationFrame(() => {
+      console.log("Adding show class"); // Debug log
       this.modal.classList.add("show");
       document.body.style.overflow = "hidden";
     });
