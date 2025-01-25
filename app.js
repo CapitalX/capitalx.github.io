@@ -51,58 +51,62 @@ document.querySelectorAll(".animate-on-scroll").forEach((element) => {
 
 // Header scroll behavior
 function initHeaderBehavior() {
-    const header = document.querySelector('.navbar');
-    let lastScroll = 0;
-    let scrollTimeout;
+  const header = document.querySelector(".navbar");
+  let lastScroll = 0;
+  let scrollTimeout;
 
-    function handleScroll() {
-        const currentScroll = window.scrollY;
-        
-        // Fade in/out based on scroll position
-        const opacity = Math.min(currentScroll / 200, 1);
-        header.style.background = `rgba(10, 10, 15, ${opacity * 0.95})`;
-        header.style.backdropFilter = `blur(${opacity * 12}px)`;
-        
-        // Always show header at the top of the page
-        if (currentScroll < 100) {
-            header.classList.remove('hidden');
-            header.classList.remove('scrolled');
-            return;
-        }
+  function handleScroll() {
+    const currentScroll = window.scrollY;
 
-        // Add scrolled class for border
-        if (currentScroll > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
+    // Fade in/out based on scroll position
+    const opacity = Math.min(currentScroll / 200, 1);
+    header.style.background = `rgba(10, 10, 15, ${opacity * 0.95})`;
+    header.style.backdropFilter = `blur(${opacity * 12}px)`;
 
-        // Handle hide/show based on scroll direction
-        if (currentScroll > lastScroll && currentScroll > 200) {
-            header.classList.add('hidden');
-        } else {
-            header.classList.remove('hidden');
-        }
-
-        lastScroll = currentScroll;
+    // Always show header at the top of the page
+    if (currentScroll < 100) {
+      header.classList.remove("hidden");
+      header.classList.remove("scrolled");
+      return;
     }
 
-    // Throttled scroll handler
-    window.addEventListener('scroll', () => {
-        if (!scrollTimeout) {
-            scrollTimeout = setTimeout(() => {
-                handleScroll();
-                scrollTimeout = null;
-            }, 16); // ~60fps
-        }
-    }, { passive: true });
+    // Add scrolled class for border
+    if (currentScroll > 50) {
+      header.classList.add("scrolled");
+    } else {
+      header.classList.remove("scrolled");
+    }
 
-    // Initial call
-    handleScroll();
+    // Handle hide/show based on scroll direction
+    if (currentScroll > lastScroll && currentScroll > 200) {
+      header.classList.add("hidden");
+    } else {
+      header.classList.remove("hidden");
+    }
+
+    lastScroll = currentScroll;
+  }
+
+  // Throttled scroll handler
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!scrollTimeout) {
+        scrollTimeout = setTimeout(() => {
+          handleScroll();
+          scrollTimeout = null;
+        }, 16); // ~60fps
+      }
+    },
+    { passive: true }
+  );
+
+  // Initial call
+  handleScroll();
 }
 
 // Initialize header behavior when DOM is loaded
-document.addEventListener('DOMContentLoaded', initHeaderBehavior);
+document.addEventListener("DOMContentLoaded", initHeaderBehavior);
 
 // Main Initialization
 document.addEventListener("DOMContentLoaded", () => {

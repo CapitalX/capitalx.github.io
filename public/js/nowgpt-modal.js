@@ -1,4 +1,4 @@
-import RAGHandler from "../../api/rag-handler.js";
+import RAGHandler from "../api/rag-handler.js";
 
 class NowGPTModal {
   constructor() {
@@ -13,7 +13,7 @@ class NowGPTModal {
     this.messageInput = null;
     this.sendButton = null;
     this.errorContainer = null;
-    this.rag = null; // Initialize as null
+    this.rag = null;
 
     // Bind methods
     this.handleMessage = this.handleMessage.bind(this);
@@ -21,25 +21,19 @@ class NowGPTModal {
     this.hideModal = this.hideModal.bind(this);
     this.init = this.init.bind(this);
 
-    // Load saved chat history
-    this.loadChatHistory();
-    this.initModal();
-    this.bindEvents();
-    this.addWelcomeMessage();
-    this.updateButtons();
+    // Create modal immediately
+    this.createModalStructure();
+    this.setupEventListeners();
 
-    // Add a slight delay to ensure all buttons are in the DOM
-    setTimeout(() => this.updateButtons(), 100);
+    // Initialize async components
+    this.initializeAsync();
   }
 
-  async init() {
+  async initializeAsync() {
     try {
-      // Create modal structure
-      this.createModalStructure();
-
       // Initialize RAG handler
       this.rag = new RAGHandler();
-      await this.rag.initialize(); // Initialize RAG when modal is created
+      await this.rag.initialize();
 
       // Load chat history
       this.loadChatHistory();
@@ -50,6 +44,67 @@ class NowGPTModal {
       console.error("Initialization error:", error);
       this.showError("Failed to initialize chat. Please try again later.");
     }
+  }
+
+  createModalStructure() {
+    // Create modal container
+    this.modal = document.createElement("div");
+    this.modal.className = "modal";
+    this.modal.id = "chatModal";
+
+    // Add your existing modal HTML structure
+    this.modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>NowGPT Chat</h2>
+                <div class="usage-info">
+                    Remaining: <span class="usage-count">-</span>
+                </div>
+                <button class="close-button">&times;</button>
+            </div>
+            <div class="messages-container"></div>
+            <div class="input-container">
+                <textarea 
+                    placeholder="Ask about ServiceNow Xanadu..." 
+                    rows="1"
+                ></textarea>
+                <button class="send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    `;
+
+    // Add modal to body
+    document.body.appendChild(this.modal);
+
+    // Store references to elements
+    this.messagesContainer = this.modal.querySelector(".messages-container");
+    this.messageInput = this.modal.querySelector("textarea");
+    this.sendButton = this.modal.querySelector(".send-button");
+  }
+
+  setupEventListeners() {
+    // Close button
+    const closeButton = this.modal.querySelector(".close-button");
+    closeButton.onclick = () => this.hideModal();
+
+    // Send button
+    this.sendButton.onclick = () => this.handleMessage();
+
+    // Enter key in textarea
+    this.messageInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        this.handleMessage();
+      }
+    });
+
+    // Auto-resize textarea
+    this.messageInput.addEventListener("input", () => {
+      this.messageInput.style.height = "auto";
+      this.messageInput.style.height = this.messageInput.scrollHeight + "px";
+    });
   }
 
   // Add methods for chat history persistence
@@ -149,166 +204,6 @@ class NowGPTModal {
     }
   }
 
-  initModal() {
-    const modalHTML = `
-        <div class="demo-modal" style="display: none;">
-            <div class="demo-modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h3>
-                            <span class="modal-icon">🤖</span>
-                            nowGPT V1
-                        </h3>
-                        <div class="usage-counter">
-                            <span class="usage-icon">🎯</span>
-                            <span class="usage-text">Questions remaining today: <span class="usage-count"></span></span>
-                        </div>
-                    </div>
-                    <button class="close-modal" aria-label="Close chat">×</button>
-                </div>
-                <div class="demo-chat">
-                    <div class="chat-messages"></div>
-                    <div class="chat-input-container">
-                        <div class="chat-input">
-                            <input type="text" 
-                                placeholder="Ask about Xanadu features, updates, or documentation..." 
-                                aria-label="Chat input">
-                            <button class="send-button" aria-label="Send message">
-                                <span class="button-text">Send</span>
-                                <span class="button-icon">↗️</span>
-                            </button>
-                        </div>
-                        <div class="typing-indicator" style="display: none;">
-                            <span></span><span></span><span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML("beforeend", modalHTML);
-    this.modal = document.querySelector(".demo-modal");
-    this.messagesContainer = this.modal.querySelector(".chat-messages");
-    this.typingIndicator = this.modal.querySelector(".typing-indicator");
-  }
-
-  bindEvents() {
-    const demoButtons = document.querySelectorAll(".try-demo-btn");
-    const closeButton = this.modal.querySelector(".close-modal");
-    const sendButton = this.modal.querySelector(".send-button");
-    const input = this.modal.querySelector(".chat-input input");
-
-    demoButtons.forEach((btn) => {
-      btn.addEventListener("click", () => this.showModal());
-    });
-
-    closeButton.addEventListener("click", () => this.hideModal());
-
-    // Close on escape key
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && this.modal.style.display === "flex") {
-        this.hideModal();
-      }
-    });
-
-    // Close on click outside modal
-    this.modal.addEventListener("click", (e) => {
-      if (e.target === this.modal) {
-        this.hideModal();
-      }
-    });
-
-    const handleMessage = async () => {
-      const message = input.value.trim();
-      if (message && !this.isProcessing) {
-        const remaining = await this.checkUsage();
-        if (remaining <= 0) {
-          alert(
-            "You have reached your daily limit. Please try again tomorrow!"
-          );
-          return;
-        }
-
-        try {
-          this.isProcessing = true;
-          sendButton.disabled = true;
-          this.updateSendButton(true);
-
-          // Then send message
-          await this.sendMessage(message);
-          input.value = "";
-        } catch (error) {
-          console.error("Message handling error:", error);
-          alert("An error occurred. Please try again.");
-        } finally {
-          this.isProcessing = false;
-          sendButton.disabled = false;
-          this.updateSendButton(false);
-          const incrementResponse = await this.incrementUsage();
-          if (!incrementResponse.ok) {
-            throw new Error("Failed to increment usage");
-          }
-        }
-      }
-    };
-
-    sendButton.addEventListener("click", handleMessage);
-
-    input.addEventListener("keypress", async (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        await handleMessage();
-      }
-    });
-
-    // Dynamic input height
-    input.addEventListener("input", () => {
-      input.style.height = "auto";
-      input.style.height = input.scrollHeight + "px";
-    });
-  }
-
-  updateSendButton(isProcessing) {
-    const button = this.modal.querySelector(".send-button");
-    const buttonText = button.querySelector(".button-text");
-    const buttonIcon = button.querySelector(".button-icon");
-
-    if (isProcessing) {
-      buttonText.textContent = "Sending";
-      buttonIcon.textContent = "⏳";
-      button.classList.add("processing");
-    } else {
-      buttonText.textContent = "Send";
-      buttonIcon.textContent = "↗️";
-      button.classList.remove("processing");
-    }
-  }
-
-  async showModal() {
-    console.log("Showing modal");
-    const remainingQuestions = await this.checkUsage();
-    if (remainingQuestions <= 0) {
-      alert("You have reached your daily limit. Please try again tomorrow!");
-      return;
-    }
-
-    // Restore chat history if available
-    const history = this.loadChatHistory();
-    if (history.length > 0) {
-      this.messagesContainer.innerHTML = ""; // Clear default welcome message
-      history.forEach((msg) => {
-        this.addMessage(msg.content, msg.isUser);
-      });
-    }
-
-    this.modal.style.display = "flex";
-    await this.updateUsageCounter();
-  }
-
-  hideModal() {
-    this.modal.style.display = "none";
-  }
-
   async updateUsageCounter() {
     const counter = this.modal.querySelector(".usage-count");
     const remaining = await this.checkUsage();
@@ -346,7 +241,7 @@ I can help you with:
 • 📖 Documentation and implementation guides  
 • 🚀 Release notes and updates
 • ⚙️ Technical details and specifications
-• 💡 Best practices and recommendations
+• �� Best practices and recommendations
 
 How can I assist you today? Feel free to ask any questions!`;
     this.addMessage(welcomeMessage, false);
@@ -487,11 +382,87 @@ How can I assist you today? Feel free to ask any questions!`;
     this.messagesContainer.appendChild(card);
     return card;
   }
+
+  async handleMessage() {
+    const message = this.messageInput.value.trim();
+    if (message && !this.isProcessing) {
+      const remaining = await this.checkUsage();
+      if (remaining <= 0) {
+        alert("You have reached your daily limit. Please try again tomorrow!");
+        return;
+      }
+
+      try {
+        this.isProcessing = true;
+        this.sendButton.disabled = true;
+        this.updateSendButton(true);
+
+        // Then send message
+        await this.sendMessage(message);
+        this.messageInput.value = "";
+      } catch (error) {
+        console.error("Message handling error:", error);
+        alert("An error occurred. Please try again.");
+      } finally {
+        this.isProcessing = false;
+        this.sendButton.disabled = false;
+        this.updateSendButton(false);
+        const incrementResponse = await this.incrementUsage();
+        if (!incrementResponse.ok) {
+          throw new Error("Failed to increment usage");
+        }
+      }
+    }
+  }
+
+  async showModal() {
+    console.log("Showing modal");
+    const remainingQuestions = await this.checkUsage();
+    if (remainingQuestions <= 0) {
+      alert("You have reached your daily limit. Please try again tomorrow!");
+      return;
+    }
+
+    // Restore chat history if available
+    const history = this.loadChatHistory();
+    if (history.length > 0) {
+      this.messagesContainer.innerHTML = ""; // Clear default welcome message
+      history.forEach((msg) => {
+        this.addMessage(msg.content, msg.isUser);
+      });
+    }
+
+    this.modal.style.display = "flex";
+    await this.updateUsageCounter();
+  }
+
+  hideModal() {
+    this.modal.style.display = "none";
+  }
+
+  updateSendButton(isProcessing) {
+    const button = this.modal.querySelector(".send-button");
+    const buttonText = button.querySelector(".button-text");
+    const buttonIcon = button.querySelector(".button-icon");
+
+    if (isProcessing) {
+      buttonText.textContent = "Sending";
+      buttonIcon.textContent = "⏳";
+      button.classList.add("processing");
+    } else {
+      buttonText.textContent = "Send";
+      buttonIcon.textContent = "↗️";
+      button.classList.remove("processing");
+    }
+  }
 }
 
 // Create and initialize modal instance
 const modal = new NowGPTModal();
-modal.init().catch(console.error);
 
 // Export for global access
 window.nowGPTModal = modal;
+
+// Export show/hide methods
+export const showModal = () => modal.showModal();
+export const hideModal = () => modal.hideModal();
