@@ -56,6 +56,8 @@ class NowGPTModal {
 
   async initialize() {
     try {
+      console.log("Initializing chat..."); // Debug log
+
       const response = await fetch("/api/chat-handler", {
         method: "POST",
         headers: {
@@ -66,19 +68,24 @@ class NowGPTModal {
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to initialize chat");
-
       const data = await response.json();
-      console.log("Chat initialization:", data.message);
+      console.log("Initialize response:", data); // Debug log
 
-      // Add welcome message
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to initialize chat");
+      }
+
+      // Add welcome message only if initialization was successful
       this.addMessage(
         "Hello! I'm NowGPT, your ServiceNow Xanadu documentation assistant. How can I help you today?",
         false
       );
+
+      return true;
     } catch (error) {
-      console.error("Initialization error:", error);
-      this.showError("Failed to initialize chat. Please try again later.");
+      console.error("Chat initialization error:", error);
+      this.showError(`Failed to initialize chat: ${error.message}`);
+      return false;
     }
   }
 
