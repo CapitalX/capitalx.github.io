@@ -13,7 +13,7 @@
     "marked": "^12.0.0",
     "openai": "^4.0.0"
   },
-  "resolutions": {
-    "@langchain/openai": "^0.0.21"
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
