@@ -29,18 +29,30 @@ export class RAGHandler {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Accept: "application/json",
           },
           body: JSON.stringify({
             action: "initialize",
           }),
         });
 
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || "Failed to initialize RAG system");
+        let data;
+        try {
+          const text = await response.text();
+          try {
+            data = JSON.parse(text);
+          } catch (e) {
+            console.error("Failed to parse response:", text);
+            throw new Error("Invalid JSON response from server");
+          }
+        } catch (e) {
+          throw new Error("Failed to read server response");
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to initialize RAG system");
+        }
+
         return data;
       };
 

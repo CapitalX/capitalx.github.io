@@ -6,6 +6,9 @@ import { ConversationBufferWindowMemory } from "langchain/memory";
 import { createClient } from "@supabase/supabase-js";
 
 export default async function handler(req, res) {
+  // Set proper headers
+  res.setHeader("Content-Type", "application/json");
+
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -16,44 +19,14 @@ export default async function handler(req, res) {
     // Handle initialization check
     if (action === "initialize") {
       try {
-        // Test connections one at a time with proper error handling
-        let supabase;
-        try {
-          supabase = createClient(
-            process.env.SUPABASE_URL,
-            process.env.SUPABASE_SERVICE_KEY
-          );
-          // Test the connection
-          await supabase.from("documents").select("count").limit(1);
-        } catch (error) {
-          console.error("Supabase connection error:", error);
-          return res.status(500).json({
-            message: "Failed to connect to Supabase",
-            error:
-              process.env.NODE_ENV === "development"
-                ? error.message
-                : undefined,
-          });
-        }
+        // Test Supabase connection
+        const supabase = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL,
+          process.env.SUPABASE_SERVICE_KEY
+        );
 
-        let embeddings;
-        try {
-          embeddings = new OpenAIEmbeddings({
-            openAIApiKey: process.env.OPENAI_API_KEY,
-            maxRetries: 3,
-          });
-          // Test the embeddings
-          await embeddings.embedQuery("test");
-        } catch (error) {
-          console.error("OpenAI embeddings error:", error);
-          return res.status(500).json({
-            message: "Failed to initialize OpenAI embeddings",
-            error:
-              process.env.NODE_ENV === "development"
-                ? error.message
-                : undefined,
-          });
-        }
+        // Simple connection test
+        await supabase.from("documents").select("count").limit(1);
 
         return res.status(200).json({
           status: "initialized",
@@ -64,7 +37,9 @@ export default async function handler(req, res) {
         return res.status(500).json({
           message: "Failed to initialize RAG system",
           error:
-            process.env.NODE_ENV === "development" ? error.message : undefined,
+            process.env.NODE_ENV === "development"
+              ? error.message
+              : "Internal server error",
         });
       }
     }
@@ -115,10 +90,11 @@ export default async function handler(req, res) {
       sources: response.sourceDocuments,
     });
   } catch (error) {
-    console.error("LangChain API error:", error);
+    console.error("API error:", error);
     return res.status(500).json({
       message: "Internal server error",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      error:
+        process.env.NODE_ENV === "development" ? error.message : "Server error",
     });
   }
 }
