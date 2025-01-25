@@ -202,20 +202,23 @@
       const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("fade-in", "is-visible");
+            entry.target.classList.add("fade-in");
+            // Add a slight delay before adding is-visible class
+            setTimeout(() => {
+              entry.target.classList.add("is-visible");
+            }, 100);
             observer.unobserve(entry.target);
           }
         });
       }, observerOptions);
 
-      // Only observe sections after the splash container
+      // Observe all animated elements
       document
         .querySelectorAll(
-          ".about-content, .skill-tags, .projects-grid, .contact-content"
+          ".about-content, .skill-tags, .projects-grid, .contact-content, .social-links, .cta-button"
         )
-        .forEach((section) => {
-          section.classList.add("fade-in");
-          observer.observe(section);
+        .forEach((element) => {
+          observer.observe(element);
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
