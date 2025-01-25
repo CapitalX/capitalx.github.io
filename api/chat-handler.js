@@ -15,7 +15,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // First, validate the request
     const { action } = req.body;
     if (!action) {
       return res.status(400).json({
@@ -24,7 +23,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Environment variable check with detailed logging
+    // Environment check
     const envCheck = {
       hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
       hasServiceKey: Boolean(process.env.SUPABASE_SERVICE_KEY),
@@ -33,7 +32,6 @@ export default async function handler(req, res) {
 
     console.log("Environment check:", envCheck);
 
-    // Early return if environment variables are missing
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
       return res.status(503).json({
         message: "Service configuration incomplete",
@@ -42,40 +40,42 @@ export default async function handler(req, res) {
       });
     }
 
-    // Initialize Supabase with more error handling
-    let supabase;
-    try {
-      supabase = createClient(
-        process.env.SUPABASE_URL,
-        process.env.SUPABASE_SERVICE_KEY,
-        {
-          auth: { persistSession: false },
-        }
-      );
-    } catch (initError) {
-      console.error("Supabase client initialization error:", initError);
-      return res.status(500).json({
-        message: "Failed to initialize database client",
-        error:
-          process.env.NODE_ENV === "development"
-            ? initError.message
-            : "Configuration error",
-        timestamp: new Date().toISOString(),
-      });
-    }
+    // Initialize Supabase with timeout options
+    const supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_KEY,
+      {
+        auth: { persistSession: false },
+        db: {
+          schema: "public",
+          timeout: 5000, // 5 second timeout
+        },
+      }
+    );
 
-    // Handle different actions
     switch (action) {
       case "initialize":
         try {
-          // Simple connection test
-          const { data, error } = await supabase
+          // Simpler health check query
+          const { error } = await supabase
             .from("documents")
-            .select("count")
-            .limit(1);
+            .select("id", { count: "exact", head: true })
+            .limit(1)
+            .timeout(3000); // 3 second timeout
 
           if (error) {
-            console.error("Database query error:", error);
+            console.error("Database health check error:", error);
+
+            // Special handling for timeout errors
+            if (error.code === "57014" || error.message.includes("timeout")) {
+              return res.status(503).json({
+                message:
+                  "Database is currently busy. Please try again in a moment.",
+                status: "timeout",
+                timestamp: new Date().toISOString(),
+              });
+            }
+
             return res.status(500).json({
               message: "Database connection failed",
               error:
@@ -89,10 +89,7 @@ export default async function handler(req, res) {
           return res.status(200).json({
             status: "connected",
             message: "Chat system initialized successfully",
-            debug: {
-              hasData: Boolean(data),
-              timestamp: new Date().toISOString(),
-            },
+            timestamp: new Date().toISOString(),
           });
         } catch (dbError) {
           console.error("Database operation failed:", dbError);
@@ -107,7 +104,6 @@ export default async function handler(req, res) {
         }
 
       case "chat":
-        // Simple response for now
         return res.status(200).json({
           message: "Chat endpoint ready",
           response: "Hello! I'm a test response. The chat system is working!",
