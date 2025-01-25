@@ -62,11 +62,25 @@ class NowGPTModal {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
           action: "initialize",
         }),
       });
+
+      // Handle 404 specifically
+      if (response.status === 404) {
+        throw new Error(
+          "Chat API endpoint not found. Please check server configuration."
+        );
+      }
+
+      // Check if the response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Invalid response format from server");
+      }
 
       const data = await response.json();
       console.log("Initialize response:", data); // Debug log
@@ -83,8 +97,22 @@ class NowGPTModal {
 
       return true;
     } catch (error) {
-      console.error("Chat initialization error:", error);
-      this.showError(`Failed to initialize chat: ${error.message}`);
+      console.error("Chat initialization error:", {
+        message: error.message,
+        status: error.status,
+        stack: error.stack,
+      });
+
+      let errorMessage = "Failed to initialize chat: ";
+      if (error.message.includes("API endpoint not found")) {
+        errorMessage += "Service unavailable. Please try again later.";
+      } else if (error.message.includes("Invalid response format")) {
+        errorMessage += "Server configuration error.";
+      } else {
+        errorMessage += error.message;
+      }
+
+      this.showError(errorMessage);
       return false;
     }
   }
