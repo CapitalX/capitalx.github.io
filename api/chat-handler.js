@@ -40,7 +40,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Initialize Supabase with timeout options
+    // Initialize Supabase client
     const supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_KEY,
@@ -48,7 +48,6 @@ export default async function handler(req, res) {
         auth: { persistSession: false },
         db: {
           schema: "public",
-          timeout: 5000, // 5 second timeout
         },
       }
     );
@@ -56,26 +55,14 @@ export default async function handler(req, res) {
     switch (action) {
       case "initialize":
         try {
-          // Simpler health check query
-          const { error } = await supabase
+          // Simple health check query
+          const { data, error } = await supabase
             .from("documents")
             .select("id", { count: "exact", head: true })
-            .limit(1)
-            .timeout(3000); // 3 second timeout
+            .limit(1);
 
           if (error) {
             console.error("Database health check error:", error);
-
-            // Special handling for timeout errors
-            if (error.code === "57014" || error.message.includes("timeout")) {
-              return res.status(503).json({
-                message:
-                  "Database is currently busy. Please try again in a moment.",
-                status: "timeout",
-                timestamp: new Date().toISOString(),
-              });
-            }
-
             return res.status(500).json({
               message: "Database connection failed",
               error:
