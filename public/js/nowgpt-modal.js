@@ -14,8 +14,9 @@ class NowGPTModal {
 
   createModalStructure() {
     this.modal = document.createElement("div");
-    this.modal.className = "modal";
+    this.modal.className = "demo-modal";
     this.modal.id = "chatModal";
+    this.modal.style.display = "none";
 
     this.modal.innerHTML = `
       <div class="demo-modal-content">
@@ -243,13 +244,19 @@ class NowGPTModal {
   }
 
   showModal() {
-    this.modal.classList.add("show");
-    document.body.style.overflow = "hidden";
+    this.modal.style.display = "flex";
+    requestAnimationFrame(() => {
+      this.modal.classList.add("show");
+      document.body.style.overflow = "hidden";
+    });
   }
 
   hideModal() {
     this.modal.classList.remove("show");
-    document.body.style.overflow = "";
+    setTimeout(() => {
+      this.modal.style.display = "none";
+      document.body.style.overflow = "";
+    }, 300);
   }
 }
 
