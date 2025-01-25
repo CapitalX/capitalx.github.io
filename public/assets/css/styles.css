@@ -140,10 +140,7 @@ body {
     align-items: center;
     gap: 2rem;
     margin: 2rem auto;
-    opacity: 0;
-    animation: fadeInUp 0.5s ease 2s forwards;
     width: 100%;
-    pointer-events: none;
 }
 
 .social-links a {
@@ -159,8 +156,7 @@ body {
 }
 
 .cta-button {
-    opacity: 0;
-    animation: fadeInUp 0.5s ease 2s forwards;
+    margin-top: 2rem;
 }
 
 .cta-button button {
@@ -988,12 +984,15 @@ section::before {
     padding-top: 0; /* Remove extra padding */
 }
 
-/* Add initial state for social links and CTA button */
-.social-links, .cta-button {
+/* Remove the old animations */
+.social-links,
+.cta-button {
+    opacity: 0;
+    transform: translateY(20px);
     pointer-events: none;
 }
 
-/* Enable interaction after animation completes */
+/* Remove old animation keyframes and styles */
 .social-links[style*="opacity: 1"],
 .cta-button[style*="opacity: 1"] {
     pointer-events: auto;
