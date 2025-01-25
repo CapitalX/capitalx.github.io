@@ -1,4 +1,4 @@
-import RAGHandler from "../api/rag-handler.js";
+import RAGHandler from "/api/rag-handler.js";
 
 class NowGPTModal {
   constructor() {
@@ -241,7 +241,7 @@ I can help you with:
 • 📖 Documentation and implementation guides  
 • 🚀 Release notes and updates
 • ⚙️ Technical details and specifications
-• �� Best practices and recommendations
+•  Best practices and recommendations
 
 How can I assist you today? Feel free to ask any questions!`;
     this.addMessage(welcomeMessage, false);

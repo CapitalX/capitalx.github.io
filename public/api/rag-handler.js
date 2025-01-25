@@ -6,7 +6,7 @@ import { ConversationBufferWindowMemory } from "langchain/memory";
 import { createClient } from "@supabase/supabase-js";
 import { BaseRetriever } from "@langchain/core/retrievers";
 
-class SmartRetriever extends BaseRetriever {
+export class SmartRetriever extends BaseRetriever {
   constructor(vectorstore) {
     super();
     this.vectorstore = vectorstore;
@@ -72,7 +72,7 @@ class SmartRetriever extends BaseRetriever {
   }
 }
 
-export default class RAGHandler {
+export class RAGHandler {
   constructor() {
     this.supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -141,3 +141,6 @@ export default class RAGHandler {
     }
   }
 }
+
+// Default export
+export default RAGHandler;

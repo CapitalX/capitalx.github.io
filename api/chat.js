@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
-import { ragHandler } from "./rag-handler";
+import { ragHandler } from "../public/api/rag-handler";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
