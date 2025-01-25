@@ -78,73 +78,37 @@ export class SmartRetriever extends BaseRetriever {
 
 export class RAGHandler {
   constructor() {
-    // Get environment variables from window._env_
-    const SUPABASE_URL = window._env_?.NEXT_PUBLIC_SUPABASE_URL;
-    const SUPABASE_ANON_KEY = window._env_?.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    const OPENAI_API_KEY = window._env_?.OPENAI_API_KEY;
-
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !OPENAI_API_KEY) {
-      throw new Error("Missing required environment variables");
-    }
-
-    this.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    this.openAIKey = OPENAI_API_KEY;
-    this.initialized = false;
-  }
-
-  async initialize() {
-    if (this.initialized) return;
-
-    const embeddings = new OpenAIEmbeddings();
-    this.vectorStore = new SupabaseVectorStore(embeddings, {
-      client: this.supabase,
-      tableName: "documents",
-      queryName: "match_documents",
-    });
-
-    const promptTemplate = new PromptTemplate({
-      template: `You are an expert assistant in ServiceNow Xanadu Release Notes and Documentation...
-      // ... your existing prompt template ...`,
-      inputVariables: ["context", "chat_history", "question"],
-    });
-
-    this.qaChain = ConversationalRetrievalChain.fromLLM(
-      new ChatOpenAI({ temperature: 0.7 }),
-      new SmartRetriever(this.vectorStore),
-      {
-        returnSourceDocuments: true,
-        memory: new ConversationBufferWindowMemory({
-          memoryKey: "chat_history",
-          outputKey: "answer",
-          returnMessages: true,
-          k: 3,
-        }),
-        questionGeneratorTemplate: promptTemplate,
-        verbose: true,
-      }
-    );
-
     this.initialized = true;
   }
 
   async processQuery(query, onProgress) {
-    await this.initialize();
-
     try {
-      onProgress("Analyzing query...", 0);
+      onProgress("Processing query...", 25);
 
-      onProgress("Searching documentation...", 33);
-      const result = await this.qaChain.call({
-        question: query,
+      const response = await fetch("/api/langchain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: query,
+          token: localStorage.getItem("nowgpt_token"), // Or however you handle tokens
+        }),
       });
 
-      onProgress("Processing response...", 66);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to process query");
+      }
 
+      onProgress("Generating response...", 75);
+
+      const result = await response.json();
       onProgress("Complete!", 100);
 
       return {
         answer: result.answer,
-        sources: result.sourceDocuments,
+        sources: result.sources,
       };
     } catch (error) {
       console.error("RAG processing error:", error);
