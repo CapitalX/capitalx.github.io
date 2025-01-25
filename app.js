@@ -108,24 +108,27 @@ function initHeaderBehavior() {
 // Initialize header behavior when DOM is loaded
 document.addEventListener("DOMContentLoaded", initHeaderBehavior);
 
-// Import the modal functions
-import { showModal, hideModal } from "./public/js/nowgpt-modal.js";
+// Import the modal class itself
+import { NowGPTModal } from "./public/js/nowgpt-modal.js";
 
 // Initialize modal handlers
 function initModalHandlers() {
+  // Create modal instance
+  const modal = new NowGPTModal();
+
   // Find all demo buttons
   const demoButtons = document.querySelectorAll(".try-demo-btn");
 
   demoButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
       e.preventDefault();
-      showModal();
+      modal.showModal();
     });
   });
 
   // Also expose to window for direct access
-  window.showNowGPTModal = showModal;
-  window.hideNowGPTModal = hideModal;
+  window.showNowGPTModal = () => modal.showModal();
+  window.hideNowGPTModal = () => modal.hideModal();
 }
 
 // Main Initialization
@@ -133,5 +136,4 @@ document.addEventListener("DOMContentLoaded", () => {
   load3DModel();
   initHeaderBehavior();
   initModalHandlers();
-  // ... other initializations
 });
