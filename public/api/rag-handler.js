@@ -1,9 +1,38 @@
 export class RAGHandler {
   constructor() {
-    this.initialized = true;
+    this.initialized = false;
+  }
+
+  async initialize() {
+    try {
+      // Simple initialization check
+      const response = await fetch("/api/langchain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: "test",
+          action: "initialize",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to initialize RAG system");
+      }
+
+      this.initialized = true;
+    } catch (error) {
+      console.error("RAG initialization error:", error);
+      throw error;
+    }
   }
 
   async processQuery(query, onProgress) {
+    if (!this.initialized) {
+      throw new Error("RAG system not initialized");
+    }
+
     try {
       onProgress("Processing query...", 25);
 

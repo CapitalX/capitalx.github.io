@@ -228,14 +228,22 @@
       import { showModal, hideModal } from "/js/nowgpt-modal.js";
 
       // Make functions available globally
-      window.showNowGPTModal = showModal;
+      window.showNowGPTModal = () => {
+        try {
+          showModal();
+        } catch (error) {
+          console.error("Failed to show modal:", error);
+        }
+      };
       window.hideNowGPTModal = hideModal;
 
-      // Add click handler to your button
-      document.querySelector("#chatButton").onclick = () => {
-        console.log("Chat button clicked");
-        showModal();
-      };
+      // Add click handler to your button after DOM is loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        const chatButton = document.querySelector("#chatButton");
+        if (chatButton) {
+          chatButton.onclick = window.showNowGPTModal;
+        }
+      });
     </script>
   </body>
 </html>
