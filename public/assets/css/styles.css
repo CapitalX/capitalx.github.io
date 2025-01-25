@@ -290,10 +290,11 @@ body {
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     width: 100%;
     padding: 1rem;
+    place-items: center;
 }
 
 .project-carousel {
@@ -311,6 +312,9 @@ body {
     border-radius: 15px;
     padding: 1.5rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .project-card:hover {
@@ -528,13 +532,14 @@ footer {
     }
     
     section {
-        padding: 4rem 1.5rem;
-        margin: 1rem;
+        padding: 3rem 1rem;
+        margin: 1rem auto;
         text-align: center;
     }
     
     .skill-tags {
         justify-content: center;
+        padding: 0 1rem;
     }
 
     .project-card {
@@ -544,6 +549,32 @@ footer {
     .about-text p {
         text-align: center;
         padding: 0 1rem;
+    }
+
+    .about-card,
+    .projects-card,
+    .contact-card {
+        padding: 1.5rem;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+    }
+
+    .project-card {
+        max-width: 100%;
+    }
+
+    .about-content,
+    .contact-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
     }
 }
 
@@ -557,9 +588,13 @@ section h2 {
 section {
     position: relative;
     z-index: 1;
-    padding: 4rem 2rem;
+    padding: 4rem 1rem;
     margin: 2rem auto;
     max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Remove glow effects from headers */
@@ -667,8 +702,11 @@ section::before {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(0, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 3rem;
+    padding: 2rem;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* Specific section adjustments */
