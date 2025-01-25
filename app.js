@@ -1,3 +1,6 @@
+// Import the modal class first
+import { NowGPTModal } from "./public/js/nowgpt-modal.js";
+
 // Dark Mode Toggle
 const darkModeToggle = document.getElementById("darkModeToggle");
 const body = document.body;
@@ -108,9 +111,6 @@ function initHeaderBehavior() {
 // Initialize header behavior when DOM is loaded
 document.addEventListener("DOMContentLoaded", initHeaderBehavior);
 
-// Import the modal class itself
-import { NowGPTModal } from "./public/js/nowgpt-modal.js";
-
 // Initialize modal handlers
 function initModalHandlers() {
   // Create modal instance
@@ -118,10 +118,17 @@ function initModalHandlers() {
 
   // Find all demo buttons
   const demoButtons = document.querySelectorAll(".try-demo-btn");
+  console.log("Found demo buttons:", demoButtons.length); // Debug log
+
+  if (demoButtons.length === 0) {
+    console.error("No demo buttons found with class 'try-demo-btn'");
+    return;
+  }
 
   demoButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
       e.preventDefault();
+      console.log("Demo button clicked"); // Debug log
       modal.showModal();
     });
   });

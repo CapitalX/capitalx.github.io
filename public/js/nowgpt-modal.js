@@ -17,6 +17,8 @@ export class NowGPTModal {
     this.modal.className = "demo-modal";
     this.modal.id = "chatModal";
     this.modal.style.display = "none";
+    this.modal.style.opacity = "0";
+    this.modal.style.visibility = "hidden";
 
     this.modal.innerHTML = `
       <div class="demo-modal-content">
@@ -244,11 +246,16 @@ export class NowGPTModal {
   }
 
   showModal() {
+    console.log("Showing modal"); // Debug log
+    this.modal.style.visibility = "visible";
     this.modal.style.display = "flex";
-    requestAnimationFrame(() => {
-      this.modal.classList.add("show");
-      document.body.style.overflow = "hidden";
-    });
+
+    // Force a reflow
+    void this.modal.offsetHeight;
+
+    // Add show class for animation
+    this.modal.classList.add("show");
+    document.body.style.overflow = "hidden";
   }
 
   hideModal() {
