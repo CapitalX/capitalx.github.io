@@ -2,8 +2,10 @@
   "name": "portfolio",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@langchain/community": "^0.0.31",
+    "@langchain/core": "^0.1.48",
     "@langchain/openai": "^0.0.21",
     "@supabase/supabase-js": "^2.48.1",
     "dompurify": "^3.0.8",
