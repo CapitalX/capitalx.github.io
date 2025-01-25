@@ -3,19 +3,18 @@
   "builds": [
     {
       "src": "public/**/*",
-      "use": "@vercel/static",
-      "config": { "zeroConfig": true }
+      "use": "@vercel/static"
     },
     {
-      "src": "api/*.js",
-      "use": "@vercel/node",
-      "config": { "zeroConfig": true }
+      "src": "api/chat-handler.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1.js"
+      "src": "/api/chat-handler",
+      "dest": "/api/chat-handler.js",
+      "methods": ["POST", "OPTIONS"]
     },
     {
       "handle": "filesystem"

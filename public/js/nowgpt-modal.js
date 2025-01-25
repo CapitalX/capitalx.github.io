@@ -58,7 +58,11 @@ class NowGPTModal {
     try {
       console.log("Initializing chat..."); // Debug log
 
-      const response = await fetch("/api/chat-handler", {
+      // Use absolute URL to avoid path issues
+      const apiUrl = window.location.origin + "/api/chat-handler";
+      console.log("Attempting to connect to:", apiUrl);
+
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
