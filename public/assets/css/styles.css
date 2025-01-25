@@ -158,6 +158,11 @@ body {
     text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
+.cta-button {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease 2s forwards;
+}
+
 .cta-button button {
     padding: 1rem 2.5rem;
     font-size: 1.1rem;
@@ -170,15 +175,35 @@ body {
     transition: all 0.3s ease;
     font-weight: 500;
     letter-spacing: 0.5px;
-    opacity: 0;
-    animation: fadeInUp 0.5s ease 2s forwards;
+}
+
+/* Remove pointer-events from button, handle at container level */
+.cta-button.fade-in {
     pointer-events: none;
+}
+
+.cta-button.fade-in.is-visible {
+    pointer-events: auto;
 }
 
 .cta-button button:hover {
     background: rgba(0, 255, 255, 0.2);
     transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
+}
+
+/* Update animation keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
 }
 
 /* About Section */
@@ -618,14 +643,9 @@ section::before {
     }
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+@keyframes showText {
     to {
-        opacity: 1;
-        transform: translateY(0);
+        visibility: visible;
     }
 }
 
@@ -725,12 +745,6 @@ section::before {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-@keyframes showText {
-    to {
-        visibility: visible;
-    }
 }
 
 /* NowGPT Modal Enhanced Styles */
