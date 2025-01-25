@@ -1,3 +1,5 @@
+import RAGHandler from "../../api/rag-handler.js";
+
 class NowGPTModal {
   constructor() {
     this.modal = null;
@@ -7,6 +9,17 @@ class NowGPTModal {
     this.isProcessing = false;
     this.isDemoEnabled = true;
     this.isSourceEnabled = true;
+    this.messagesContainer = null;
+    this.messageInput = null;
+    this.sendButton = null;
+    this.errorContainer = null;
+    this.rag = null; // Initialize as null
+
+    // Bind methods
+    this.handleMessage = this.handleMessage.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.init = this.init.bind(this);
 
     // Load saved chat history
     this.loadChatHistory();
@@ -17,8 +30,26 @@ class NowGPTModal {
 
     // Add a slight delay to ensure all buttons are in the DOM
     setTimeout(() => this.updateButtons(), 100);
+  }
 
-    this.rag = new RAGHandler();
+  async init() {
+    try {
+      // Create modal structure
+      this.createModalStructure();
+
+      // Initialize RAG handler
+      this.rag = new RAGHandler();
+      await this.rag.initialize(); // Initialize RAG when modal is created
+
+      // Load chat history
+      this.loadChatHistory();
+
+      // Check usage
+      await this.updateUsageCounter();
+    } catch (error) {
+      console.error("Initialization error:", error);
+      this.showError("Failed to initialize chat. Please try again later.");
+    }
   }
 
   // Add methods for chat history persistence
@@ -89,6 +120,10 @@ class NowGPTModal {
 
   async sendMessage(message) {
     try {
+      if (!this.rag) {
+        throw new Error("Chat system not initialized");
+      }
+
       const messageDiv = this.addMessage(message, true);
       const progressCard = this.addProgressCard();
 
@@ -110,7 +145,7 @@ class NowGPTModal {
       setTimeout(() => progressCard.remove(), 1000);
     } catch (error) {
       console.error("Chat error:", error);
-      this.showError(error.message);
+      this.showError(error.message || "Failed to process message");
     }
   }
 
@@ -405,13 +440,25 @@ How can I assist you today? Feel free to ask any questions!`;
   }
 
   showError(message) {
-    const errorMessage = `<div class="error-message">❌ ${message}</div>`;
-    if (this.messagesContainer.lastChild) {
-      this.messagesContainer.lastChild.querySelector(
-        ".message-text"
-      ).innerHTML = errorMessage;
+    if (!this.errorContainer) {
+      this.errorContainer = document.createElement("div");
+      this.errorContainer.className = "error-container";
+      this.modal.appendChild(this.errorContainer);
     }
-    this.typingIndicator.style.display = "none";
+
+    this.errorContainer.innerHTML = `
+        <div class="error-message">
+            ${message}
+            <button class="error-close">&times;</button>
+        </div>
+    `;
+
+    const closeBtn = this.errorContainer.querySelector(".error-close");
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        this.errorContainer.innerHTML = "";
+      };
+    }
   }
 
   addSourcesCard(sources) {
@@ -442,7 +489,9 @@ How can I assist you today? Feel free to ask any questions!`;
   }
 }
 
-// Initialize the NowGPT modal
-if (typeof window !== "undefined") {
-  new NowGPTModal();
-}
+// Create and initialize modal instance
+const modal = new NowGPTModal();
+modal.init().catch(console.error);
+
+// Export for global access
+window.nowGPTModal = modal;
