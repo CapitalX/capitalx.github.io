@@ -25,8 +25,11 @@ class NowGPTModal {
     // Setup listeners
     this.setupEventListeners();
 
-    // Add welcome message
-    this.addWelcomeMessage();
+    // Initialize async components
+    this.initializeAsync().catch((error) => {
+      console.error("Failed to initialize:", error);
+      this.showError("Failed to initialize chat. Please try again later.");
+    });
   }
 
   bindMethods() {
@@ -464,11 +467,28 @@ How can I assist you today? Feel free to ask any questions!`;
 }
 
 // Create and initialize modal instance
-const modal = new NowGPTModal();
+let modal;
+try {
+  modal = new NowGPTModal();
+  console.log("Modal initialized successfully");
+} catch (error) {
+  console.error("Failed to create modal:", error);
+}
 
 // Export for global access
 window.nowGPTModal = modal;
 
 // Export show/hide methods
-export const showModal = () => modal.showModal();
-export const hideModal = () => modal.hideModal();
+export const showModal = () => {
+  console.log("Showing modal...");
+  if (modal) {
+    return modal.showModal();
+  } else {
+    console.error("Modal not initialized");
+  }
+};
+export const hideModal = () => {
+  if (modal) {
+    return modal.hideModal();
+  }
+};
