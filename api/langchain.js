@@ -1,9 +1,12 @@
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { ConversationalRetrievalChain } from "langchain/chains";
+import {
+  createStuffDocumentsChain,
+  createRetrievalChain,
+} from "langchain/chains";
 import { PromptTemplate } from "langchain/prompts";
-import { BufferWindowMemory } from "langchain/memory";
+import { BufferMemory } from "langchain/memory";
 import { createClient } from "@supabase/supabase-js";
 
 export default async function handler(req, res) {
@@ -65,24 +68,36 @@ export default async function handler(req, res) {
       queryName: "match_documents",
     });
 
-    const chain = ConversationalRetrievalChain.fromLLM(
-      new ChatOpenAI({
-        temperature: 0.7,
-        openAIApiKey: process.env.OPENAI_API_KEY,
-      }),
-      vectorStore.asRetriever(),
-      {
-        returnSourceDocuments: true,
-        memory: new BufferWindowMemory({
-          memoryKey: "chat_history",
-          outputKey: "answer",
-          returnMessages: true,
-          k: 3,
-        }),
-      }
-    );
+    const model = new ChatOpenAI({
+      temperature: 0.7,
+      openAIApiKey: process.env.OPENAI_API_KEY,
+    });
 
-    const response = await chain.call({
+    const memory = new BufferMemory({
+      memoryKey: "chat_history",
+      outputKey: "answer",
+      returnMessages: true,
+    });
+
+    const prompt = PromptTemplate.fromTemplate(`
+      Answer the following question based on the provided context:
+      Context: {context}
+      Question: {question}
+      Answer:
+    `);
+
+    const documentChain = await createStuffDocumentsChain({
+      llm: model,
+      prompt,
+    });
+
+    const retrievalChain = await createRetrievalChain({
+      combineDocsChain: documentChain,
+      retriever: vectorStore.asRetriever(),
+      memory,
+    });
+
+    const response = await retrievalChain.invoke({
       question: message,
     });
 
