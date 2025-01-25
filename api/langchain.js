@@ -3,7 +3,7 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ConversationalRetrievalChain } from "langchain/chains";
 import { PromptTemplate } from "langchain/prompts";
-import { ConversationBufferWindowMemory } from "langchain/memory";
+import { BufferWindowMemory } from "langchain/memory";
 import { createClient } from "@supabase/supabase-js";
 
 export default async function handler(req, res) {
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
       vectorStore.asRetriever(),
       {
         returnSourceDocuments: true,
-        memory: new ConversationBufferWindowMemory({
+        memory: new BufferWindowMemory({
           memoryKey: "chat_history",
           outputKey: "answer",
           returnMessages: true,
