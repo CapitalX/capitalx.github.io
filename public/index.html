@@ -224,5 +224,18 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <script type="module" src="/js/nowgpt-modal.js"></script>
+    <script type="module">
+      import { showModal, hideModal } from "/js/nowgpt-modal.js";
+
+      // Make functions available globally
+      window.showNowGPTModal = showModal;
+      window.hideNowGPTModal = hideModal;
+
+      // Add click handler to your button
+      document.querySelector("#chatButton").onclick = () => {
+        console.log("Chat button clicked");
+        showModal();
+      };
+    </script>
   </body>
 </html>
