@@ -14,6 +14,9 @@ class NowGPTModal {
     this.bindEvents();
     this.addWelcomeMessage();
     this.updateButtons();
+
+    // Add a slight delay to ensure all buttons are in the DOM
+    setTimeout(() => this.updateButtons(), 100);
   }
 
   // Add methods for chat history persistence
@@ -406,25 +409,18 @@ How can I assist you today? Feel free to ask any questions!`;
 
   updateButtons() {
     // Update demo buttons
-    const demoButtons = document.querySelectorAll(".try-demo-btn");
-    demoButtons.forEach((button) => {
-      button.disabled = !this.isDemoEnabled; // Disable if isDemoEnabled is false
-      if (!this.isDemoEnabled) {
-        button.title = "Coming Soon";
-      } else {
-        button.title = "Try Demo";
-      }
+    document.querySelectorAll(".try-demo-btn").forEach((button) => {
+      button.disabled = !this.isDemoEnabled;
+      button.title = this.isDemoEnabled ? "Try the demo" : "Coming Soon";
     });
 
-    // Update source buttons
-    const sourceButtons = document.querySelectorAll(".source-btn");
-    sourceButtons.forEach((button) => {
-      button.disabled = !this.isSourceEnabled; // Disable if isSourceEnabled is false
-      if (!this.isSourceEnabled) {
-        button.title = "Coming Soon";
-      } else {
-        button.title = "View Repo";
-      }
+    // Update source buttons - make sure to select ALL source buttons
+    document.querySelectorAll(".source-btn, a.source-btn").forEach((button) => {
+      button.disabled = !this.isSourceEnabled;
+      button.style.pointerEvents = this.isSourceEnabled ? "auto" : "none";
+      button.title = this.isSourceEnabled ? "View source" : "Coming Soon";
+      // Add opacity for visual feedback
+      button.style.opacity = this.isSourceEnabled ? "1" : "0.5";
     });
   }
 }
