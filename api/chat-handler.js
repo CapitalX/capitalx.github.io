@@ -6,48 +6,82 @@ export default async function handler(req, res) {
   }
 
   const { action } = req.body;
+  console.log("Received action:", action); // Debug log
 
   try {
-    // Initialize Supabase client
+    // Log environment variables (without exposing sensitive data)
+    console.log("Supabase URL exists:", !!process.env.SUPABASE_URL);
+    console.log("Service key exists:", !!process.env.SUPABASE_SERVICE_KEY);
+
+    // Initialize Supabase client with error handling
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+      throw new Error("Missing Supabase configuration");
+    }
+
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL,
+      process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_KEY
     );
 
     // Test connection and handle different actions
     switch (action) {
       case "initialize":
-        // Test Supabase connection
+        console.log("Attempting Supabase connection..."); // Debug log
+
+        // Test connection with more detailed error handling
         const { data, error } = await supabase
           .from("documents")
           .select("count")
           .limit(1);
 
-        if (error) throw error;
+        if (error) {
+          console.error("Supabase connection error:", error); // Debug log
+          throw new Error(`Database connection failed: ${error.message}`);
+        }
 
-        console.log("Supabase connection successful");
+        console.log("Supabase connection successful, data:", data); // Debug log
         return res.status(200).json({
           status: "connected",
           message: "Chat system initialized successfully",
+          debug: {
+            hasData: !!data,
+            timestamp: new Date().toISOString(),
+          },
         });
 
       case "chat":
-        // We'll implement the chat logic here later
         return res.status(200).json({
           message: "Chat endpoint ready",
-          // This is a placeholder - we'll implement real chat later
-          response: "Hello! I'm a placeholder response. Real chat coming soon!",
+          response: "Hello! I'm a test response. The chat system is working!",
+          timestamp: new Date().toISOString(),
         });
 
       default:
-        return res.status(400).json({ message: "Invalid action" });
+        console.warn("Invalid action received:", action); // Debug log
+        return res.status(400).json({
+          message: "Invalid action",
+          received: action,
+        });
     }
   } catch (error) {
-    console.error("Handler error:", error);
+    console.error("Handler error details:", {
+      message: error.message,
+      stack: error.stack,
+      action: action,
+    });
+
+    // Send a more detailed error response
     return res.status(500).json({
       message: "Error processing request",
       error:
-        process.env.NODE_ENV === "development" ? error.message : "Server error",
+        process.env.NODE_ENV === "development"
+          ? {
+              message: error.message,
+              type: error.name,
+              action: action,
+            }
+          : "Server error",
+      timestamp: new Date().toISOString(),
     });
   }
 }
