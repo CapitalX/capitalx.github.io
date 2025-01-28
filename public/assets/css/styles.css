@@ -471,7 +471,6 @@ body {
     letter-spacing: 0.5px;
     text-decoration: none;
     margin-top: 2rem;
-    pointer-events: none;
 }
 
 .contact-button:hover {
