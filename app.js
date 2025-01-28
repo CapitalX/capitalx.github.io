@@ -108,42 +108,11 @@ function initHeaderBehavior() {
   handleScroll();
 }
 
-// Initialize modal handlers
-function initModalHandlers() {
-  console.log("Initializing modal handlers"); // Debug log
-
-  // Create modal instance
-  const modal = new NowGPTModal();
-
-  // Find all demo buttons with data-project attribute
-  const demoButtons = document.querySelectorAll(
-    "button[data-project='nowgpt']"
-  );
-  console.log("Found demo buttons:", demoButtons.length); // Debug log
-
-  if (demoButtons.length === 0) {
-    console.error("No demo buttons found with data-project='nowgpt'");
-    return;
-  }
-
-  demoButtons.forEach((button, index) => {
-    console.log(`Adding click listener to button ${index}`); // Debug log
-    button.addEventListener("click", (e) => {
-      e.preventDefault();
-      console.log(`Button ${index} clicked`); // Debug log
-      modal.showModal();
-    });
-  });
-}
-
 // Single DOMContentLoaded listener for all initializations
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded"); // Debug log
 
   // Initialize features in order
-  initModalHandlers();
   initHeaderBehavior();
   load3DModel();
-
-  // Remove the other DOMContentLoaded listeners
 });

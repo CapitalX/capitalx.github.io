@@ -1,3 +1,5 @@
+import { NowGPTModal } from "./nowgpt-modal.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize modal handlers
   const demoButtons = document.querySelectorAll(
