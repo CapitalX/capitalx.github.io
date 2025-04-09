@@ -10,7 +10,6 @@ darkModeToggle.addEventListener("click", () => {
 if (localStorage.getItem("darkMode") === "true") {
   body.classList.add("dark-mode");
 }
-[1];
 
 // Smooth Scrolling
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -21,14 +20,12 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     });
   });
 });
-[2];
 
 // 3D Model Loading
 function load3DModel() {
   // Placeholder: Add your 3D model loading logic here
   console.log("Loading 3D model...");
 }
-[3];
 
 // Intersection Observer for Animations
 const observerOptions = {
@@ -105,6 +102,62 @@ function initHeaderBehavior() {
   handleScroll();
 }
 
+function typewriterEffect(elementId, words, typingSpeed = 150, delay = 2000) {
+  const element = document.getElementById(elementId);
+  let wordIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function type() {
+    const currentWord = words[wordIndex];
+    const displayText = isDeleting
+      ? currentWord.substring(0, charIndex--)
+      : currentWord.substring(0, charIndex++);
+
+    element.textContent = displayText;
+
+    if (!isDeleting && charIndex === currentWord.length) {
+      setTimeout(() => (isDeleting = true), delay);
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+    }
+
+    const nextSpeed = isDeleting ? typingSpeed / 2 : typingSpeed;
+    setTimeout(type, nextSpeed);
+  }
+
+  type();
+}
+
+function typeWords(elementSelector, words, typingSpeed = 150, pause = 2000) {
+  const element = document.querySelector(elementSelector);
+  let wordIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function type() {
+    const currentWord = words[wordIndex];
+    const displayText = isDeleting
+      ? currentWord.substring(0, charIndex--)
+      : currentWord.substring(0, charIndex++);
+
+    element.textContent = displayText;
+
+    if (!isDeleting && charIndex === currentWord.length) {
+      setTimeout(() => (isDeleting = true), pause);
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+    }
+
+    const nextSpeed = isDeleting ? typingSpeed / 2 : typingSpeed;
+    setTimeout(type, nextSpeed);
+  }
+
+  type();
+}
+
 // Single DOMContentLoaded listener for all initializations
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded"); // Debug log
@@ -112,4 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize features in order
   initHeaderBehavior();
   load3DModel();
+  typewriterEffect("typewriter", ["Technologist", "DJ"]);
+  typeWords(".intro-text p", ["Technologist", "DJ", "Developer"]);
 });
