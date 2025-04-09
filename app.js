@@ -165,6 +165,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize features in order
   initHeaderBehavior();
   load3DModel();
-  typewriterEffect("typewriter", ["Technologist", "DJ"]);
-  typeWords(".intro-text p", ["Technologist", "DJ", "Developer"]);
+  typewriterEffect("typewriter", ["Technologist", "DJ", "Developer"]); // Corrected words array
 });
