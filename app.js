@@ -1,6 +1,3 @@
-// Import the modal class first
-import { NowGPTModal } from "/js/nowgpt-modal.js";
-
 // Dark Mode Toggle
 const darkModeToggle = document.getElementById("darkModeToggle");
 const body = document.body;
