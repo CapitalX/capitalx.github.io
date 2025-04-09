@@ -108,6 +108,10 @@ function typewriterEffect(elementId, words, typingSpeed = 150, delay = 2000) {
   let charIndex = 0;
   let isDeleting = false;
 
+  // Ensure the typewriter text is hidden initially
+  element.style.opacity = "0";
+  element.style.transition = "opacity 0.5s ease";
+
   function type() {
     const currentWord = words[wordIndex];
     const displayText = isDeleting
@@ -115,6 +119,11 @@ function typewriterEffect(elementId, words, typingSpeed = 150, delay = 2000) {
       : currentWord.substring(0, charIndex++);
 
     element.textContent = displayText;
+
+    // Fade in the element when the first character is typed
+    if (charIndex === 1 && !isDeleting) {
+      element.style.opacity = "1";
+    }
 
     if (!isDeleting && charIndex === currentWord.length) {
       setTimeout(() => (isDeleting = true), delay);
@@ -166,4 +175,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeaderBehavior();
   load3DModel();
   typewriterEffect("typewriter", ["Technologist", "DJ", "Developer"]); // Corrected words array
+
+  // Ensure the typewriter text is visible
+  const typewriterElement = document.getElementById("typewriter");
+  typewriterElement.style.visibility = "visible";
+  typewriterElement.style.opacity = "1";
 });
