@@ -220,11 +220,13 @@
       window.addEventListener("scroll", highlightActiveLink);
 
       // Smooth scroll for navbar links
-      document.querySelectorAll(".nav-link").forEach((link) => {
+      document.querySelectorAll(".nav-link, .nav-brand").forEach((link) => {
         link.addEventListener("click", (e) => {
           e.preventDefault();
-          const targetId = link.getAttribute("href").substring(1);
-          const targetElement = document.getElementById(targetId);
+          const targetId = link.getAttribute("href")?.substring(1);
+          const targetElement = targetId
+            ? document.getElementById(targetId)
+            : null;
           if (targetElement) {
             const offset = 70; // Adjusted offset for better alignment
             const targetPosition = targetElement.offsetTop - offset;
@@ -235,6 +237,22 @@
           }
         });
       });
+
+      document
+        .querySelector(".cta-button button")
+        .addEventListener("click", () => {
+          const targetElement = document.getElementById(
+            "automation-development"
+          );
+          if (targetElement) {
+            const offset = 70; // Adjusted offset for better alignment
+            const targetPosition = targetElement.offsetTop - offset;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: "smooth",
+            });
+          }
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
