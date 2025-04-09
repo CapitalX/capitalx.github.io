@@ -1207,11 +1207,9 @@ section::before {
     /* Removed border-right and blink animation */
 }
 
+/* Removed redundant blinking cursor */
 #typewriter::after {
-    content: '|';
-    display: inline-block;
-    margin-left: 5px;
-    animation: blink 0.7s steps(2, start) infinite;
+    content: ''; 
 }
 
 @keyframes blink {
