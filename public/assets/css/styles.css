@@ -157,7 +157,6 @@ body {
     display: inline-block; /* Ensure width adjusts dynamically */
     margin: 0 auto 2rem auto;
     padding-right: 5px;
-    border-right: 3px solid #00ffff;
     animation: 
         typewriter-text 1s cubic-bezier(0.4, 0.1, 0.2, 1) 1s forwards; /* Removed duplicate blink animation */
     transition: width 0.3s ease; /* Smoothly resize width */
@@ -636,14 +635,6 @@ section::before {
     }
 }
 
-@keyframes blink {
-    from, to { 
-        border-color: transparent;
-    }
-    50% { 
-        border-color: #00ffff;
-    }
-}
 
 @keyframes showText {
     to {
