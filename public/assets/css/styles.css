@@ -60,7 +60,7 @@ body {
 .nav-brand:hover {
     color: #00ffff;
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.5);
-    animation: pulse 1s infinite;
+    transform: scale(1.1); /* Slightly swell */
 }
 
 @keyframes pulse {
