@@ -14,13 +14,13 @@
   </head>
   <body>
     <div class="stars" id="stars"></div>
-    <nav class="navbar">
+    <nav class="navbar sticky">
       <div class="nav-brand">XTech</div>
       <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
     </nav>
 
@@ -75,10 +75,32 @@
       </div>
     </section>
 
-    <section id="dj-services" class="projects-section">
-      <div class="projects-card">
-        <h2>DJ Services</h2>
-        <div class="projects-grid">
+    <section
+      id="dj-services"
+      class="projects-section"
+      style="
+        background: url('/assets/images/dj-services-bg.jpg') center/cover
+          no-repeat;
+        position: relative;
+      "
+    >
+      <div
+        class="overlay"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+        "
+      ></div>
+      <div
+        class="projects-card two-column-layout"
+        style="position: relative; z-index: 1"
+      >
+        <div class="text-content">
+          <h2>DJ Services</h2>
           <p>
             Professional DJ services for events, parties, and special occasions.
             Let me bring the perfect vibe to your event with a curated playlist
@@ -88,13 +110,47 @@
             >Book Now</a
           >
         </div>
+        <div class="visual-content">
+          <iframe
+            width="100%"
+            height="200"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            title="DJ Services Preview"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            style="border-radius: 10px"
+          ></iframe>
+        </div>
       </div>
     </section>
 
-    <section id="music-production" class="projects-section">
-      <div class="projects-card">
-        <h2>Music Production</h2>
-        <div class="projects-grid">
+    <section
+      id="music-production"
+      class="projects-section"
+      style="
+        background: url('/assets/images/music-production-bg.jpg') center/cover
+          no-repeat;
+        position: relative;
+      "
+    >
+      <div
+        class="overlay"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+        "
+      ></div>
+      <div
+        class="projects-card two-column-layout"
+        style="position: relative; z-index: 1"
+      >
+        <div class="text-content">
+          <h2>Music Production</h2>
           <p>
             Offering high-quality music production services, including beat
             making, mixing, and mastering. Let's create something amazing
@@ -107,13 +163,45 @@
             >Explore My Music</a
           >
         </div>
+        <div class="visual-content">
+          <iframe
+            src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"
+            width="100%"
+            height="200"
+            frameborder="0"
+            allowtransparency="true"
+            allow="encrypted-media"
+            style="border-radius: 10px"
+          ></iframe>
+        </div>
       </div>
     </section>
 
-    <section id="automation-development" class="projects-section">
-      <div class="projects-card">
-        <h2>Automation Development</h2>
-        <div class="projects-grid">
+    <section
+      id="automation-development"
+      class="projects-section"
+      style="
+        background: linear-gradient(to right, #1e3c72, #2a5298);
+        position: relative;
+      "
+    >
+      <div
+        class="overlay"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+        "
+      ></div>
+      <div
+        class="projects-card two-column-layout"
+        style="position: relative; z-index: 1"
+      >
+        <div class="text-content">
+          <h2>Automation Development</h2>
           <p>
             Custom automation solutions to streamline workflows and improve
             efficiency. From ServiceNow to custom scripts, I can help automate
@@ -122,6 +210,13 @@
           <a href="mailto:xbecoding@gmail.com" class="contact-button"
             >Get Started</a
           >
+        </div>
+        <div class="visual-content">
+          <img
+            src="/assets/images/automation-icon.png"
+            alt="Automation Icon"
+            style="width: 100%; max-width: 300px"
+          />
         </div>
       </div>
     </section>
@@ -206,6 +301,30 @@
         .forEach((element) => {
           observer.observe(element);
         });
+
+      // Highlight active section link
+      const sections = document.querySelectorAll("section");
+      const navLinks = document.querySelectorAll(".nav-link");
+
+      function highlightActiveLink() {
+        let currentSection = "";
+
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop - 100; // Adjust for navbar height
+          if (window.scrollY >= sectionTop) {
+            currentSection = section.getAttribute("id");
+          }
+        });
+
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+          if (link.getAttribute("href").includes(currentSection)) {
+            link.classList.add("active");
+          }
+        });
+      }
+
+      window.addEventListener("scroll", highlightActiveLink);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>

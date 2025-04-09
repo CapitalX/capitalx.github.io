@@ -39,6 +39,15 @@ body {
     transform: translateY(-100%);
 }
 
+.navbar.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    transition: background 0.3s ease;
+}
+
 .nav-brand {
     font-size: 1.5rem;
     font-weight: bold;
@@ -73,6 +82,12 @@ body {
 
 .nav-links a:hover::after {
     width: 100%;
+}
+
+.nav-link.active {
+    color: #00ffff;
+    font-weight: bold;
+    border-bottom: 2px solid #00ffff;
 }
 
 /* Splash Section */
