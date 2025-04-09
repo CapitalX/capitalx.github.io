@@ -54,6 +54,22 @@ body {
     color: #fff;
     text-decoration: none; /* Ensure it looks like text, not a link */
     cursor: pointer; /* Change cursor to pointer */
+    transition: all 0.3s ease;
+}
+
+.nav-brand:hover {
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.5);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 .nav-links {
@@ -479,63 +495,6 @@ body {
     margin: 0 auto;
 }
 
-/* Contact Section */
-.contact-section {
-    padding: 5rem 2rem;
-    text-align: center;
-    background: transparent;
-    backdrop-filter: none;
-}
-
-.contact-section h2 {
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
-    color: #fff;
-    text-shadow: none;
-}
-
-.contact-button {
-    display: inline-block;
-    padding: 1rem 2.5rem;
-    font-size: 1.1rem;
-    background: rgba(0, 255, 255, 0.1);
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    color: #fff;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.contact-button:hover {
-    background: rgba(0, 255, 255, 0.2);
-    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
-    transform: translateY(-2px);
-}
-
-.contact-card {
-    background: rgba(10, 10, 15, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 3rem;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.contact-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    padding: 1rem;
-}
-
-.contact-content p {
-    font-size: 1.2rem;
-    color: #b8b8b8;
-}
-
 /* Footer */
 footer {
     padding: 2rem;
@@ -584,8 +543,7 @@ footer {
     }
 
     .about-card,
-    .projects-card,
-    .contact-card {
+    .projects-card {
         padding: 1.5rem;
         width: 90%;
         margin: 0 auto;
@@ -600,8 +558,7 @@ footer {
         max-width: 100%;
     }
 
-    .about-content,
-    .contact-content {
+    .about-content {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -709,8 +666,7 @@ section::before {
 
 /* Remove any remaining glow effects */
 .about-section h2,
-.projects-section h2,
-.contact-section h2 {
+.projects-section h2 {
     text-shadow: none;
 }
 
@@ -728,8 +684,7 @@ section::before {
 
 /* Add card styling for sections */
 .about-card,
-.projects-card,
-.contact-card {
+.projects-card {
     background: rgba(10, 10, 15, 0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(0, 255, 255, 0.1);
@@ -743,15 +698,13 @@ section::before {
 
 /* Specific section adjustments */
 .about-section,
-.projects-section,
-.contact-section {
+.projects-section {
     padding: 2rem;
 }
 
 /* Content spacing */
 .about-content,
-.projects-grid,
-.contact-content {
+.projects-grid {
     margin: 0;
     padding: 1rem;
 }
