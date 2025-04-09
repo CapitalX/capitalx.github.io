@@ -1207,6 +1207,22 @@ section::before {
     /* Removed border-right and blink animation */
 }
 
+#typewriter::after {
+    content: '|';
+    display: inline-block;
+    margin-left: 5px;
+    animation: blink 0.7s steps(2, start) infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
 .about-card.projects-card:hover {
     transform: translateY(-10px); /* Slight lift */
     box-shadow: 0 10px 40px rgba(0, 255, 255, 0.5); /* Enhanced turquoise glow */

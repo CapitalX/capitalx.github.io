@@ -176,11 +176,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize features in order
   initHeaderBehavior();
   load3DModel();
-  typewriterEffect("typewriter", ["Technologist", "DJ", "Developer"]); // Corrected words array
-
-  // Ensure the typewriter text is visible
-
-  const typewriterElement = document.getElementById("typewriter");
-  typewriterElement.style.visibility = "visible";
-  typewriterElement.style.opacity = "1";
+  // Removed typewriterEffect() call to avoid conflicts with TypewriterJS in index.html
 });
