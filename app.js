@@ -130,13 +130,15 @@ function typewriterEffect(elementId, words, typingSpeed = 150, delay = 2000) {
     } else if (isDeleting && charIndex === 0) {
       isDeleting = false;
       wordIndex = (wordIndex + 1) % words.length;
+      setTimeout(type, delay); // Add delay before typing the next word
+      return;
     }
 
     const nextSpeed = isDeleting ? typingSpeed / 2 : typingSpeed;
     setTimeout(type, nextSpeed);
   }
 
-  type();
+  setTimeout(type, delay); // Add initial delay before starting
 }
 
 function typeWords(elementSelector, words, typingSpeed = 150, pause = 2000) {
