@@ -18,20 +18,10 @@
       <a href="#home" class="nav-brand">XTech</a>
       <ul class="nav-links">
         <li>
-          <a
-            href="#home"
-            class="nav-link"
-            onclick="document.getElementById('home').scrollIntoView({behavior: 'smooth'})"
-            >Home</a
-          >
+          <a href="#home" class="nav-link">Home</a>
         </li>
         <li>
-          <a
-            href="#about"
-            class="nav-link"
-            onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})"
-            >About</a
-          >
+          <a href="#about" class="nav-link">About</a>
         </li>
         <!-- Removed the Contact link -->
       </ul>
@@ -228,6 +218,18 @@
       }
 
       window.addEventListener("scroll", highlightActiveLink);
+
+      // Smooth scroll for navbar links
+      document.querySelectorAll(".nav-link").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute("href").substring(1);
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
