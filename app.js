@@ -15,7 +15,11 @@ if (localStorage.getItem("darkMode") === "true") {
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
-    document.querySelector(this.getAttribute("href")).scrollIntoView({
+    const target = document.querySelector(this.getAttribute("href"));
+    const offset = 80; // Adjust for navbar height
+    const targetPosition = target.offsetTop - offset;
+    window.scrollTo({
+      top: targetPosition,
       behavior: "smooth",
     });
   });
