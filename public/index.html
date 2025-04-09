@@ -216,5 +216,28 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <script type="module" src="/app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typewriter-effect/dist/core.js"></script>
+    <script>
+      const typewriter = new Typewriter("#typewriter", {
+        loop: true,
+        delay: 50, // Faster typing
+        deleteSpeed: 30, // Faster deleting
+      });
+
+      typewriter
+        .pauseFor(500)
+        .typeString("Tehchnologist")
+        .pauseFor(1200)
+        .deleteAll()
+        .typeString("DJ")
+        .pauseFor(1200)
+        .deleteAll()
+        .typeString("Music Producer")
+        .pauseFor(1200)
+        .deleteAll()
+        .typeString("Automation Expert")
+        .pauseFor(1200)
+        .deleteAll()
+        .start();
+    </script>
   </body>
 </html>
