@@ -1276,3 +1276,8 @@ section::before {
         border-color: #00ffff;
     }
 }
+
+.about-card.projects-card:hover {
+    transform: translateY(-10px); /* Slight lift */
+    box-shadow: 0 10px 40px rgba(0, 255, 255, 0.5); /* Enhanced turquoise glow */
+}

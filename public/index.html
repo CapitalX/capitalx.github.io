@@ -59,7 +59,7 @@
     </section>
 
     <section id="about" class="about-section">
-      <div class="about-card">
+      <div class="about-card projects-card">
         <h2>About Me</h2>
         <div class="about-content">
           <div class="about-text" style="text-align: center">
@@ -228,5 +228,10 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <script type="module" src="/app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        typewriterEffect("typewriter", ["Technologist", "DJ", "Developer"]);
+      });
+    </script>
   </body>
 </html>
