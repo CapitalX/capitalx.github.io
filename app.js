@@ -177,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
   typewriterEffect("typewriter", ["Technologist", "DJ", "Developer"]); // Corrected words array
 
   // Ensure the typewriter text is visible
+
   const typewriterElement = document.getElementById("typewriter");
   typewriterElement.style.visibility = "visible";
   typewriterElement.style.opacity = "1";
