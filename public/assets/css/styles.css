@@ -664,7 +664,7 @@ section::before {
         opacity: 1;
     }
     to { 
-        width: 15ch; /* Increased from 11ch to 15ch to fit longer text */
+        width: 20ch; /* Increased from 11ch to 15ch to fit longer text */
         opacity: 1;
     }
 }
