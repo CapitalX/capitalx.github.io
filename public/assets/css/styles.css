@@ -1161,7 +1161,7 @@ section::before {
 }
 
 .user-message .message-content {
-    background: #2962ff;
+    background: #00ff00;
     color: white;
     border-radius: 1rem 1rem 0 1rem;
 }
@@ -1192,7 +1192,7 @@ section::before {
 
 .send-button {
     padding: 0.8rem 1.2rem;
-    background: #2962ff;
+    background: #00ff00;
     border: none;
     border-radius: 0.5rem;
     color: white;

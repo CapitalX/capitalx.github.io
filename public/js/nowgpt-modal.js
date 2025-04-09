@@ -98,11 +98,39 @@ export class NowGPTModal {
   }
 
   async fetchBotResponse(message) {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: message,
+          showSources: true,
+        }),
+      });
 
-    // Replace this with your actual API call
-    return "This is a demo response. Replace this with your actual API integration.";
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      // Format the response with sources if available
+      let formattedResponse = data.answer;
+
+      if (data.sourceDocuments && data.sourceDocuments.length > 0) {
+        formattedResponse += "\n\nSources:\n";
+        data.sourceDocuments.forEach((doc) => {
+          formattedResponse += `- ${doc.metadata.source}\n`;
+        });
+      }
+
+      return formattedResponse;
+    } catch (error) {
+      console.error("Error:", error);
+      throw new Error("Failed to get response from the chatbot");
+    }
   }
 
   addMessage(type, content) {
