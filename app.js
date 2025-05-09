@@ -132,7 +132,7 @@ function showSuccessScreen() {
 
 // Send email (using EmailJS)
 document.getElementById("form").addEventListener("submit", function (event) {
-  event.preventDefault();
+  event.preventDefault(); // Prevent page reload
 
   const btn = document.getElementById("button");
   const nameField = document.getElementById("name");
@@ -171,11 +171,13 @@ document.getElementById("form").addEventListener("submit", function (event) {
     })
     .then(
       () => {
+        btn.value = "Send Email";
         showSuccessScreen(); // Show success screen on success
       },
       (err) => {
         btn.value = "Send Email";
-        alert(JSON.stringify(err));
+        alert("Failed to send email. Please try again.");
+        console.error(err);
       }
     );
 });
