@@ -501,8 +501,8 @@ body {
     background: linear-gradient(145deg, rgba(10, 10, 15, 0.9), rgba(0, 0, 5, 0.95));
     border: 2px solid rgba(0, 255, 255, 0.3);
     border-radius: 20px;
-    padding: 3rem; /* Increased padding for better spacing */
-    max-width: 1000px; /* Increased max width */
+    padding: 3rem;
+    max-width: 1200px; /* Increased max width for better web browsing */
     margin: 0 auto;
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -516,7 +516,7 @@ body {
 .viewer-content {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem; /* Increased gap for better spacing */
+    gap: 2.5rem;
     align-items: center;
     justify-content: center;
 }
@@ -526,8 +526,8 @@ body {
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 100%; /* Ensure full width */
-    max-width: 900px; /* Limit iframe width */
+    width: 100%;
+    max-width: 1000px; /* Increased iframe width for better display */
 }
 
 .viewer-content iframe:hover {
@@ -742,6 +742,19 @@ footer {
         align-items: center;
         text-align: center;
         width: 100%;
+    }
+
+    .viewer-card {
+        padding: 2rem;
+        max-width: 90%; /* Smaller width for mobile */
+    }
+
+    .viewer-content iframe {
+        max-width: 100%; /* Ensure iframe fits smaller screens */
+    }
+
+    .upcoming-gigs {
+        max-width: 90%; /* Adjust gigs section for mobile */
     }
 
     .viewer-card {
@@ -1588,6 +1601,50 @@ section::before {
 }
 
 .soundcloud-footer a:hover {
+    color: #b3ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+/* Upcoming Gigs Section */
+.upcoming-gigs {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(10, 10, 15, 0.9);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+    text-align: left;
+    max-width: 1000px; /* Consistent width with other cards */
+    margin: 0 auto;
+}
+
+.upcoming-gigs h3 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.upcoming-gigs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.upcoming-gigs li {
+    font-size: 1rem;
+    color: #b8b8b8;
+    line-height: 1.6;
+}
+
+.upcoming-gigs a {
+    color: #00ffff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.upcoming-gigs a:hover {
     color: #b3ffff;
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
