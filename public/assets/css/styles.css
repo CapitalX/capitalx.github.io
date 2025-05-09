@@ -1624,13 +1624,13 @@ section::before {
 
 /* Upcoming Gigs Section */
 .upcoming-gigs {
-    margin-top: 4rem; /* Ensure spacing from SoundCloud */
+    margin-top: 4rem;
     padding: 2rem;
     background: rgba(10, 10, 15, 0.95);
     border: 2px solid rgba(0, 255, 255, 0.3);
     border-radius: 20px;
-    width: 100%; /* Ensure the container spans the full width */
-    max-width: 1600px; /* Explicitly set the max width */
+    width: 100%;
+    max-width: 1600px;
     margin: 0 auto;
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
     text-align: left;
@@ -1641,28 +1641,46 @@ section::before {
     color: #fff;
     margin-bottom: 1.5rem;
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    text-align: center;
 }
 
 .upcoming-gigs ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.upcoming-gigs li {
+.gig-card {
+    background: rgba(10, 10, 15, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gig-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 255, 255, 0.4);
+}
+
+.gig-card div {
+    margin-bottom: 0.5rem;
     font-size: 1.2rem;
     color: #b8b8b8;
-    line-height: 1.8;
 }
 
-.upcoming-gigs a {
+.gig-card a {
     color: #00ffff;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease;
 }
 
-.upcoming-gigs a:hover {
+.gig-card a:hover {
     color: #b3ffff;
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
