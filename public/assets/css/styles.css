@@ -502,7 +502,7 @@ body {
     border: 2px solid rgba(0, 255, 255, 0.3);
     border-radius: 20px;
     padding: 3rem;
-    max-width: 1200px; /* Increased max width for better web browsing */
+    max-width: 1400px; /* Increased max width for better web browsing */
     margin: 0 auto;
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -516,7 +516,7 @@ body {
 .viewer-content {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 3rem; /* Increased gap for better spacing */
     align-items: center;
     justify-content: center;
 }
@@ -527,7 +527,7 @@ body {
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: 100%;
-    max-width: 1000px; /* Increased iframe width for better display */
+    max-width: 1200px; /* Increased iframe width for better display */
 }
 
 .viewer-content iframe:hover {
@@ -746,7 +746,7 @@ footer {
 
     .viewer-card {
         padding: 2rem;
-        max-width: 90%; /* Smaller width for mobile */
+        max-width: 95%; /* Smaller width for mobile */
     }
 
     .viewer-content iframe {
@@ -754,7 +754,8 @@ footer {
     }
 
     .upcoming-gigs {
-        max-width: 90%; /* Adjust gigs section for mobile */
+        max-width: 95%; /* Adjust gigs section for mobile */
+        padding: 1.5rem;
     }
 
     .viewer-card {
@@ -1607,21 +1608,21 @@ section::before {
 
 /* Upcoming Gigs Section */
 .upcoming-gigs {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background: rgba(10, 10, 15, 0.9);
+    margin-top: 3rem; /* Increased margin for better spacing */
+    padding: 2rem;
+    background: rgba(10, 10, 15, 0.95);
     border: 2px solid rgba(0, 255, 255, 0.3);
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
     text-align: left;
-    max-width: 1000px; /* Consistent width with other cards */
+    max-width: 1200px; /* Consistent width with other cards */
     margin: 0 auto;
 }
 
 .upcoming-gigs h3 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #fff;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
@@ -1632,9 +1633,9 @@ section::before {
 }
 
 .upcoming-gigs li {
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #b8b8b8;
-    line-height: 1.6;
+    line-height: 1.8;
 }
 
 .upcoming-gigs a {
