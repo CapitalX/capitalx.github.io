@@ -191,108 +191,81 @@ window.addEventListener("click", (event) => {
 });
 
 // View Toggle and Dynamic Content
+const toggleViewButton = document.getElementById("toggleViewButton");
 const viewToggle = document.getElementById("viewToggle");
-const dynamicContent = document.getElementById("dynamic-content");
+const viewerCard = document.getElementById("viewer-card");
 
 // Initialize view state
-let currentView = localStorage.getItem("currentView") || "Beatsbycapitalx";
-updateView(currentView);
+let currentView = "BeatsByCapitalX";
 
-// Toggle view on click
-viewToggle.addEventListener("click", () => {
-  currentView = currentView === "Beatsbycapitalx" ? "XTech" : "Beatsbycapitalx";
-  localStorage.setItem("currentView", currentView);
-  updateView(currentView);
-});
-
-// Update call-to-action button to toggle views
-const ctaButton = document.querySelector(".cta-button button");
-
-// Update both the button and the experience section dynamically
-ctaButton.addEventListener("click", () => {
-  currentView = currentView === "Beatsbycapitalx" ? "XTech" : "Beatsbycapitalx";
-  localStorage.setItem("currentView", currentView);
+// Toggle view on button click
+toggleViewButton.addEventListener("click", () => {
+  currentView = currentView === "BeatsByCapitalX" ? "XTech" : "BeatsByCapitalX";
   updateView(currentView);
 });
 
 // Update view content
 function updateView(view) {
   viewToggle.textContent = view;
-  ctaButton.textContent =
-    view === "Beatsbycapitalx"
-      ? "Switch to XTech"
-      : "Switch to Beatsbycapitalx";
+  toggleViewButton.textContent = view === "BeatsByCapitalX" ? "Switch to XTech" : "Switch to BeatsByCapitalX";
 
-  if (view === "Beatsbycapitalx") {
-    dynamicContent.innerHTML = `
-      <section id="home" class="splash-container">
-        <div class="intro-text">
-          <h1>Beatsbycapitalx</h1>
-          <p>Explore my DJ and music production journey.</p>
-        </div>
-      </section>
-      <section id="viewer-card" class="viewer-section">
-        <div class="viewer-card">
-          <h2>Capital X 🎧</h2>
-          <div class="viewer-content">
-            <iframe
-              style="border-radius: 12px; width: 100%; height: 380px"
-              src="https://open.spotify.com/embed/album/12z3l71d1e2FjLWAS14NCD?utm_source=generator&theme=0"
-              frameborder="0"
-              allowfullscreen=""
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            ></iframe>
+  if (view === "BeatsByCapitalX") {
+    viewerCard.innerHTML = `
+      <div class="viewer-card">
+        <h2>Capital X 🎧</h2>
+        <div class="viewer-content">
+          <iframe
+            style="border-radius: 12px; width: 100%; height: 380px"
+            src="https://open.spotify.com/embed/album/12z3l71d1e2FjLWAS14NCD?utm_source=generator&theme=0"
+            frameborder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+          <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/zFIuqzCdOOA"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+          <div class="soundcloud-container">
             <iframe
               width="100%"
-              height="315"
-              src="https://www.youtube.com/embed/zFIuqzCdOOA"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+              height="300"
+              scrolling="no"
+              frameborder="no"
+              allow="autoplay"
+              src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1269104419&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
             ></iframe>
-            <div class="soundcloud-container">
-              <iframe
-                width="100%"
-                height="300"
-                scrolling="no"
-                frameborder="no"
-                allow="autoplay"
-                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1269104419&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
-              ></iframe>
-            </div>
           </div>
         </div>
-      </section>
+      </div>
     `;
   } else {
-    dynamicContent.innerHTML = `
-      <section id="home" class="splash-container">
-        <div class="intro-text">
-          <h1>XTech</h1>
-          <p>Discover AI automation and tech solutions.</p>
-        </div>
-      </section>
-      <section id="viewer-card" class="viewer-section">
-        <div class="viewer-card">
-          <h2>XTech AI Automation</h2>
-          <div class="viewer-content">
-            <p>Explore cutting-edge AI and automation projects.</p>
-            <div class="project-card">
-              <h3>Project 1: AI Chatbot</h3>
-              <p>An intelligent chatbot powered by OpenAI and LangChain.</p>
-            </div>
-            <div class="project-card">
-              <h3>Project 2: Workflow Automation</h3>
-              <p>Streamline your business processes with custom automation solutions.</p>
-            </div>
+    viewerCard.innerHTML = `
+      <div class="viewer-card">
+        <h2>XTech AI Automation</h2>
+        <div class="viewer-content">
+          <p>Explore cutting-edge AI and automation projects.</p>
+          <div class="project-card">
+            <h3>Project 1: AI Chatbot</h3>
+            <p>An intelligent chatbot powered by OpenAI and LangChain.</p>
+          </div>
+          <div class="project-card">
+            <h3>Project 2: Workflow Automation</h3>
+            <p>Streamline your business processes with custom automation solutions.</p>
           </div>
         </div>
-      </section>
+      </div>
     `;
   }
 }
+
+// Initialize the default view
+updateView(currentView);
 
 // Single DOMContentLoaded listener for all initializations
 document.addEventListener("DOMContentLoaded", () => {
