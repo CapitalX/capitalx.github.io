@@ -490,6 +490,95 @@ body {
     margin: 0 auto;
 }
 
+/* Viewer Section */
+.viewer-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: transparent;
+}
+
+.viewer-card {
+    background: rgba(10, 10, 15, 0.8);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.viewer-card h2 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.viewer-content iframe {
+    margin: 1rem 0;
+    border-radius: 10px;
+    border: none;
+}
+
+/* Inquiry Section */
+.inquiry-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: transparent;
+}
+
+.inquiry-card {
+    background: rgba(10, 10, 15, 0.8);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.inquiry-card h2 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.submit-button {
+    padding: 1rem 2rem;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
 /* Footer */
 footer {
     padding: 2rem;

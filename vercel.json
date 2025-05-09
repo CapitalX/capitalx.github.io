@@ -26,6 +26,14 @@
     {
       "src": "/app.js",
       "dest": "/public/app.js"
+    },
+    {
+      "src": "/viewer-card",
+      "dest": "/public/index.html"
+    },
+    {
+      "src": "/inquiry-form",
+      "dest": "/public/index.html"
     }
   ],
   "github": {

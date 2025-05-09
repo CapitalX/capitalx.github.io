@@ -25,9 +25,8 @@
           <a href="#about" class="nav-link">About</a>
         </li>
         <li>
-          <a href="#automation-development" class="nav-link">Services</a>
+          <a href="#viewer-card" class="nav-link">Experience</a>
         </li>
-        <!-- Removed the Contact link -->
       </ul>
     </nav>
 
@@ -40,9 +39,6 @@
         <div class="social-links fade-in">
           <a href="https://github.com/CapitalX" target="_blank"
             ><i class="fab fa-github"></i
-          ></a>
-          <a href="https://www.linkedin.com/in/capitalx/" target="_blank"
-            ><i class="fab fa-linkedin"></i
           ></a>
           <a
             href="https://bsky.app/profile/itscapitalx.bsky.social"
@@ -61,72 +57,58 @@
       </div>
       <div class="cta-button fade-in">
         <button
-          onclick="document.getElementById('automation-development').scrollIntoView({behavior: 'smooth'})"
+          onclick="document.getElementById('viewer-card').scrollIntoView({behavior: 'smooth'})"
         >
-          Discover My Services
+          Discover My Work
         </button>
       </div>
     </section>
 
-    <section id="about" class="about-section">
-      <div class="about-card projects-card">
-        <h2>About Me</h2>
-        <div class="about-content">
-          <div class="about-text" style="text-align: center">
-            <p>
-              I'm a versatile professional with expertise in DJing, music
-              production, and freelance app development. As a DJ, I bring energy
-              and creativity to events, curating unforgettable experiences
-              through music. In music production, I specialize in crafting
-              high-quality beats, mixing, and mastering tracks. Additionally, I
-              develop custom automation tools for small businesses, streamlining
-              workflows and enhancing efficiency.
-            </p>
-          </div>
+    <section id="viewer-card" class="viewer-section">
+      <div class="viewer-card">
+        <h2>Experience My DJing</h2>
+        <div class="viewer-content">
+          <iframe
+            style="border-radius:12px"
+            src="https://open.spotify.com/embed/playlist/37i9dQZF1E4wDrq5juG4Za?utm_source=generator&theme=0"
+            width="100%"
+            height="152"
+            frameborder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+          <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/your_video_id"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
         </div>
       </div>
     </section>
 
-    <section id="automation-development" class="projects-section">
-      <div class="projects-card">
-        <h2>Automation Development</h2>
-        <p>
-          Custom automation solutions to streamline workflows and improve
-          efficiency. From ServiceNow to custom scripts, I can help automate
-          your processes.
-        </p>
-        <a href="mailto:xbecoding@gmail.com" class="contact-button"
-          >Get Started</a
-        >
-      </div>
-    </section>
-
-    <section id="dj-services" class="projects-section">
-      <div class="projects-card">
-        <h2>DJ Services</h2>
-        <p>
-          Professional DJ services for events, parties, and special occasions.
-          Let me bring the perfect vibe to your event with a curated playlist
-          and live mixing.
-        </p>
-        <a href="mailto:xbecoding@gmail.com" class="contact-button">Book Now</a>
-      </div>
-    </section>
-
-    <section id="music-production" class="projects-section">
-      <div class="projects-card">
-        <h2>Music Production</h2>
-        <p>
-          Offering high-quality music production services, including beat
-          making, mixing, and mastering. Let's create something amazing
-          together.
-        </p>
-        <a
-          href="https://open.spotify.com/artist/7eSCe1Z5dPkgh5kLl5WK1E?si=ODw3wGbBTAWRthArXVRmWQ"
-          target="_blank"
-          class="contact-button"
-          >Explore My Music</a
-        >
+    <section id="inquiry-form" class="inquiry-section">
+      <div class="inquiry-card">
+        <h2>Contact Me</h2>
+        <form action="https://formspree.io/f/your_form_id" method="POST">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="submit-button">Send Inquiry</button>
+        </form>
       </div>
     </section>
 
@@ -245,9 +227,7 @@
       document
         .querySelector(".cta-button button")
         .addEventListener("click", () => {
-          const targetElement = document.getElementById(
-            "automation-development"
-          );
+          const targetElement = document.getElementById("viewer-card");
           if (targetElement) {
             const offset = 70; // Adjusted offset for better alignment
             const targetPosition = targetElement.offsetTop - offset;
