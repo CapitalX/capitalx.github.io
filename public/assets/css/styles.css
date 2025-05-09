@@ -498,25 +498,98 @@ body {
 }
 
 .viewer-card {
-    background: rgba(10, 10, 15, 0.8);
+    background: linear-gradient(145deg, rgba(10, 10, 15, 0.9), rgba(0, 0, 5, 0.95));
     border: 2px solid rgba(0, 255, 255, 0.3);
-    border-radius: 15px;
-    padding: 2rem;
-    max-width: 800px;
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 900px;
     margin: 0 auto;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.viewer-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 50px rgba(0, 255, 255, 0.4);
 }
 
 .viewer-card h2 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     color: #fff;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    background: linear-gradient(90deg, #00ffff, #ff5500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.viewer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
 }
 
 .viewer-content iframe {
-    margin: 1rem 0;
-    border-radius: 10px;
-    border: none;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.viewer-content iframe:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+}
+
+/* SoundCloud Container */
+.soundcloud-container {
+    margin-top: 1.5rem;
+    border: 2px solid rgba(255, 85, 0, 0.3);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(255, 85, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(10, 10, 15, 0.9);
+}
+
+.soundcloud-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(255, 85, 0, 0.5);
+}
+
+.soundcloud-footer {
+    font-size: 0.85rem;
+    color: #cccccc;
+    text-align: center;
+    padding: 0.5rem;
+    background: rgba(10, 10, 15, 0.8);
+    border-top: 1px solid rgba(255, 85, 0, 0.3);
+}
+
+.soundcloud-footer a {
+    color: #ff5500;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.soundcloud-footer a:hover {
+    color: #ffa366;
+    text-shadow: 0 0 10px rgba(255, 85, 0, 0.8);
+}
+
+/* Spotify and YouTube Styling */
+.viewer-content iframe[src*="spotify"],
+.viewer-content iframe[src*="youtube"] {
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    background: rgba(10, 10, 15, 0.9);
+}
+
+.viewer-content iframe[src*="spotify"]:hover,
+.viewer-content iframe[src*="youtube"]:hover {
+    box-shadow: 0 10px 40px rgba(0, 255, 255, 0.4);
 }
 
 /* Inquiry Section */
@@ -689,6 +762,19 @@ footer {
         align-items: center;
         text-align: center;
         width: 100%;
+    }
+
+    .viewer-card {
+        padding: 2rem;
+    }
+
+    .viewer-card h2 {
+        font-size: 2rem;
+    }
+
+    .viewer-content iframe {
+        width: 100%;
+        height: auto;
     }
 }
 
@@ -1358,20 +1444,23 @@ section::before {
 
 /* Contact Button */
 .contact-button {
-    margin-top: 1.5rem;
-    padding: 1rem 2rem;
-    background: rgba(0, 255, 255, 0.1);
-    border: 1px solid rgba(0, 255, 255, 0.3);
+    margin-top: 2rem;
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 85, 0, 0.2));
+    border: 2px solid rgba(0, 255, 255, 0.3);
     color: #fff;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
 .contact-button:hover {
-    background: rgba(0, 255, 255, 0.2);
-    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
-    transform: translateY(-2px);
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.3), rgba(255, 85, 0, 0.3));
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
 }
 
 /* Modal */
