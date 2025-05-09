@@ -120,26 +120,51 @@ document.getElementById("form").addEventListener("submit", function (event) {
   event.preventDefault();
 
   const btn = document.getElementById("button");
+  const nameField = document.getElementById("name");
+  const emailField = document.getElementById("email");
+  const messageField = document.getElementById("message");
+  const timeField = document.getElementById("time");
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(emailField.value)) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  // Ensure all fields are filled
+  if (!nameField.value || !emailField.value || !messageField.value) {
+    alert("All fields are required.");
+    return;
+  }
+
   btn.value = "Sending...";
 
   // Autopopulate the time field
-  const timeField = document.getElementById("time");
   timeField.value = new Date().toISOString();
+
+  const formattedName = `${nameField.value} | ${emailField.value}`;
 
   const serviceID = "default_service";
   const templateID = "template_witgj8m";
 
-  emailjs.sendForm(serviceID, templateID, this).then(
-    () => {
-      btn.value = "Send Email";
-      alert("Sent!");
-      closeModal();
-    },
-    (err) => {
-      btn.value = "Send Email";
-      alert(JSON.stringify(err));
-    }
-  );
+  emailjs
+    .send(serviceID, templateID, {
+      name: formattedName,
+      message: messageField.value,
+      time: timeField.value,
+    })
+    .then(
+      () => {
+        btn.value = "Send Email";
+        alert("Sent!");
+        closeModal();
+      },
+      (err) => {
+        btn.value = "Send Email";
+        alert(JSON.stringify(err));
+      }
+    );
 });
 
 // Close modal on outside click
