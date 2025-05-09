@@ -1745,7 +1745,7 @@ section::before {
 .gig-date-time {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 2rem; /* Increased gap for more space */
     margin-top: 0.5rem;
     font-size: 1.2rem;
     color: #b8b8b8;
