@@ -207,7 +207,10 @@ toggleViewButton.addEventListener("click", () => {
 // Update view content
 function updateView(view) {
   viewToggle.textContent = view;
-  toggleViewButton.textContent = view === "BeatsByCapitalX" ? "Switch to XTech" : "Switch to BeatsByCapitalX";
+  toggleViewButton.textContent =
+    view === "BeatsByCapitalX"
+      ? "Switch to XTech"
+      : "Switch to BeatsByCapitalX";
 
   if (view === "BeatsByCapitalX") {
     viewerCard.innerHTML = `
