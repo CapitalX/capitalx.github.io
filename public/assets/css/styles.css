@@ -1633,7 +1633,7 @@ section::before {
     max-width: 1600px;
     margin: 0 auto;
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
-    text-align: left;
+    text-align: center; /* Center-align content */
 }
 
 .upcoming-gigs h3 {
@@ -1641,7 +1641,6 @@ section::before {
     color: #fff;
     margin-bottom: 1.5rem;
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-    text-align: center;
 }
 
 .upcoming-gigs ul {
@@ -1651,15 +1650,18 @@ section::before {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    align-items: center; /* Center-align cards */
 }
 
 .gig-card {
     background: rgba(10, 10, 15, 0.9);
     border: 1px solid rgba(0, 255, 255, 0.3);
     border-radius: 15px;
-    padding: 1.5rem;
+    padding: 2rem;
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 600px; /* Limit card width */
+    text-align: center; /* Center-align text */
 }
 
 .gig-card:hover {
@@ -1667,20 +1669,44 @@ section::before {
     box-shadow: 0 10px 40px rgba(0, 255, 255, 0.4);
 }
 
-.gig-card div {
+.gig-header h4 {
+    font-size: 1.8rem;
+    color: #fff;
     margin-bottom: 0.5rem;
+}
+
+.gig-header p {
     font-size: 1.2rem;
     color: #b8b8b8;
+    margin-bottom: 1rem;
 }
 
-.gig-card a {
-    color: #00ffff;
+.gig-body p {
+    font-size: 1rem;
+    color: #b8b8b8;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.gig-footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.gig-button {
+    padding: 0.75rem 1.5rem;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 50px;
     text-decoration: none;
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.gig-card a:hover {
-    color: #b3ffff;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+.gig-button:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
+    transform: translateY(-2px);
 }
