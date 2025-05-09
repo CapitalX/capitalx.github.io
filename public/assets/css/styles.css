@@ -545,13 +545,21 @@ body {
 
 /* SoundCloud Container */
 .soundcloud-container {
-    margin-top: 3rem; /* Add spacing between SoundCloud and the next section */
+    margin-top: 3rem; /* Ensure spacing above SoundCloud */
+    margin-bottom: 4rem; /* Add spacing below SoundCloud for Upcoming Gigs */
     border: 2px solid rgba(0, 255, 255, 0.3);
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
     background: rgba(10, 10, 15, 0.9);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Ensure it spans the full width */
+    max-width: 1200px; /* Set a consistent max width */
+}
+
+.soundcloud-container iframe {
+    width: 100%; /* Ensure iframe spans the full width */
+    height: 400px; /* Adjust height for better display */
 }
 
 .soundcloud-container:hover {
@@ -1616,7 +1624,7 @@ section::before {
 
 /* Upcoming Gigs Section */
 .upcoming-gigs {
-    margin-top: 4rem; /* Add spacing between SoundCloud and Upcoming Gigs */
+    margin-top: 4rem; /* Ensure spacing from SoundCloud */
     padding: 2rem;
     background: rgba(10, 10, 15, 0.95);
     border: 2px solid rgba(0, 255, 255, 0.3);
