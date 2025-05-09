@@ -116,30 +116,31 @@ function closeModal() {
 }
 
 // Send email (using EmailJS)
-function sendEmail(event) {
+document.getElementById("form").addEventListener("submit", function (event) {
   event.preventDefault();
-  const name = document.getElementById("modal-name").value;
-  const email = document.getElementById("modal-email").value;
-  const message = document.getElementById("modal-message").value;
 
-  emailjs
-    .send("service_tvimec8", "template_witgj8m", {
-      name: name,
-      email: email,
-      message: message,
-    })
-    .then(
-      (response) => {
-        console.log("Email sent successfully!", response.status, response.text);
-        alert("Your message has been sent!");
-        closeModal();
-      },
-      (error) => {
-        console.error("Failed to send email:", error);
-        alert("Failed to send your message. Please try again later.");
-      }
-    );
-}
+  const btn = document.getElementById("button");
+  btn.value = "Sending...";
+
+  // Autopopulate the time field
+  const timeField = document.getElementById("time");
+  timeField.value = new Date().toISOString();
+
+  const serviceID = "default_service";
+  const templateID = "template_witgj8m";
+
+  emailjs.sendForm(serviceID, templateID, this).then(
+    () => {
+      btn.value = "Send Email";
+      alert("Sent!");
+      closeModal();
+    },
+    (err) => {
+      btn.value = "Send Email";
+      alert(JSON.stringify(err));
+    }
+  );
+});
 
 // Close modal on outside click
 window.addEventListener("click", (event) => {

@@ -579,6 +579,26 @@ body {
     transform: translateY(-2px);
 }
 
+/* Modal Form */
+.field {
+    margin-bottom: 1.5rem;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.field input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
 /* Footer */
 footer {
     padding: 2rem;
@@ -1411,4 +1431,8 @@ section::before {
     background: rgba(0, 255, 255, 0.2);
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
     transform: translateY(-2px);
+}
+
+#time {
+  display: none;
 }
