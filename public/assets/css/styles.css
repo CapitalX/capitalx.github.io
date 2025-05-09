@@ -516,7 +516,7 @@ body {
 .viewer-content {
     display: flex;
     flex-direction: column;
-    gap: 3rem; /* Increased gap for better spacing */
+    gap: 3rem; /* Increased gap for equal spacing */
     align-items: center;
     justify-content: center;
 }
