@@ -200,7 +200,7 @@ body {
 .cta-button button {
     padding: 1rem 2.5rem;
     font-size: 1.2rem;
-    background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 85, 0, 0.2));
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 255, 255, 0.2)); /* Teal to white */
     border: 2px solid rgba(0, 255, 255, 0.3);
     color: #fff;
     border-radius: 50px;
@@ -211,7 +211,7 @@ body {
 }
 
 .cta-button button:hover {
-    background: linear-gradient(90deg, rgba(0, 255, 255, 0.3), rgba(255, 85, 0, 0.3));
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.3), rgba(255, 255, 255, 0.3)); /* Slightly brighter teal to white */
     transform: translateY(-3px);
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
 }
@@ -1466,7 +1466,7 @@ section::before {
     margin-top: 2rem;
     padding: 1rem 2.5rem;
     font-size: 1.2rem;
-    background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 85, 0, 0.2));
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 255, 255, 0.2)); /* Teal to white */
     border: 2px solid rgba(0, 255, 255, 0.3);
     color: #fff;
     border-radius: 50px;
@@ -1477,7 +1477,7 @@ section::before {
 }
 
 .contact-button:hover {
-    background: linear-gradient(90deg, rgba(0, 255, 255, 0.3), rgba(255, 85, 0, 0.3));
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.3), rgba(255, 255, 255, 0.3)); /* Slightly brighter teal to white */
     transform: translateY(-3px);
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
 }
@@ -1664,18 +1664,12 @@ section::before {
 
 .gig-card {
     background: rgba(10, 10, 15, 0.9);
-    border: 1px solid rgba(0, 255, 255, 0.3);
+    border: none; /* Remove border */
     border-radius: 15px;
     padding: 2rem;
-    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    max-width: 600px; /* Limit card width */
-    text-align: center; /* Center-align text */
-}
-
-.gig-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 40px rgba(0, 255, 255, 0.4);
+    box-shadow: none; /* Remove shadow */
+    max-width: 600px;
+    text-align: center;
 }
 
 .gig-header h4 {
