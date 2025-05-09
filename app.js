@@ -190,6 +190,55 @@ window.addEventListener("click", (event) => {
   }
 });
 
+// View Toggle and Dynamic Content
+const viewToggle = document.getElementById("viewToggle");
+const dynamicContent = document.getElementById("dynamic-content");
+
+// Initialize view state
+let currentView = localStorage.getItem("currentView") || "Beatsbycapitalx";
+updateView(currentView);
+
+// Toggle view on click
+viewToggle.addEventListener("click", () => {
+  currentView = currentView === "Beatsbycapitalx" ? "XTech" : "Beatsbycapitalx";
+  localStorage.setItem("currentView", currentView);
+  updateView(currentView);
+});
+
+// Update view content
+function updateView(view) {
+  viewToggle.textContent = view;
+  if (view === "Beatsbycapitalx") {
+    dynamicContent.innerHTML = `
+      <section id="home" class="splash-container">
+        <div class="intro-text">
+          <h1>Beatsbycapitalx</h1>
+          <p>Explore my DJ and music production journey.</p>
+        </div>
+      </section>
+      <section id="viewer-card" class="viewer-section">
+        <!-- Existing DJ content -->
+      </section>
+    `;
+  } else {
+    dynamicContent.innerHTML = `
+      <section id="home" class="splash-container">
+        <div class="intro-text">
+          <h1>XTech</h1>
+          <p>Discover AI automation and tech solutions.</p>
+        </div>
+      </section>
+      <section id="viewer-card" class="viewer-section">
+        <!-- New XTech content -->
+        <div class="viewer-card">
+          <h2>XTech AI Automation</h2>
+          <p>Explore cutting-edge AI and automation projects.</p>
+        </div>
+      </section>
+    `;
+  }
+}
+
 // Single DOMContentLoaded listener for all initializations
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded"); // Debug log

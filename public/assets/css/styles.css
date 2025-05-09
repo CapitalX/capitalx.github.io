@@ -63,6 +63,16 @@ body {
     transform: scale(1.1); /* Slightly swell */
 }
 
+.nav-brand {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.nav-brand:hover {
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
 @keyframes pulse {
     0%, 100% {
         transform: scale(1);
@@ -1760,4 +1770,9 @@ section::before {
 .gig-date-time i {
     color: #00ffff;
     font-size: 1.2rem;
+}
+
+#dynamic-content {
+    padding: 2rem;
+    text-align: center;
 }
