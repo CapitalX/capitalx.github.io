@@ -1433,3 +1433,92 @@ section::before {
 #time {
   display: none;
 }
+
+/* Success Screen */
+.success-screen {
+    text-align: center;
+    padding: 2rem;
+}
+
+.success-screen .icon-container {
+    font-size: 3rem;
+    color: #00ff00;
+    margin-bottom: 1rem;
+    animation: flipIcon 0.6s ease-in-out;
+}
+
+.success-screen h2 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.success-screen p {
+    font-size: 1rem;
+    color: #b8b8b8;
+    margin-bottom: 2rem;
+}
+
+.success-screen button {
+    padding: 0.75rem 1.5rem;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.success-screen button:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+@keyframes flipIcon {
+    0% {
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(90deg);
+    }
+    100% {
+        transform: rotateY(180deg);
+    }
+}
+
+/* SoundCloud Styles */
+.soundcloud-container {
+    margin-top: 2rem;
+    border: 2px solid rgba(255, 85, 0, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(255, 85, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.soundcloud-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(255, 85, 0, 0.5);
+}
+
+.soundcloud-footer {
+    font-size: 0.85rem;
+    color: #cccccc;
+    text-align: center;
+    padding: 0.5rem;
+    background: rgba(10, 10, 15, 0.8);
+    border-top: 1px solid rgba(255, 85, 0, 0.3);
+}
+
+.soundcloud-footer a {
+    color: #ff5500;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.soundcloud-footer a:hover {
+    color: #ffa366;
+    text-shadow: 0 0 10px rgba(255, 85, 0, 0.8);
+}

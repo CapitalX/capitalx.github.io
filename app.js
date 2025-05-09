@@ -115,6 +115,21 @@ function closeModal() {
   document.getElementById("contactModal").style.display = "none";
 }
 
+// Update modal functionality to include success screen
+function showSuccessScreen() {
+  const modalContent = document.querySelector(".modal-content");
+  modalContent.innerHTML = `
+    <div class="success-screen">
+      <div class="icon-container">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2>Message Sent!</h2>
+      <p>Thank you for reaching out. I'll get back to you soon.</p>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  `;
+}
+
 // Send email (using EmailJS)
 document.getElementById("form").addEventListener("submit", function (event) {
   event.preventDefault();
@@ -156,9 +171,7 @@ document.getElementById("form").addEventListener("submit", function (event) {
     })
     .then(
       () => {
-        btn.value = "Send Email";
-        alert("Sent!");
-        closeModal();
+        showSuccessScreen(); // Show success screen on success
       },
       (err) => {
         btn.value = "Send Email";
