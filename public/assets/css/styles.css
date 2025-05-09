@@ -1741,3 +1741,23 @@ section::before {
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
     transform: translateY(-2px);
 }
+
+.gig-date-time {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: #b8b8b8;
+}
+
+.gig-date-time span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gig-date-time i {
+    color: #00ffff;
+    font-size: 1.2rem;
+}
