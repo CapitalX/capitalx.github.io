@@ -106,6 +106,49 @@ function initHeaderBehavior() {
   handleScroll();
 }
 
+// Modal functionality
+function openModal() {
+  document.getElementById("contactModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("contactModal").style.display = "none";
+}
+
+// Send email (using EmailJS)
+function sendEmail(event) {
+  event.preventDefault();
+  const name = document.getElementById("modal-name").value;
+  const email = document.getElementById("modal-email").value;
+  const message = document.getElementById("modal-message").value;
+
+  emailjs
+    .send("service_tvimec8", "template_witgj8m", {
+      name: name,
+      email: email,
+      message: message,
+    })
+    .then(
+      (response) => {
+        console.log("Email sent successfully!", response.status, response.text);
+        alert("Your message has been sent!");
+        closeModal();
+      },
+      (error) => {
+        console.error("Failed to send email:", error);
+        alert("Failed to send your message. Please try again later.");
+      }
+    );
+}
+
+// Close modal on outside click
+window.addEventListener("click", (event) => {
+  const modal = document.getElementById("contactModal");
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
 // Single DOMContentLoaded listener for all initializations
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded"); // Debug log
