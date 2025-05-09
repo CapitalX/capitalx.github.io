@@ -502,7 +502,7 @@ body {
     border: 2px solid rgba(0, 255, 255, 0.3);
     border-radius: 20px;
     padding: 3rem;
-    max-width: 1400px; /* Increased max width for better web browsing */
+    max-width: 1600px; /* Increased max width for better web browsing */
     margin: 0 auto;
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -526,8 +526,8 @@ body {
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 100%;
-    max-width: 1200px; /* Increased iframe width for better display */
+    width: 100%; /* Ensure iframe spans the full width */
+    max-width: 1400px; /* Increased iframe width for better display */
 }
 
 .viewer-content iframe:hover {
