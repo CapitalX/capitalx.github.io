@@ -502,7 +502,8 @@ body {
     border: 2px solid rgba(0, 255, 255, 0.3);
     border-radius: 20px;
     padding: 3rem;
-    max-width: 1800px; /* Increased max width for better web browsing */
+    width: 100%; /* Ensure the container spans the full width */
+    max-width: 1800px; /* Explicitly set the max width */
     margin: 0 auto;
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -527,7 +528,7 @@ body {
     box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: 100%; /* Ensure iframe spans the full width */
-    max-width: 1600px; /* Increased iframe width for better display */
+    max-width: 1600px; /* Explicitly set the iframe max width */
 }
 
 .viewer-content iframe:hover {
@@ -1613,10 +1614,11 @@ section::before {
     background: rgba(10, 10, 15, 0.95);
     border: 2px solid rgba(0, 255, 255, 0.3);
     border-radius: 20px;
+    width: 100%; /* Ensure the container spans the full width */
+    max-width: 1600px; /* Explicitly set the max width */
+    margin: 0 auto;
     box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
     text-align: left;
-    max-width: 1600px; /* Consistent width with other cards */
-    margin: 0 auto;
 }
 
 .upcoming-gigs h3 {
