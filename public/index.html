@@ -46,33 +46,106 @@
       <div class="cta-button fade-in">
         <button id="toggleViewButton">Discover My Work</button>
       </div>
-    </section>    <section id="viewer-card" class="viewer-section">
-      <div class="viewer-card">
-        <h2>Projects & Experience</h2>
-        <div class="viewer-content">
-          <div class="project-info">
-            <h3>Technology & Automation</h3>
-            <p>Explore my work in ServiceNow development, automation solutions, and technology innovation.</p>
-            
-            <div class="tech-skills">
-              <h4>Core Technologies</h4>
-              <div class="skill-tags">
-                <span>ServiceNow</span>
-                <span>JavaScript</span>
-                <span>Python</span>
-                <span>Automation</span>
-                <span>API Integration</span>
-                <span>Workflow Design</span>
+    </section>    <section id="viewer-card" class="experience-section">
+      <div class="experience-container">
+        <div class="section-header">
+          <h2 class="section-title">Projects & Experience</h2>
+          <p class="section-subtitle">Crafting innovative solutions through technology</p>
+        </div>
+        
+        <div class="experience-grid">
+          <!-- Professional Experience Card -->
+          <div class="experience-card featured-card">
+            <div class="card-icon">
+              <i class="fas fa-briefcase"></i>
+            </div>
+            <div class="card-content">
+              <h3>ServiceNow Development</h3>
+              <p class="card-description">Enterprise platform development with focus on automation, workflow optimization, and business process improvement.</p>
+              <div class="tech-stack">
+                <span class="tech-tag primary">ServiceNow</span>
+                <span class="tech-tag">JavaScript</span>
+                <span class="tech-tag">API Integration</span>
+                <span class="tech-tag">Workflow Design</span>
               </div>
             </div>
-            
-            <div class="experience-highlight">
-              <h4>Professional Focus</h4>
-              <p>Specializing in ServiceNow platform development, business process automation, and creating efficient technological solutions that streamline operations and enhance user experiences.</p>
+            <div class="card-overlay"></div>
+          </div>
+          
+          <!-- Automation Solutions Card -->
+          <div class="experience-card">
+            <div class="card-icon">
+              <i class="fas fa-cogs"></i>
             </div>
+            <div class="card-content">
+              <h3>Automation Solutions</h3>
+              <p class="card-description">Building intelligent automation systems that streamline operations and enhance productivity across various platforms.</p>
+              <div class="tech-stack">
+                <span class="tech-tag primary">Python</span>
+                <span class="tech-tag">Process Automation</span>
+                <span class="tech-tag">Integration</span>
+              </div>
+            </div>
+            <div class="card-overlay"></div>
+          </div>
+          
+          <!-- Web Development Card -->
+          <div class="experience-card">
+            <div class="card-icon">
+              <i class="fas fa-code"></i>
+            </div>
+            <div class="card-content">
+              <h3>Web Development</h3>
+              <p class="card-description">Creating modern, responsive web applications with cutting-edge technologies and user-centered design principles.</p>
+              <div class="tech-stack">
+                <span class="tech-tag primary">React</span>
+                <span class="tech-tag">Node.js</span>
+                <span class="tech-tag">TypeScript</span>
+                <span class="tech-tag">CSS3</span>
+              </div>
+            </div>
+            <div class="card-overlay"></div>
+          </div>
+          
+          <!-- Innovation Card -->
+          <div class="experience-card">
+            <div class="card-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="card-content">
+              <h3>Technology Innovation</h3>
+              <p class="card-description">Exploring emerging technologies and implementing innovative solutions to solve complex business challenges.</p>
+              <div class="tech-stack">
+                <span class="tech-tag primary">Cloud Solutions</span>
+                <span class="tech-tag">AI/ML</span>
+                <span class="tech-tag">DevOps</span>
+              </div>
+            </div>
+            <div class="card-overlay"></div>
           </div>
         </div>
-        <button class="contact-button" onclick="openModal()">Contact Me</button>
+        
+        <div class="experience-stats">
+          <div class="stat-item">
+            <div class="stat-number">5+</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Projects Completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Technologies Mastered</div>
+          </div>
+        </div>
+        
+        <div class="cta-section">
+          <button class="modern-cta-button" onclick="openModal()">
+            <span class="button-text">Let's Collaborate</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -181,12 +254,10 @@
             observer.unobserve(entry.target);
           }
         });
-      }, observerOptions);
-
-      // Observe all animated elements
+      }, observerOptions);      // Observe all animated elements
       document
         .querySelectorAll(
-          ".about-content, .skill-tags, .projects-grid, .contact-content, .social-links, .cta-button"
+          ".about-content, .skill-tags, .projects-grid, .contact-content, .social-links, .cta-button, .experience-card, .experience-stats, .section-header"
         )
         .forEach((element) => {
           observer.observe(element);
